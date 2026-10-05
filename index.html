@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>SEYR | سَيْر</title>
+<style>
+:root{
+ --bg:#f4f7fb;--card:#fff;--text:#101828;--muted:#667085;--line:#e4e7ec;
+ --primary:#6d5dfc;--primary2:#18b6a4;--dark:#0b1220;--good:#039855;--warn:#b54708;
+ --danger:#d92d20;--soft:#eef4ff;--shadow:0 14px 42px rgba(16,24,40,.08);--radius:22px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh}.top{position:sticky;top:0;z-index:20;background:rgba(244,247,251,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(228,231,236,.9)}
+.toprow{max-width:1180px;margin:auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{font-size:22px;font-weight:950;letter-spacing:-.4px}.brand-ar{font-size:15px;font-weight:800;opacity:.72;margin-right:5px}.sub{font-size:12px;color:var(--muted);margin-top:4px}.actions{display:flex;gap:8px}.icon{width:42px;height:42px;border-radius:13px;border:1px solid var(--line);background:#fff}
+.content{max-width:1180px;margin:auto;padding:22px 20px 100px}.page{display:none}.page.active{display:block}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#11152f,#5b4ee8 52%,#14b8a6);color:#fff;border-radius:30px;padding:30px;box-shadow:0 24px 70px rgba(23,73,184,.22)}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08);left:-90px;top:-120px}.eyebrow{font-size:12px;opacity:.75}.hero h1{font-size:34px;margin:8px 0}.meta{opacity:.82}.heroBtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:2}
+.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}.btn.white{background:#fff;color:#143b9e}.btn.glass{background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.22)}.btn.outline{background:#fff;color:var(--text);border:1px solid var(--line)}.btn.danger{background:var(--danger)}
+.section{margin-top:20px}.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.head h2{font-size:18px;margin:0}.muted{color:var(--muted);font-size:13px}.status{font-size:12px;color:var(--good)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.tile{min-height:108px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:18px;text-align:right}.tile b{font-size:25px;margin-bottom:7px}.tile span{font-weight:800}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.split{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}
+.weather{display:flex;justify-content:space-between;align-items:center}.temp{font-size:42px;font-weight:900}.weatherIcon{font-size:62px}.forecast{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:10px}.mini{padding:12px;text-align:center;border-radius:16px}.mini b{font-size:12px}.mini .w{font-size:24px;margin:5px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 11px;font-size:12px}.chip.active{background:var(--soft);color:#1747b8;border-color:#cbd9ff;font-weight:800}
+.search{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:#fff;outline:none}.search:focus{border-color:#9bb6ff;box-shadow:0 0 0 4px #eaf0ff}
+.list{display:grid;gap:10px}.item{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;display:flex;gap:12px;align-items:flex-start}.item .ico{font-size:25px}.grow{flex:1}
+.places{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.placeCard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.placeCard .emoji{font-size:28px}.placeCard h3{margin:7px 0}.placeCard p{color:var(--muted);font-size:13px;line-height:1.7}
+.timeline{display:grid;gap:12px}.day{display:grid;grid-template-columns:110px 1fr;gap:12px}.dayhead{background:#edf4ff;color:#1747b8;border-radius:17px;padding:13px;text-align:center}.dayhead b{display:block}.daybody{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px}.daybody h3{margin:0 0 6px}.daybody p{white-space:pre-line;line-height:1.8;margin:0;color:#344054}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}.kpi b{display:block;font-size:22px;margin-top:5px}
+.season{display:grid;grid-template-columns:1fr 1fr;gap:12px}.seasonMain{background:linear-gradient(135deg,#eff6ff,#fff);border:1px solid #d7e4ff;border-radius:20px;padding:20px}.seasonMain h3{margin:0 0 7px}.score{height:9px;background:#e9edf3;border-radius:99px;overflow:hidden}.score i{display:block;height:100%;background:linear-gradient(90deg,#1769ff,#6b4ce6);border-radius:99px}
+.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}th{background:#f8fafc;color:#475467}
+.modal{position:fixed;inset:0;background:rgba(3,10,22,.58);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:14px}.modal.show{display:flex}.sheet{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:24px 24px 16px 16px;padding:22px;position:relative}.close{position:absolute;left:15px;top:15px;border:1px solid var(--line);background:#fff;border-radius:12px;width:38px;height:38px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px;position:relative}.field.full{grid-column:1/-1}.field label{font-size:12px;color:#475467;font-weight:800}.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fff;outline:none}.field input:focus,.field textarea:focus{border-color:#9bb6ff;box-shadow:0 0 0 4px #edf2ff}
+.suggestions{position:relative;z-index:60;margin-top:-1px}.suggestion{background:#fff;border:1px solid var(--line);border-top:0;padding:12px;cursor:pointer}.suggestion:hover{background:#f7f9fc}.suggestion.success{background:#effaf5;color:#027a48;cursor:default}.suggestion small{color:var(--muted)}
+.notice{padding:13px 14px;background:#fff7e6;border-radius:14px;color:#7a4d00;font-size:13px}.notice.success{background:#ecfdf3;color:#027a48}
+.bottom{position:fixed;bottom:0;right:0;left:0;z-index:25;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:center}.bottom .nav{width:160px;max-width:20%;border:0;background:transparent;padding:9px 5px;color:#667085;font-size:11px}.bottom .nav b{display:block;font-size:20px}.bottom .nav.active{color:#1769ff;font-weight:900}
+.dark{--bg:#08111f;--card:#101b2d;--text:#eef4ff;--muted:#98a5ba;--line:#26344b;--soft:#14284c}.dark .top{background:rgba(8,17,31,.88)}.dark .icon,.dark .tile,.dark .card,.dark .item,.dark .placeCard,.dark .daybody,.dark .sheet,.dark .field input,.dark .field textarea,.dark .field select,.dark .suggestion,.dark table{background:var(--card);color:var(--text)}.dark th{background:#142033}.dark .btn.outline,.dark .close{background:var(--card);color:var(--text)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.split,.season{grid-template-columns:1fr}.places{grid-template-columns:1fr 1fr}.forecast{overflow:auto;grid-template-columns:repeat(7,100px)}.day{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.content{padding:16px 14px 88px}.hero h1{font-size:27px}}
+@media(max-width:560px){.places{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.hero{padding:23px}.heroBtns .btn{width:100%}.toprow{padding:13px 14px}}
+
+.notifyBtn{position:relative}.badge{position:absolute;top:-4px;left:-4px;min-width:18px;height:18px;border-radius:99px;background:#f04438;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid #fff}.quickSources{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.sourceBtn{border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 11px;font-weight:800;font-size:12px}.dark .sourceBtn{background:var(--card);color:var(--text)}.liveDot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#12b76a;margin-left:5px}.placeCard .metaRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.placeCard .mapBtns{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.placeCard .mapBtns .btn{padding:8px 10px;font-size:11px}.langBtn{min-width:42px;font-weight:900}.reminder{border-right:4px solid var(--primary);background:#f8faff}.dark .reminder{background:#101b2d}.sourceNote{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6}.powerVisual{display:flex;align-items:center;gap:15px;background:linear-gradient(135deg,#f7f9ff,#fff);border:1px solid var(--line);border-radius:18px;padding:16px}.dark .powerVisual{background:var(--card)}.plugIcon{font-size:56px}.lang-en{direction:ltr;text-align:left}
+
+/* SEYR premium UI refresh */
+.hero{min-height:270px;padding:34px;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.18),transparent 28%),linear-gradient(135deg,#0b1026 0%,#4f46e5 48%,#08a89a 100%)}
+.hero h1{font-size:clamp(32px,5vw,48px);letter-spacing:-1.2px;line-height:1.08}.hero .meta{font-size:15px}.heroBtns{margin-top:28px}
+.grid{gap:14px}.tile{min-height:126px;position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.tile:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,rgba(109,93,252,.10),rgba(24,182,164,.08));left:-25px;bottom:-30px}.tile:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(16,24,40,.12);border-color:#d6d9ff}.tile b,.tile span{position:relative;z-index:1}
+.card,.placeCard{transition:transform .2s ease,box-shadow .2s ease}.card:hover{box-shadow:0 18px 48px rgba(16,24,40,.09)}
+.exploreHero{background:linear-gradient(135deg,#11162f,#332c92 52%,#087f76);color:#fff;border-radius:26px;padding:24px;box-shadow:0 22px 60px rgba(31,41,91,.22);margin-bottom:14px;position:relative;overflow:hidden}.exploreHero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07);left:-70px;bottom:-100px}.exploreHero .cityName{font-size:30px;font-weight:950;letter-spacing:-.6px}.exploreHero .cityMeta{opacity:.78;margin-top:5px}.exploreHero .cityActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px;position:relative;z-index:1}.exploreHero .btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}
+.exploreTabs{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin:14px 0}.exploreTab{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px 8px;font-weight:850;color:#344054}.exploreTab span{display:block;font-size:20px;margin-bottom:4px}.exploreTab.active{background:linear-gradient(135deg,#f0efff,#e9fbf8);border-color:#c9c5ff;color:#4f46e5}
+.places{grid-template-columns:repeat(3,1fr);gap:15px}.placeCard{padding:0;overflow:hidden}.placeCard .placeTop{padding:17px 17px 10px}.placeCard .placeImage{height:105px;background:linear-gradient(135deg,#eef2ff,#e9fbf8);display:flex;align-items:center;justify-content:center;font-size:46px}.placeCard .placeBody{padding:0 17px 17px}.placeCard h3{font-size:17px}.placeCard .desc{min-height:43px}.placeCard .mapBtns{padding-top:10px;border-top:1px solid var(--line)}
+@media(max-width:900px){.exploreTabs{grid-template-columns:repeat(3,1fr)}.places{grid-template-columns:1fr 1fr}}@media(max-width:560px){.exploreTabs{grid-template-columns:repeat(2,1fr)}.exploreHero .cityName{font-size:25px}.places{grid-template-columns:1fr}}
+
+/* SEYR V3 — premium travel app layer */
+:root{--seyrA:#6d5dfc;--seyrB:#08b7a8;--seyrInk:#11152d;--seyrSoft:#f6f7fb;--seyrLine:rgba(17,21,45,.08)}
+body{background:radial-gradient(circle at 15% 0%,rgba(109,93,252,.09),transparent 32%),radial-gradient(circle at 90% 10%,rgba(8,183,168,.08),transparent 28%),#f7f8fc;color:var(--seyrInk)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(17,21,45,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(17,21,45,.025) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,black,transparent 75%);z-index:-1}
+.topbar{backdrop-filter:blur(22px);background:rgba(255,255,255,.76)!important;border-bottom:1px solid rgba(255,255,255,.65)!important;box-shadow:0 8px 30px rgba(24,28,60,.05)!important}
+.brand{font-weight:1000!important;letter-spacing:-1.2px;font-size:24px!important;background:linear-gradient(100deg,#5c4bf4,#08a99c);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.sub{font-weight:650!important;color:#69708a!important}
+.hero{min-height:340px!important;border-radius:34px!important;padding:34px!important;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.18),transparent 24%),linear-gradient(135deg,#10152f 0%,#342b87 52%,#087f78 100%)!important;box-shadow:0 28px 80px rgba(42,35,112,.25)!important;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;left:7%;bottom:-45px;font-size:220px;color:rgba(255,255,255,.045);transform:rotate(-15deg)}
+.hero h1{font-size:clamp(34px,6vw,64px)!important;line-height:1.02!important;letter-spacing:-2.5px!important;max-width:800px}
+.hero .meta{font-size:15px!important;opacity:.82}
+.heroBtns .btn{border-radius:18px!important;padding:13px 17px!important;font-weight:850!important;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.section,.card,.tile,.placeCard,.sheet{border:1px solid rgba(17,21,45,.07)!important;box-shadow:0 14px 42px rgba(24,28,60,.065)!important}
+.tile{min-height:132px!important;border-radius:24px!important;background:linear-gradient(180deg,#fff,#fafbff)!important;font-size:31px!important;transition:.25s!important}
+.tile:hover{transform:translateY(-5px) scale(1.01);box-shadow:0 20px 42px rgba(24,28,60,.11)!important}
+.tile span{font-size:14px!important;font-weight:850!important;margin-top:10px}
+.exploreHero{min-height:300px;background:radial-gradient(circle at 80% 25%,rgba(255,255,255,.16),transparent 20%),linear-gradient(135deg,#0d1230,#4431a4 54%,#059b91)!important;border-radius:32px!important;padding:30px!important;box-shadow:0 28px 75px rgba(50,39,140,.23)!important}
+.exploreHero .cityName{font-size:clamp(38px,7vw,72px)!important;line-height:.95!important;letter-spacing:-3px!important}
+.exploreHero .cityMeta{font-size:15px!important}
+.exploreTabs{gap:9px!important;overflow:auto!important;padding:4px 1px 10px!important}
+.exploreTab{border:1px solid rgba(17,21,45,.08)!important;background:#fff!important;border-radius:16px!important;padding:11px 14px!important;font-weight:850!important;box-shadow:0 6px 18px rgba(17,21,45,.05)}
+.exploreTab.active{background:linear-gradient(135deg,var(--seyrA),#8a78ff)!important;color:#fff!important;border-color:transparent!important}
+.search{height:58px!important;border-radius:19px!important;border:1px solid rgba(17,21,45,.1)!important;box-shadow:0 12px 30px rgba(17,21,45,.06)!important;font-size:15px!important;padding-inline:18px!important}
+.places{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))!important;gap:16px!important}
+.placeCard{border-radius:25px!important;padding:19px!important;background:rgba(255,255,255,.92)!important;transition:.25s!important;position:relative;overflow:hidden}
+.placeCard:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--seyrA),var(--seyrB))}
+.placeCard:hover{transform:translateY(-6px);box-shadow:0 22px 48px rgba(24,28,60,.12)!important}
+.placeCard .emoji{width:54px!important;height:54px!important;border-radius:17px!important;display:grid!important;place-items:center!important;background:linear-gradient(135deg,#f0eeff,#e7fbf8)!important;font-size:27px!important}
+.placeCard h3{font-size:18px!important;letter-spacing:-.3px}
+.btn{border-radius:15px!important;font-weight:800!important}
+.bottom{background:rgba(255,255,255,.84)!important;backdrop-filter:blur(20px)!important;border-top:1px solid rgba(17,21,45,.07)!important;box-shadow:0 -12px 35px rgba(17,21,45,.06)!important}
+.bottom .nav{border-radius:16px!important;font-weight:800!important}
+.bottom .nav.active{background:linear-gradient(135deg,rgba(109,93,252,.13),rgba(8,183,168,.1))!important;color:var(--seyrA)!important}
+.weather{background:linear-gradient(135deg,#e9e7ff,#e6fbf8)!important;border-radius:25px!important;padding:22px!important}
+.forecast{display:grid!important;grid-template-columns:repeat(7,minmax(90px,1fr))!important;gap:10px!important;overflow:auto!important}
+.forecast .mini{border-radius:20px!important;min-width:90px!important;text-align:center!important;background:#fff!important}
+.status{border-radius:999px!important;padding:7px 11px!important;background:rgba(109,93,252,.08)!important}
+.notice{border-radius:17px!important}
+
+.preferenceGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}.preferenceCard{border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(180deg,#fffdf8,#f8f0e3)}.preferenceCard label{display:block;font-weight:900;margin-bottom:8px}.budgetInput{position:relative}.budgetInput input{padding-inline-end:54px}.budgetInput span{position:absolute;inset-inline-end:12px;top:39px;font-weight:900;color:#8b6b58}.tripTypes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.tripTypeBtn{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 7px;font-weight:850;cursor:pointer}.tripTypeBtn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.preferenceHint{font-size:12px;color:var(--muted);margin-top:7px}.activityOptions{display:flex;gap:8px;overflow:auto;padding:10px 0 2px;scrollbar-width:none}.activityOptions::-webkit-scrollbar{display:none}.activityOpt{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:9px 13px;font-weight:850;cursor:pointer}.activityOpt.active{background:var(--primary);color:#fff;border-color:var(--primary)}.exploreSkeleton{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.skeletonCard{height:150px;border-radius:20px;background:linear-gradient(90deg,#eee5d5 25%,#f8f1e5 37%,#eee5d5 63%);background-size:400% 100%;animation:seyrShimmer 1.15s infinite}@keyframes seyrShimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}.powerPlugImage{display:grid;place-items:center;padding:12px;border-radius:22px;background:linear-gradient(135deg,#f1e6d4,#fffaf1);border:1px solid #ded3bf}.powerPlugImage svg{width:min(220px,72vw);height:150px}.plugCaption{text-align:center;font-size:11px;color:#8a7b68;margin-top:4px}.realisticPlug{position:relative;overflow:hidden;padding:0;background:#f7f0e5;min-height:190px}.realisticPlug img{width:100%;max-height:310px;object-fit:cover;display:block}.plugPhotoOverlay{position:absolute;inset:auto 10px 10px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 11px;border-radius:13px;background:rgba(17,38,31,.78);color:#fff;backdrop-filter:blur(8px);font-size:11px}.plugPhotoOverlay span{opacity:.82}.premiumPlug .plugSvg{width:min(260px,80vw);height:190px}.bookingHint{margin-top:8px;font-size:11px;color:var(--muted)}@media(max-width:760px){.exploreSkeleton{grid-template-columns:1fr 1fr}}@media(max-width:480px){.exploreSkeleton{grid-template-columns:1fr}}
+.recommendationBar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#f4e8d6,#e7f0e8);border:1px solid rgba(11,75,59,.12)}.recommendationBar b{color:#0b4b3b}.recommendationBar .muted{font-size:12px}@media(max-width:560px){.preferenceGrid{grid-template-columns:1fr}.tripTypes{grid-template-columns:repeat(3,1fr)}.recommendationBar{display:block}}
+.dark{background:#090b16!important;color:#f7f7fb!important}.dark .card,.dark .tile,.dark .placeCard,.dark .topbar,.dark .bottom,.dark .search,.dark .exploreTab{background:#111522!important;color:#f7f7fb!important;border-color:rgba(255,255,255,.08)!important}.dark .muted,.dark .sub{color:#a9afc2!important}.dark .tile{background:linear-gradient(180deg,#141827,#10131f)!important}
+@media(max-width:760px){.hero{min-height:300px!important;padding:24px!important;border-radius:27px!important}.hero h1{font-size:39px!important}.exploreHero{min-height:270px!important;padding:24px!important}.exploreHero .cityName{font-size:46px!important}.grid{grid-template-columns:repeat(2,1fr)!important}.tile{min-height:112px!important}.forecast{grid-template-columns:repeat(7,90px)!important}.places{grid-template-columns:1fr!important}}
+
+/* ================= SEYR VOYAGE — EXCEPTIONAL UI ================= */
+:root{
+ --bg:#f6efdf; --card:#fffaf0; --text:#173c31; --muted:#786f61; --line:#ded3bf;
+ --primary:#0b4b3b; --primary2:#b75b3b; --dark:#0a2f27; --soft:#eee2cf;
+ --shadow:0 18px 50px rgba(38,55,43,.10); --radius:24px;
+ --hero-image:url("https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1800&q=88");
+}
+html,body{background:var(--bg)!important;color:var(--text)!important}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;letter-spacing:-.01em}
+.top{background:rgba(246,239,223,.88)!important;border-bottom:1px solid rgba(222,211,191,.7)!important;box-shadow:none!important}
+.toprow{max-width:980px!important;padding:14px 18px!important}
+.brand{font-family:Georgia,"Times New Roman",serif!important;font-size:22px!important;letter-spacing:.12em!important;color:var(--primary)!important;display:flex;align-items:center;gap:8px}.brand:after{content:"↗";font-family:Inter,Arial,sans-serif;font-size:11px;letter-spacing:0;opacity:.55;margin-inline-start:2px}.dark .brand{color:#fff!important}
+.brand:before{display:none!important}
+.brand-ar{display:none!important}.dark .brand,.dark .brand-ar{color:#fff!important}.dark .logoTag{color:#cfc6b8!important}.dark .seyrLogoMark{filter:drop-shadow(0 7px 16px rgba(255,255,255,.08))}.sub{font-family:Georgia,serif!important;font-size:9px!important;letter-spacing:.08em!important;color:#9a8d7b!important;margin:0!important}
+.actions{gap:6px!important}.actions .icon{width:34px!important;height:34px!important;border-radius:50%!important;background:rgba(255,250,240,.8)!important;border-color:#d9ccb7!important;color:var(--primary)!important}.actions .icon:nth-child(2){background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important}
+.content{max-width:980px!important;padding:12px 18px 110px!important}
+.hero{min-height:475px!important;padding:34px!important;border-radius:26px!important;box-shadow:0 24px 60px rgba(22,61,47,.18)!important;background-image:linear-gradient(180deg,rgba(8,42,33,.02) 22%,rgba(6,54,42,.38) 53%,rgba(5,55,42,.96) 100%),var(--hero-image)!important;background-position:center!important;background-size:cover!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;isolation:isolate}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 35%);z-index:-1}
+.hero:after{width:180px!important;height:180px!important;left:auto!important;right:-80px!important;top:-70px!important;background:rgba(255,255,255,.10)!important;filter:blur(2px)!important}
+.eyebrow{display:inline-flex!important;width:max-content!important;padding:7px 11px!important;border:1px solid rgba(255,255,255,.25)!important;border-radius:999px!important;background:rgba(255,255,255,.12)!important;backdrop-filter:blur(8px)!important;text-transform:uppercase!important;font-size:9px!important;letter-spacing:.04em!important}
+.hero h1{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(48px,7vw,78px)!important;line-height:.95!important;font-weight:400!important;letter-spacing:-.045em!important;margin:16px 0 12px!important;text-shadow:0 3px 18px rgba(0,0,0,.22)}
+.meta{font-size:13px!important;opacity:.95!important}
+.heroBtns{margin-top:18px!important;padding-top:18px!important;border-top:1px solid rgba(255,255,255,.24)!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
+.heroBtns .btn{border-radius:999px!important;padding:12px 18px!important;font-size:12px!important}.heroBtns .btn.white{background:var(--primary2)!important;color:#fff!important}.heroBtns .btn.glass{background:rgba(255,255,255,.10)!important;border-color:rgba(255,255,255,.24)!important}
+.section{margin-top:34px!important}.head{margin-bottom:16px!important}.head h2{font-family:Georgia,"Times New Roman",serif!important;font-size:24px!important;font-weight:400!important;letter-spacing:-.03em!important;color:var(--primary)!important}.head .muted{font-size:11px!important}
+.grid{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}.tile{min-height:82px!important;background:rgba(255,250,240,.65)!important;border:1px solid var(--line)!important;border-radius:18px!important;box-shadow:none!important;align-items:center!important;text-align:center!important;padding:12px!important;transition:.25s!important;color:var(--primary)!important}.tile:hover{transform:translateY(-3px)!important;background:#fffaf0!important;box-shadow:var(--shadow)!important}.tile b{font-size:23px!important;margin-bottom:5px!important}.tile span{font-size:10px!important;font-weight:600!important;color:#765f4f!important}
+.card,.placeCard,.item,.daybody,.sheet,.field input,.field textarea,.field select,.suggestion,table{background:rgba(255,250,240,.72)!important;border-color:var(--line)!important;box-shadow:none!important}.card{border-radius:22px!important}.card:hover,.placeCard:hover{transform:translateY(-2px);box-shadow:var(--shadow)!important}
+.split{gap:28px!important}.weather{padding:24px!important}.temp{font-family:Georgia,serif!important;font-size:52px!important;font-weight:400!important;color:var(--primary)!important}.weatherIcon{font-size:54px!important}
+.forecast{gap:6px!important}.mini{background:#efe3d0!important;border-radius:14px!important;color:var(--primary)!important}
+.kpis{grid-template-columns:repeat(4,1fr)!important;gap:9px!important}.kpi{background:transparent!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:10px 2px!important}.kpi b{font-family:Georgia,serif!important;font-size:25px!important;font-weight:400!important;color:var(--primary)!important}
+.exploreHero{border-radius:24px!important;padding:32px!important;background-image:linear-gradient(180deg,rgba(8,42,33,.18),rgba(7,57,43,.94)),var(--hero-image)!important;background-size:cover!important;background-position:center!important;box-shadow:0 22px 55px rgba(18,65,50,.18)!important}.exploreHero .cityName{font-family:Georgia,serif!important;font-size:46px!important;font-weight:400!important}.exploreHero .btn{border-radius:999px!important;background:rgba(255,250,240,.13)!important}
+.exploreTabs{grid-template-columns:repeat(6,1fr)!important;gap:7px!important}.exploreTab{background:transparent!important;border:1px solid var(--line)!important;border-radius:999px!important;color:#765f4f!important;padding:9px 7px!important;font-size:11px!important}.exploreTab span{display:inline!important;font-size:13px!important;margin:0 4px 0 0!important}.exploreTab.active{background:var(--primary)!important;border-color:var(--primary)!important;color:#fff!important}
+.places{gap:10px!important}.placeCard{border-radius:20px!important;overflow:hidden!important;padding:0!important}.placeCard .placeImage{height:150px!important;background:linear-gradient(135deg,#d8c4a7,#6d8e7e)!important}.placeCard .placeBody{padding:15px!important}.placeCard h3{font-family:Georgia,serif!important;font-size:21px!important;font-weight:400!important;color:var(--primary)!important}.placeCard p{font-size:12px!important;color:var(--muted)!important}.chip{background:#eee2cf!important;border-color:#dfd0b9!important;color:#6c5a4b!important}.chip.active{background:#dce9df!important;border-color:#c2d5c8!important;color:var(--primary)!important}
+.btn{background:var(--primary)!important;border-radius:999px!important;font-weight:700!important}.btn.outline{background:transparent!important;border:1px solid #cfc0aa!important;color:var(--primary)!important}.btn.danger{background:#9e3e2e!important}
+.bottom{left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:12px!important;width:min(420px,calc(100% - 24px))!important;border:1px solid #ddd0bb!important;border-radius:22px!important;background:rgba(255,250,240,.94)!important;box-shadow:0 18px 45px rgba(31,52,42,.16)!important;backdrop-filter:blur(18px)!important;overflow:hidden!important}.bottom .nav{width:20%!important;max-width:none!important;color:#8b7b6b!important;padding:10px 4px!important;font-size:9px!important}.bottom .nav b{font-size:18px!important;font-weight:500!important;margin-bottom:2px!important}.bottom .nav.active{color:var(--primary)!important}.bottom .nav.active b{background:#eadbc4;border-radius:50%;width:32px;height:26px;margin:0 auto 2px;display:flex;align-items:center;justify-content:center}
+.modal .sheet{border-radius:28px 28px 0 0!important;background:#fffaf0!important}.close{border-radius:50%!important;background:#eee2cf!important;color:var(--primary)!important}
+.notice{border-radius:16px!important;border-color:var(--line)!important;background:#f0e6d6!important}
+.search{background:#fffaf0!important;border-color:var(--line)!important;border-radius:999px!important}.field label{color:#7b6b5a!important;font-size:11px!important}
+.dark{--bg:#0b2922;--card:#10352c;--text:#f8f0df;--muted:#c7bba8;--line:#315348;--soft:#173f34}.dark .top{background:rgba(11,41,34,.88)!important}.dark .bottom{background:rgba(13,48,40,.94)!important;border-color:#315348!important}.dark .tile,.dark .card,.dark .placeCard,.dark .item,.dark .daybody,.dark .sheet,.dark .field input,.dark .field textarea,.dark .field select,.dark table{background:rgba(16,53,44,.88)!important;color:var(--text)!important}.dark .head h2,.dark .kpi b,.dark .temp,.dark .placeCard h3{color:#f8f0df!important}.dark .chip{background:#1a4338!important;color:#dfd3bf!important}
+@media(max-width:900px){.content{padding:10px 14px 104px!important}.hero{min-height:510px!important;padding:24px!important}.hero h1{font-size:54px!important}.heroBtns{flex-wrap:wrap}.grid{grid-template-columns:repeat(4,1fr)!important}.split{grid-template-columns:1fr!important}.kpis{grid-template-columns:repeat(2,1fr)!important}.places{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:560px){.toprow{padding:10px 12px!important}.sub{display:none!important}.actions .icon{width:32px!important;height:32px!important}.content{padding:8px 10px 104px!important}.hero{min-height:500px!important;border-radius:24px!important;padding:20px!important}.hero h1{font-size:52px!important}.heroBtns{gap:7px!important}.heroBtns .btn{padding:10px 13px!important}.grid{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}.tile{min-height:72px!important;border-radius:15px!important;padding:8px 3px!important}.tile b{font-size:18px!important}.tile span{font-size:8px!important}.section{margin-top:26px!important}.head h2{font-size:21px!important}.exploreHero{padding:24px!important}.exploreHero .cityName{font-size:40px!important}.exploreTabs{grid-template-columns:repeat(3,1fr)!important}.places{grid-template-columns:1fr!important}.placeCard .placeImage{height:180px!important}.bottom{bottom:8px!important}.bottom .nav{font-size:8px!important}}
+/* =========================================================== */
+
+
+/* ================= SEYR AI — VOYAGE COPILOT ================= */
+.seyr-ai-fab{position:fixed;inset-inline-end:22px;bottom:88px;z-index:80;border:0;border-radius:999px;padding:12px 16px;background:linear-gradient(135deg,#0b4b3b,#1b6b57);color:#fff;box-shadow:0 16px 38px rgba(11,75,59,.28);display:flex;align-items:center;gap:8px;font-weight:900;cursor:pointer}.seyr-ai-fab .ai-spark{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#b75b3b;font-size:14px}.seyr-ai{position:fixed;inset-inline-end:22px;bottom:154px;width:min(440px,calc(100vw - 28px));height:min(690px,calc(100vh - 175px));z-index:90;background:#fffaf0;border:1px solid #ded3bf;border-radius:28px;box-shadow:0 30px 90px rgba(15,50,40,.24);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(18px) scale(.98);pointer-events:none;transition:.22s ease}.seyr-ai.show{opacity:1;transform:none;pointer-events:auto}.seyr-ai-head{padding:17px 18px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#0b4b3b,#174f41);color:#fff}.ai-title{font:700 24px Georgia,serif}.ai-sub{font-size:11px;opacity:.78;margin-top:2px}.ai-close{border:0;background:rgba(255,255,255,.12);color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer}.ai-context{margin:12px 14px 0;padding:10px 12px;border-radius:15px;background:#f0e6d6;color:#536258;font-size:11px;line-height:1.6}.ai-messages{flex:1;overflow:auto;padding:12px 14px;display:flex;flex-direction:column;gap:9px}.ai-msg{max-width:88%;padding:11px 13px;border-radius:17px;line-height:1.7;font-size:13px;white-space:pre-wrap}.ai-msg.user{align-self:flex-start;background:#0b4b3b;color:#fff;border-bottom-right-radius:5px}.ai-msg.assistant{align-self:flex-end;background:#f0e6d6;color:#173c31;border-bottom-left-radius:5px}.ai-msg.thinking{opacity:.65}.ai-quick{display:flex;gap:6px;overflow:auto;padding:8px 12px;border-top:1px solid #eee4d3}.ai-quick button{white-space:nowrap;border:1px solid #d9ccb7;background:#fffdf8;border-radius:999px;padding:8px 10px;font-size:10px;color:#315247;cursor:pointer}.ai-input{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #ded3bf;background:#fffdf8}.ai-input textarea{flex:1;resize:none;border:1px solid #d9ccb7;border-radius:16px;padding:10px 12px;outline:none;font:inherit;font-size:13px;background:#fffaf0;color:#173c31}.ai-input button{border:0;border-radius:15px;background:#b75b3b;color:#fff;font-weight:900;padding:0 14px;cursor:pointer}.ai-note{text-align:center;padding:0 10px 9px;color:#9a8d7b;font-size:9px}.dark .seyr-ai{background:#10352c;border-color:#315348}.dark .ai-context,.dark .ai-msg.assistant{background:#173f34;color:#f8f0df}.dark .ai-input{background:#10352c;border-color:#315348}.dark .ai-input textarea{background:#0f3028;color:#f8f0df;border-color:#315348}.dark .ai-quick{border-color:#315348}.dark .ai-quick button{background:#173f34;color:#f8f0df;border-color:#315348}
+.exploreTabs{position:sticky;top:8px;z-index:15;display:flex!important;gap:7px!important;overflow:auto!important;padding:7px!important;background:rgba(246,239,223,.94)!important;backdrop-filter:blur(14px)!important;border:1px solid #ded3bf!important;border-radius:18px!important}.exploreTab{flex:0 0 auto!important;min-width:96px!important;padding:11px 13px!important;border:1px solid #ded3bf!important;border-radius:999px!important;background:#fffaf0!important;color:#173c31!important;font-weight:900!important;cursor:pointer!important;pointer-events:auto!important}.exploreTab.active{background:#0b4b3b!important;color:#fff!important;border-color:#0b4b3b!important}.exploreTab span{margin-inline-end:4px}.exploreResultCount{margin:9px 2px;color:#786f61;font-size:11px}.plannerDestination{margin:0 0 14px;padding:13px 15px;border-radius:18px;background:linear-gradient(135deg,#e7f0e8,#f4e8d6);border:1px solid rgba(11,75,59,.12)}
+@media(max-width:560px){.seyr-ai-fab{inset-inline-end:12px;bottom:82px;padding:10px 13px}.seyr-ai{inset-inline-end:10px;bottom:136px;width:calc(100vw - 20px);height:calc(100vh - 160px);border-radius:24px}.seyr-ai-fab span:last-child{font-size:11px}.exploreTabs{top:4px}.exploreTab{min-width:82px;padding:10px 10px;font-size:11px}}
+</style>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#6d5dfc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SEYR | سَيْر">
+<link rel="apple-touch-icon" href="/icons/icon-192.svg">
+<style>
+/* SEYR interactive scroll layer */
+html{scroll-behavior:smooth}
+body{--scroll-progress:0%}
+#seyrScrollProgress{position:fixed;top:0;left:0;height:3px;width:var(--scroll-progress);background:linear-gradient(90deg,#b75b3b,#0b4b3b);z-index:9999;pointer-events:none;transition:width .08s linear}
+.page.active>.head,.page.active>.section,.page.active>.card,.page.active>.timeline,.page.active>.tableWrap,.page.active>.exploreHero,.page.active>.exploreTabs,.page.active>#places,.page.active>#plannerDestination{animation:seyrPageIn .48s cubic-bezier(.2,.8,.2,1) both}
+.reveal{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1)}
+.reveal.is-visible{opacity:1;transform:none}
+.card,.tile,.placeCard,.day,.item,.kpi,.preferenceCard{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,border-color .35s ease}
+.card:hover,.tile:hover,.placeCard:hover,.day:hover,.item:hover,.kpi:hover,.preferenceCard:hover{transform:translateY(-4px)}
+.top{transition:padding .3s ease,box-shadow .3s ease,background .3s ease}
+body.seyr-scrolling .top{box-shadow:0 8px 30px rgba(31,52,42,.08);backdrop-filter:blur(18px)}
+body.seyr-nav-hidden .bottom{transform:translate(-50%,130%)!important;opacity:.15!important;pointer-events:none!important}
+.bottom{transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s ease!important}
+.hero{--hero-shift:0px;transition:box-shadow .4s ease,transform .4s ease}
+.hero::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(11,75,59,.16));opacity:.55;transition:opacity .4s ease}
+.hero>*{position:relative;z-index:1}
+@keyframes seyrPageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.page.active>*{animation:none}.bottom,.top{transition:none!important}}
+.seyrLogo{display:flex;align-items:center;gap:10px}.seyrLogoMark{width:42px;height:42px;flex:0 0 42px;filter:drop-shadow(0 7px 16px rgba(28,67,55,.16))}.brandWrap{display:flex;flex-direction:column}.brand{font-weight:900;letter-spacing:.08em}.brand-ar{font-family:inherit;letter-spacing:0}.logoTag{font-size:10px;color:var(--muted);margin-top:2px}
+</style>
+<style id="seyr-final-polish">
+button,.btn,.chip,.exploreTab,.activityOpt,.tripTypeBtn,.nav,.tile,.icon{pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important;position:relative;z-index:2}
+.bottom,.top,.modal,.sheet{isolation:isolate}
+.exploreTab,.activityOpt,.tripTypeBtn{user-select:none;-webkit-tap-highlight-color:transparent}
+.page.active{animation:seyrPageIn .42s cubic-bezier(.2,.8,.2,1)}
+.page.active .card,.page.active .tile,.page.active .placeCard{will-change:transform}
+.scrollTopFab{position:fixed;right:18px;bottom:92px;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:rgba(255,250,240,.92);color:var(--primary);backdrop-filter:blur(12px);box-shadow:0 12px 30px rgba(23,60,49,.14);z-index:24;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s ease}
+.scrollTopFab.show{opacity:1;transform:none;pointer-events:auto}.dark .scrollTopFab{background:rgba(16,53,44,.94);color:#fff}
+.recommendationsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.recCard{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;min-height:125px;cursor:pointer;transition:.28s ease}.recCard:hover{transform:translateY(-3px)}.recCard .recIcon{font-size:24px}.recCard b{display:block;margin-top:7px;line-height:1.35}.recCard small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}.morePlaces{width:100%;margin-top:12px}.flightSection{margin-top:18px}.flightGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.flightCard{border:1px solid var(--line);border-radius:20px;padding:15px;background:linear-gradient(145deg,#fffaf0,#f2eadc);display:flex;flex-direction:column;min-height:185px}.dark .flightCard{background:linear-gradient(145deg,#12392f,#102f27)}.flightLogo{font-weight:950;font-size:16px;letter-spacing:.03em}.flightDates{font-size:11px;color:var(--muted);margin:8px 0;line-height:1.5}.flightCard .btn{margin-top:auto;width:100%}.flightNote{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6}.flightHero{padding:16px;border-radius:20px;background:linear-gradient(135deg,#0b4b3b,#174f41);color:#fff;margin-bottom:10px}.flightHero b{font-size:18px}.flightHero .muted{color:rgba(255,255,255,.72)}
+@media(max-width:760px){.recommendationsGrid{grid-template-columns:repeat(2,1fr)}.flightGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.flightGrid{grid-template-columns:1fr}.recommendationsGrid{grid-template-columns:1fr 1fr}}
+</style>
+<style id="seyr-premium-final">
+.seyr-copilot-card{position:relative;overflow:hidden;min-height:190px;border-radius:28px;padding:25px 28px;background:linear-gradient(120deg,#071c18 0%,#0b4b3b 55%,#174f41 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 24px 70px rgba(11,75,59,.22)}
+.copilot-glow{position:absolute;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,rgba(183,91,59,.30),transparent 68%);inset-inline-end:-110px;top:-125px;pointer-events:none}
+.copilot-main{position:relative;z-index:1;max-width:720px}.copilot-kicker,.flight-home-kicker{font-size:10px;letter-spacing:1.5px;font-weight:950;opacity:.7}.copilot-main h2{font-size:28px;margin:6px 0}.copilot-main p{margin:0;color:rgba(255,255,255,.75);line-height:1.75;font-size:13px;max-width:650px}.copilot-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.btn.glassDark{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff}.copilot-orbit{width:126px;height:126px;flex:0 0 126px;border:1px solid rgba(255,255,255,.18);border-radius:50%;display:grid;place-items:center;position:relative;background:rgba(255,255,255,.05);box-shadow:inset 0 0 40px rgba(255,255,255,.04)}.copilot-orbit span{font-size:38px;transform:rotate(-18deg)}.copilot-orbit i,.copilot-orbit b{position:absolute;font-style:normal;font-size:9px;background:#b75b3b;padding:5px 8px;border-radius:999px}.copilot-orbit i{top:6px;inset-inline-end:4px}.copilot-orbit b{bottom:8px;inset-inline-start:3px;background:#fff;color:#0b4b3b}
+.flight-home-card{position:relative;overflow:hidden;border:1px solid #dce3e0;border-radius:24px;padding:22px;background:linear-gradient(135deg,#f8fcfb,#eef6f2);box-shadow:var(--shadow)}.flight-home-card h2{margin:6px 0;font-size:22px}.flight-home-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.flight-providers{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.flight-providers span{padding:7px 10px;border:1px solid #d7e2de;border-radius:999px;background:#fff;color:#496057;font-size:10px;font-weight:850}
+.dark .flight-home-card{background:linear-gradient(135deg,#102f28,#12392f);border-color:#315348}.dark .flight-providers span{background:#173f34;color:#e9f4ef;border-color:#315348}
+@media(max-width:650px){.seyr-copilot-card{padding:21px;min-height:0}.copilot-orbit{width:86px;height:86px;flex-basis:86px}.copilot-orbit span{font-size:27px}.copilot-main h2{font-size:23px}.flight-home-card{padding:18px}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="toprow">
+  <div class="seyrLogo"><img class="seyrLogoMark" src="/icons/logo-seyr.svg" alt="SEYR"><div class="brandWrap"><div class="brand">SEYR</div><div class="logoTag">Travel, intelligently.</div></div></div><div class="sub">سافر أذكى — استكشف أكثر — كل رحلتك في مكان واحد</div></div>
+  <div class="actions"><button class="icon langBtn" id="langBtn" onclick="toggleLanguage()">EN</button><button class="icon notifyBtn" onclick="notificationsModal()">🔔<span id="notifyBadge" class="badge">0</span></button><button class="icon" onclick="toggleDark()">◐</button><button class="icon" onclick="refreshAll()">↻</button></div>
+ </div>
+</header>
+<main class="content">
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="eyebrow">مركز الرحلة</div>
+  <h1 id="route">الرياض → اختر وجهتك</h1>
+  <div class="meta" id="dates">أنشئ رحلتك ليتم بناء المعلومات تلقائياً</div>
+  <div class="heroBtns"><button class="btn white" onclick="newTripModal()">＋ إنشاء / تعديل الرحلة</button><button class="btn glass" onclick="go('planner')">🗓️ مخطط الرحلة</button><button class="btn glass" onclick="go('explore')">📍 استكشف</button></div>
+ </div>
+ <section class="section"><div class="head"><h2>لوحة الرحلة</h2><span class="status" id="fresh">● جاهز</span></div>
+  <div class="grid">
+   <button class="tile" onclick="weatherModal()">🌤️<span>الطقس</span></button>
+   <button class="tile" onclick="seasonModal()">🗓️<span>أفضل وقت للسفر</span></button>
+   <button class="tile" onclick="qiblaModal()">🧭<span>القبلة</span></button>
+   <button class="tile" onclick="powerModal()">🔌<span>الكهرباء</span></button>
+   <button class="tile" onclick="currencyModal()">💱<span>العملة</span></button>
+   <button class="tile" onclick="visaModal()">🛂<span>التأشيرة</span></button>
+   <button class="tile" onclick="phrasesModal()">🗣️<span>العبارات</span></button>
+   <button class="tile" onclick="dailyWordModal()">📚<span>كلمة اليوم</span></button>
+   <button class="tile" onclick="go('documents')">📄<span>المستندات</span></button>
+  </div>
+ </section>
+ <section class="section split">
+  <div><div class="head"><h2 id="weatherTitle">الطقس في الوجهة</h2><span class="muted" id="weatherTime">—</span></div><div class="card weather"><div><div class="temp" id="temp">--°</div><div id="weatherText" class="muted">اختر مدينة الوجهة</div></div><div class="weatherIcon" id="weatherIcon">🌍</div></div><div id="forecast" class="forecast"></div><div id="weatherExtra" class="card" style="margin-top:12px"></div></div>
+  <div><div class="head"><h2>أفضل وقت</h2><span class="muted">مناخي</span></div><div id="seasonCard" class="card"><div class="muted">اختر مدينة الوجهة لاحتساب أفضل الأشهر من بيانات المناخ التاريخية.</div></div></div>
+ </section>
+ <section class="section">
+  <div class="seyr-copilot-card">
+    <div class="copilot-glow"></div>
+    <div class="copilot-main">
+      <div class="copilot-kicker">✦ SEYR INTELLIGENCE</div>
+      <h2>سَيْر AI</h2>
+      <p>مساعدك الشخصي للرحلة — يفهم وجهتك، التواريخ، الميزانية، نوع الرحلة والمخطط، ويكمل معك من نفس السياق.</p>
+      <div class="copilot-actions">
+        <button class="btn" onclick="openSeyrAI()">✦ اسأل سَيْر</button>
+        <button class="btn glassDark" onclick="aiQuick('راجع رحلتي واقترح أهم 3 تحسينات')">تحسين الرحلة</button>
+      </div>
+    </div>
+    <div class="copilot-orbit"><span>✈</span><i>AI</i><b>24/7</b></div>
+  </div>
+ </section>
+ <section class="section"><div class="head"><h2>ملخص الرحلة</h2><span class="muted">كل التفاصيل في مكان واحد</span></div><div class="kpis" id="kpis"></div></section>
+ <section class="section">
+  <div class="head"><h2>✈️ تذاكر الطيران</h2><span class="status"><span class="liveDot"></span>خيارات حقيقية</span></div>
+  <div class="flight-home-card">
+    <div><span class="flight-home-kicker">SMART FLIGHT SEARCH</span><h2>من رحلتك مباشرة إلى التذكرة</h2><p id="flightHomeMeta" class="muted">حدد وجهتك وتواريخ السفر، وسيفتح لك سَيْر مقارنة الرحلات بالمسار والتاريخ الصحيح.</p></div>
+    <div class="flight-home-actions">
+      <button class="btn" onclick="go('explore');setTimeout(()=>document.getElementById('flightBooking')?.scrollIntoView({behavior:'smooth',block:'center'}),120)">ابحث عن الرحلات</button>
+      <button class="btn outline" onclick="openFlightSearch('google')">Google Flights</button>
+    </div>
+    <div class="flight-providers"><span>Wego</span><span>Google Flights</span><span>Skyscanner</span></div>
+  </div>
+ </section>
+ <section class="section"><div class="head"><h2>اكتشف الوجهة</h2><span class="status"><span class="liveDot"></span>يتحدث عند الطلب</span></div><div class="card"><b>مطاعم · مقاهي · معالم · أنشطة · فعاليات</b><p class="muted">كلها داخل «استكشف» مع روابط الخريطة المناسبة للدولة. GetYourGuide يظهر كمصدر للأنشطة، والربط الرسمي بالنتائج والأسعار يحتاج حساب Partner API.</p><button class="btn" style="width:100%" onclick="go('explore')">افتح استكشف</button></div></section>
+</section>
+
+<section id="planner" class="page"><div class="head"><h2>🗓️ مخطط الرحلة</h2><button class="btn" onclick="openDayModal()">＋ إضافة يوم</button></div><div id="plannerDestination" class="plannerDestination"></div><div id="plannerList" class="timeline"></div></section>
+
+<section id="stay" class="page"><div class="head"><h2>🏨 السكن</h2><button class="btn" onclick="addSimple('stay')">＋ إضافة سكن</button></div><div id="stayList" class="list"></div></section>
+
+<section id="transport" class="page"><div class="head"><h2>🚌 المواصلات والحجوزات</h2><button class="btn" onclick="addSimple('transport')">＋ إضافة رحلة</button></div><div id="transportList" class="list"></div></section>
+
+<section id="explore" class="page"><div class="exploreHero"><div class="muted" style="color:rgba(255,255,255,.68)">استكشف حول رحلتك</div><div id="exploreCityName" class="cityName">اختر مدينة الوجهة</div><div id="exploreCityMeta" class="cityMeta">أنشئ رحلة أولاً ليتم تحميل الأماكن حول مدينتك مباشرة.</div><div class="cityActions"><button class="btn" onclick="loadExplore(true)">↻ تحديث الأماكن</button><button class="btn" onclick="openCityMaps()">🗺️ خريطة المدينة</button><button class="btn" onclick="openGYG()">🎟️ أنشطة</button></div></div>
+ <div class="card"><div class="head"><b>كل شيء حول المدينة</b><span class="status"><span class="liveDot"></span><span id="exploreStatus">جاهز</span></span></div><div class="quickSources" id="mapSources"></div><div class="sourceNote">يتم البحث بإحداثيات مدينة الوجهة المختارة، ثم عرض الأماكن المتاحة من المصادر الحية. لا يتم اختلاق التقييمات أو الأسعار.</div></div>
+ <input id="search" class="search" style="margin-top:12px" placeholder="🔎 ابحث داخل المدينة: مطعم، مقهى، معلم، نشاط…" oninput="filterExplore()">
+ <div id="exploreRecommendation" class="recommendationBar"><div><b>اقتراحاتك جاهزة</b><div class="muted">سنرتب لك الأماكن حسب شباب / عائلية / فردية والميزانية.</div></div><button class="btn outline" onclick="newTripModal()">تعديل التفضيلات</button></div><div id="recommendations" class="recommendationsGrid"></div><div class="exploreTabs"><button class="exploreTab active" data-filter="all" onclick="setFilter('all',this)"><span>✨</span>الكل</button><button class="exploreTab" data-filter="tourism" onclick="setFilter('tourism',this)"><span>🏛️</span>معالم</button><button class="exploreTab" data-filter="restaurant" onclick="setFilter('restaurant',this)"><span>🍽️</span>مطاعم</button><button class="exploreTab" data-filter="cafe" onclick="setFilter('cafe',this)"><span>☕</span>مقاهي</button><button class="exploreTab" data-filter="activity" onclick="setFilter('activity',this)"><span>🎟️</span>أنشطة</button><button class="exploreTab" data-filter="shopping" onclick="setFilter('shopping',this)"><span>🛍️</span>تسوق</button><button class="exploreTab" data-filter="nature" onclick="setFilter('nature',this)"><span>🌿</span>طبيعة</button><button class="exploreTab" data-filter="beach" onclick="setFilter('beach',this)"><span>🏖️</span>شواطئ</button><button class="exploreTab" data-filter="nightlife" onclick="setFilter('nightlife',this)"><span>🌙</span>ليلية</button><button class="exploreTab" data-filter="hotel" onclick="setFilter('hotel',this)"><span>🏨</span>فنادق</button></div>
+ <div id="activityOptions" class="activityOptions" hidden><button class="activityOpt active" onclick="setActivitySub('all',this)">🎟️ الكل</button><button class="activityOpt" onclick="setActivitySub('adventure',this)">🧗 مغامرات</button><button class="activityOpt" onclick="setActivitySub('nature',this)">🌿 طبيعة</button><button class="activityOpt" onclick="setActivitySub('culture',this)">🏛️ ثقافة</button><button class="activityOpt" onclick="setActivitySub('family',this)">👨‍👩‍👧 عائلية</button><button class="activityOpt" onclick="setActivitySub('night',this)">🌙 ليلية</button></div><div id="exploreResultCount" class="exploreResultCount"></div><div id="places" class="places"></div><button id="morePlacesBtn" class="btn outline morePlaces" hidden onclick="showMorePlaces()">عرض المزيد</button>
+ <section class="flightSection"><div class="head"><h2>✈️ حجز الطيران</h2><span class="status"><span class="liveDot"></span>بحث حي عند الضغط</span></div><div id="flightBooking"></div></section>
+ <div class="card" style="margin-top:16px"><b>🎟️ الأنشطة والحجوزات</b><p class="muted">تصفح أنشطة ${trip.to?.ar||'الوجهة'} عبر GetYourGuide. الربط البرمجي الكامل بالنتائج والأسعار يحتاج Partner API.</p><button class="btn" onclick="openGYG()">استكشاف أنشطة المدينة</button></div>
+</section>
+
+<section id="documents" class="page"><div class="head"><h2>📄 مستندات الرحلة</h2><button class="btn" onclick="uploadDoc()">＋ رفع مستند</button></div><div id="docs" class="list"></div><div class="notice" style="margin-top:12px">النسخة الحالية تحفظ بيانات المستند محلياً. التخزين السحابي يحتاج حساباً وقاعدة بيانات وخدمة ملفات.</div></section>
+
+<section id="budget" class="page"><div class="head"><h2>💰 الميزانية</h2></div><div class="card tableWrap"><table><thead><tr><th>البند</th><th>التقدير</th><th>ملاحظات</th></tr></thead><tbody id="budgetTable"></tbody></table></div></section>
+
+<section id="account" class="page"><div class="head"><h2>⚙️ الإعدادات والحساب</h2></div><div class="list">
+ <div class="item"><div class="ico">🇸🇦</div><div class="grow"><b>جواز السفر</b><div class="muted">الجنسية المستخدمة للتأشيرات: السعودية</div></div></div>
+ <div class="item"><div class="ico">🌍</div><div class="grow"><b>قاعدة المدن</b><div class="muted">بحث ثنائي اللغة مع مصدر مدن عالمي + Geocoding احتياطي</div></div></div>
+ <div class="item"><div class="ico">🌦️</div><div class="grow"><b>المناخ</b><div class="muted">يُحتسب أفضل وقت مبدئياً من بيانات الطقس التاريخية للمدينة المختارة</div></div></div>
+ <div class="item"><div class="ico">⭐</div><div class="grow"><b>تقييمات Google Places (اختياري)</b><div class="muted">لإظهار التقييم وعدد المراجعات داخل التطبيق، أدخل مفتاح Google Places API المقيد بتطبيقك.</div><div style="display:flex;gap:8px;margin-top:9px"><input id="googlePlacesKey" class="field" style="flex:1;padding:10px;border:1px solid var(--line);border-radius:12px" type="password" placeholder="Google Places API Key"><button class="btn" onclick="saveGoogleKey()">حفظ</button></div></div></div>
+ </div>
+</section>
+</main>
+<button id="scrollTopFab" class="scrollTopFab" aria-label="العودة للأعلى" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<nav class="bottom">
+ <button class="nav active" onclick="go('home',this)"><b>⌂</b>الرئيسية</button>
+ <button class="nav" onclick="go('planner',this)"><b>☷</b>المخطط</button>
+ <button class="nav" onclick="go('explore',this)"><b>⌕</b>استكشف</button>
+ <button class="nav" onclick="go('documents',this)"><b>▣</b>المستندات</button>
+ <button class="nav" onclick="go('account',this)"><b>◎</b>حسابي</button>
+</nav>
+
+<button class="seyr-ai-fab" onclick="openSeyrAI()" aria-label="مساعد سَيْر"><span class="ai-spark">✦</span><span>سَيْر AI</span></button>
+<div id="seyrAI" class="seyr-ai" aria-hidden="true">
+  <div class="seyr-ai-head"><div><div class="ai-title">سَيْر AI</div><div class="ai-sub">رفيقك الذكي — يفهم رحلتك ويخطط معك</div></div><button class="ai-close" onclick="closeSeyrAI()">✕</button></div>
+  <div id="seyrAIContext" class="ai-context"></div>
+  <div id="seyrAIMessages" class="ai-messages"></div>
+  <div class="ai-quick">
+    <button onclick="aiQuick('رتب لي برنامج اليوم حسب ميزانيتي ونوع الرحلة')">برنامج اليوم</button>
+    <button onclick="aiQuick('اقترح لي مطاعم ومقاهي مناسبة لي')">مطاعم ومقاهي</button>
+    <button onclick="aiQuick('ما الأشياء التي لا يجب أن أفوتها؟')">لا تفوتني</button>
+    <button onclick="aiQuick('راجع خطتي واكتشف أي مشكلة فيها')">راجع خطتي</button>
+  </div>
+  <form class="ai-input" onsubmit="sendSeyrAI(event)"><textarea id="seyrAIInput" rows="1" placeholder="اسأل سَيْر عن رحلتك…" autocomplete="off"></textarea><button type="submit" id="seyrAISend">إرسال ↑</button></form>
+  <div class="ai-note">سَيْر يستخدم بيانات رحلتك الحالية. لا ترسل بيانات حساسة.</div>
+</div>
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="sheet"><button class="close" onclick="closeModal()">✕</button><h2 id="mt" style="margin:4px 45px 16px 0"></h2><div id="mb"></div></div></div>
+
+<script>
+const CURRENCY_BY_CC={"AW":"AWG","AF":"AFN","AO":"AOA","AI":"XCD","AX":"EUR","AL":"ALL","AD":"EUR","AE":"AED","AR":"ARS","AM":"AMD","AS":"USD","TF":"EUR","AG":"XCD","AU":"AUD","AT":"EUR","AZ":"AZN","BI":"BIF","BE":"EUR","BJ":"XOF","BQ":"USD","BF":"XOF","BD":"BDT","BG":"BGN","BH":"BHD","BS":"BSD","BA":"BAM","BL":"EUR","BY":"BYN","BZ":"BZD","BM":"BMD","BO":"BOB","BR":"BRL","BB":"BBD","BN":"BND","BT":"BTN","BV":"NOK","BW":"BWP","CF":"XAF","CA":"CAD","CC":"AUD","CH":"CHF","CL":"CLP","CN":"CNY","CI":"XOF","CM":"XAF","CD":"CDF","CG":"XAF","CK":"NZD","CO":"COP","KM":"KMF","CV":"CVE","CR":"CRC","CU":"CUP","CW":"XCG","CX":"AUD","KY":"KYD","CY":"EUR","CZ":"CZK","DE":"EUR","DJ":"DJF","DM":"XCD","DK":"DKK","DO":"DOP","DZ":"DZD","EC":"USD","EG":"EGP","ER":"ERN","EH":"MAD","ES":"EUR","EE":"EUR","ET":"ETB","FI":"EUR","FJ":"FJD","FK":"FKP","FR":"EUR","FO":"DKK","FM":"USD","GA":"XAF","GB":"GBP","GE":"GEL","GG":"GBP","GH":"GHS","GI":"GIP","GN":"GNF","GP":"EUR","GM":"GMD","GW":"XOF","GQ":"XAF","GR":"EUR","GD":"XCD","GL":"DKK","GT":"GTQ","GF":"EUR","GU":"USD","GY":"GYD","HK":"HKD","HM":"AUD","HN":"HNL","HR":"EUR","HT":"USD","HU":"HUF","ID":"IDR","IM":"GBP","IN":"INR","IO":"USD","IE":"EUR","IR":"IRR","IQ":"IQD","IS":"ISK","IL":"ILS","IT":"EUR","JM":"JMD","JE":"GBP","JO":"JOD","JP":"JPY","KZ":"KZT","KE":"KES","KG":"KGS","KH":"KHR","KI":"AUD","KN":"XCD","KR":"KRW","KW":"KWD","LA":"LAK","LB":"LBP","LR":"LRD","LY":"LYD","LC":"XCD","LI":"CHF","LK":"LKR","LS":"LSL","LT":"EUR","LU":"EUR","LV":"EUR","MO":"MOP","MF":"EUR","MA":"MAD","MC":"EUR","MD":"MDL","MG":"MGA","MV":"MVR","MX":"MXN","MH":"USD","MK":"MKD","ML":"XOF","MT":"EUR","MM":"MMK","ME":"EUR","MN":"MNT","MP":"USD","MZ":"MZN","MR":"MRU","MS":"XCD","MQ":"EUR","MU":"MUR","MW":"MWK","MY":"MYR","YT":"EUR","NA":"NAD","NC":"XPF","NE":"XOF","NF":"AUD","NG":"NGN","NI":"NIO","NU":"NZD","NL":"EUR","NO":"NOK","NP":"NPR","NR":"AUD","NZ":"NZD","OM":"OMR","PK":"PKR","PA":"USD","PN":"NZD","PE":"PEN","PH":"PHP","PW":"USD","PG":"PGK","PL":"PLN","PR":"USD","KP":"KPW","PT":"EUR","PY":"PYG","PS":"JOD","PF":"XPF","QA":"QAR","RE":"EUR","RO":"RON","RU":"RUB","RW":"RWF","SA":"SAR","SD":"SDG","SN":"XOF","SG":"SGD","GS":"GBP","SH":"SHP","SJ":"NOK","SB":"SBD","SL":"SLE","SV":"USD","SM":"EUR","SO":"SOS","PM":"EUR","RS":"RSD","SS":"SSP","ST":"STN","SR":"SRD","SK":"EUR","SI":"EUR","SE":"SEK","SZ":"SZL","SX":"XCG","SC":"SCR","SY":"SYP","TC":"USD","TD":"XAF","TG":"XOF","TH":"THB","TJ":"TJS","TK":"NZD","TM":"TMT","TL":"USD","TO":"TOP","TT":"TTD","TN":"TND","TR":"TRY","TV":"AUD","TW":"TWD","TZ":"TZS","UG":"UGX","UA":"UAH","UM":"USD","UY":"UYU","US":"USD","UZ":"UZS","VA":"EUR","VC":"XCD","VE":"VES","VG":"USD","VI":"USD","VN":"VND","VU":"VUV","WF":"XPF","WS":"WST","YE":"YER","ZA":"ZAR","ZM":"ZMW","ZW":"ZWG"};
+const CURRENCY_NAME={SAR:'الريال السعودي',AED:'الدرهم الإماراتي',EUR:'اليورو',GBP:'الجنيه الإسترليني',USD:'الدولار الأمريكي',JPY:'الين الياباني',CNY:'اليوان الصيني',RUB:'الروبل الروسي',VND:'الدونغ الفيتنامي',TRY:'الليرة التركية',KRW:'الوون الكوري',THB:'البات التايلندي',INR:'الروبية الهندية',CHF:'الفرنك السويسري',CAD:'الدولار الكندي',AUD:'الدولار الأسترالي',MAD:'الدرهم المغربي',EGP:'الجنيه المصري',QAR:'الريال القطري',KWD:'الدينار الكويتي',BHD:'الدينار البحريني',OMR:'الريال العماني',JOD:'الدينار الأردني'};
+const POWER={SA:['G','230 V','60 Hz'],AE:['G','230 V','50 Hz'],BH:['G','230 V','50 Hz'],KW:['G','230 V','50 Hz'],QA:['G','240 V','50 Hz'],OM:['G','230 V','50 Hz'],GB:['G','230 V','50 Hz'],IE:['G','230 V','50 Hz'],MT:['G','230 V','50 Hz'],CY:['G','230 V','50 Hz'],FR:['C / E','230 V','50 Hz'],DE:['C / F','230 V','50 Hz'],ES:['C / F','230 V','50 Hz'],IT:['C / F / L','230 V','50 Hz'],CH:['C / J','230 V','50 Hz'],AT:['C / F','230 V','50 Hz'],NL:['C / F','230 V','50 Hz'],BE:['C / E','230 V','50 Hz'],PT:['C / F','230 V','50 Hz'],GR:['C / F','230 V','50 Hz'],TR:['C / F','230 V','50 Hz'],RU:['C / F','230 V','50 Hz'],UA:['C / F','230 V','50 Hz'],PL:['C / E','230 V','50 Hz'],CZ:['C / E','230 V','50 Hz'],SK:['C / E','230 V','50 Hz'],HU:['C / F','230 V','50 Hz'],SE:['C / F','230 V','50 Hz'],NO:['C / F','230 V','50 Hz'],DK:['C / F / K','230 V','50 Hz'],FI:['C / F','230 V','50 Hz'],IS:['C / F','230 V','50 Hz'],JP:['A / B','100 V','50 / 60 Hz'],US:['A / B','120 V','60 Hz'],CA:['A / B','120 V','60 Hz'],MX:['A / B','127 V','60 Hz'],BR:['C / N','127 / 220 V','60 Hz'],AR:['I','230 V','50 Hz'],CL:['C / L','230 V','50 Hz'],CO:['A / B','110 V','60 Hz'],PE:['A / B / C','230 V','60 Hz'],CR:['A / B','120 V','60 Hz'],PA:['A / B','120 V','60 Hz'],DO:['A / B','120 V','60 Hz'],CU:['A / B','120 V','60 Hz'],VN:['A / B / C','230 V','50 Hz'],CN:['A / I','230 V','50 Hz'],HK:['G','230 V','50 Hz'],MO:['G','230 V','50 Hz'],TW:['A / B','110 V','60 Hz'],KR:['C / F','230 V','60 Hz'],IN:['D / M','230 V','50 Hz'],PK:['C / D','230 V','50 Hz'],BD:['A / C / D / G / M','230 V','50 Hz'],NP:['C / D / M','230 V','50 Hz'],LK:['G','230 V','50 Hz'],ID:['C / F','230 V','50 Hz'],MY:['G','230 V','50 Hz'],SG:['G','230 V','50 Hz'],TH:['A / B / C / O','230 V','50 Hz'],KH:['A / B / C / F / G','230 V','50 Hz'],LA:['A / B / C','230 V','50 Hz'],MM:['A / B / C / D / E / F / G / I','230 V','50 Hz'],PH:['A / B / C','230 V','60 Hz'],AU:['I','230 V','50 Hz'],NZ:['I','230 V','50 Hz'],FJ:['I','240 V','50 Hz'],PG:['I','240 V','50 Hz'],ZA:['C / M / N','230 V','50 Hz'],NG:['G','230 V','50 Hz'],KE:['G','240 V','50 Hz'],GH:['G','230 V','50 Hz'],TZ:['G','230 V','50 Hz'],UG:['G','240 V','50 Hz'],MA:['C / E','230 V','50 Hz'],DZ:['C / F','230 V','50 Hz'],TN:['C / E','230 V','50 Hz'],EG:['C / F','230 V','50 Hz'],JO:['C / F / G','230 V','50 Hz'],LB:['C / F','230 V','50 Hz'],IL:['C / H','230 V','50 Hz'],IR:['C / F','230 V','50 Hz'],IQ:['C / G','230 V','50 Hz'],SY:['C / E / F / L','230 V','50 Hz'],YE:['C / D / G','230 V','50 Hz'],ET:['C / F / G','230 V','50 Hz'],GH:['G','230 V','50 Hz'],ZM:['G','230 V','50 Hz'],ZW:['G','230 V','50 Hz'],MU:['C / E / G','230 V','50 Hz'],MV:['C / D / G','230 V','50 Hz'],SC:['G','240 V','50 Hz'],BRN:['G','240 V','50 Hz']};
+const CITY_DATA_URL='https://raw.githubusercontent.com/jamsshhayd/world-cities-translations/master/Data/world-cities.json';
+const GEO='/api/geocode';
+const GEO_PROVIDER='https://geocoding-api.open-meteo.com/v1/search';
+const WEATHER='https://api.open-meteo.com/v1/forecast';
+const ARCHIVE='https://archive-api.open-meteo.com/v1/archive';
+const citiesByCountry=new Map(); let cityReady=false, cityLoadPromise=null;
+const fallbackCountries=[{"cc":"AW","en":"Aruba"},{"cc":"AF","en":"Afghanistan"},{"cc":"AO","en":"Angola"},{"cc":"AI","en":"Anguilla"},{"cc":"AX","en":"Åland Islands"},{"cc":"AL","en":"Albania"},{"cc":"AD","en":"Andorra"},{"cc":"AE","en":"United Arab Emirates"},{"cc":"AR","en":"Argentina"},{"cc":"AM","en":"Armenia"},{"cc":"AS","en":"American Samoa"},{"cc":"AQ","en":"Antarctica"},{"cc":"TF","en":"French Southern Territories"},{"cc":"AG","en":"Antigua and Barbuda"},{"cc":"AU","en":"Australia"},{"cc":"AT","en":"Austria"},{"cc":"AZ","en":"Azerbaijan"},{"cc":"BI","en":"Burundi"},{"cc":"BE","en":"Belgium"},{"cc":"BJ","en":"Benin"},{"cc":"BQ","en":"Bonaire, Sint Eustatius and Saba"},{"cc":"BF","en":"Burkina Faso"},{"cc":"BD","en":"Bangladesh"},{"cc":"BG","en":"Bulgaria"},{"cc":"BH","en":"Bahrain"},{"cc":"BS","en":"Bahamas"},{"cc":"BA","en":"Bosnia and Herzegovina"},{"cc":"BL","en":"Saint Barthélemy"},{"cc":"BY","en":"Belarus"},{"cc":"BZ","en":"Belize"},{"cc":"BM","en":"Bermuda"},{"cc":"BO","en":"Bolivia, Plurinational State of"},{"cc":"BR","en":"Brazil"},{"cc":"BB","en":"Barbados"},{"cc":"BN","en":"Brunei Darussalam"},{"cc":"BT","en":"Bhutan"},{"cc":"BV","en":"Bouvet Island"},{"cc":"BW","en":"Botswana"},{"cc":"CF","en":"Central African Republic"},{"cc":"CA","en":"Canada"},{"cc":"CC","en":"Cocos (Keeling) Islands"},{"cc":"CH","en":"Switzerland"},{"cc":"CL","en":"Chile"},{"cc":"CN","en":"China"},{"cc":"CI","en":"Côte d'Ivoire"},{"cc":"CM","en":"Cameroon"},{"cc":"CD","en":"Congo, The Democratic Republic of the"},{"cc":"CG","en":"Congo"},{"cc":"CK","en":"Cook Islands"},{"cc":"CO","en":"Colombia"},{"cc":"KM","en":"Comoros"},{"cc":"CV","en":"Cabo Verde"},{"cc":"CR","en":"Costa Rica"},{"cc":"CU","en":"Cuba"},{"cc":"CW","en":"Curaçao"},{"cc":"CX","en":"Christmas Island"},{"cc":"KY","en":"Cayman Islands"},{"cc":"CY","en":"Cyprus"},{"cc":"CZ","en":"Czechia"},{"cc":"DE","en":"Germany"},{"cc":"DJ","en":"Djibouti"},{"cc":"DM","en":"Dominica"},{"cc":"DK","en":"Denmark"},{"cc":"DO","en":"Dominican Republic"},{"cc":"DZ","en":"Algeria"},{"cc":"EC","en":"Ecuador"},{"cc":"EG","en":"Egypt"},{"cc":"ER","en":"Eritrea"},{"cc":"EH","en":"Western Sahara"},{"cc":"ES","en":"Spain"},{"cc":"EE","en":"Estonia"},{"cc":"ET","en":"Ethiopia"},{"cc":"FI","en":"Finland"},{"cc":"FJ","en":"Fiji"},{"cc":"FK","en":"Falkland Islands (Malvinas)"},{"cc":"FR","en":"France"},{"cc":"FO","en":"Faroe Islands"},{"cc":"FM","en":"Micronesia, Federated States of"},{"cc":"GA","en":"Gabon"},{"cc":"GB","en":"United Kingdom"},{"cc":"GE","en":"Georgia"},{"cc":"GG","en":"Guernsey"},{"cc":"GH","en":"Ghana"},{"cc":"GI","en":"Gibraltar"},{"cc":"GN","en":"Guinea"},{"cc":"GP","en":"Guadeloupe"},{"cc":"GM","en":"Gambia"},{"cc":"GW","en":"Guinea-Bissau"},{"cc":"GQ","en":"Equatorial Guinea"},{"cc":"GR","en":"Greece"},{"cc":"GD","en":"Grenada"},{"cc":"GL","en":"Greenland"},{"cc":"GT","en":"Guatemala"},{"cc":"GF","en":"French Guiana"},{"cc":"GU","en":"Guam"},{"cc":"GY","en":"Guyana"},{"cc":"HK","en":"Hong Kong"},{"cc":"HM","en":"Heard Island and McDonald Islands"},{"cc":"HN","en":"Honduras"},{"cc":"HR","en":"Croatia"},{"cc":"HT","en":"Haiti"},{"cc":"HU","en":"Hungary"},{"cc":"ID","en":"Indonesia"},{"cc":"IM","en":"Isle of Man"},{"cc":"IN","en":"India"},{"cc":"IO","en":"British Indian Ocean Territory"},{"cc":"IE","en":"Ireland"},{"cc":"IR","en":"Iran, Islamic Republic of"},{"cc":"IQ","en":"Iraq"},{"cc":"IS","en":"Iceland"},{"cc":"IL","en":"Israel"},{"cc":"IT","en":"Italy"},{"cc":"JM","en":"Jamaica"},{"cc":"JE","en":"Jersey"},{"cc":"JO","en":"Jordan"},{"cc":"JP","en":"Japan"},{"cc":"KZ","en":"Kazakhstan"},{"cc":"KE","en":"Kenya"},{"cc":"KG","en":"Kyrgyzstan"},{"cc":"KH","en":"Cambodia"},{"cc":"KI","en":"Kiribati"},{"cc":"KN","en":"Saint Kitts and Nevis"},{"cc":"KR","en":"Korea, Republic of"},{"cc":"KW","en":"Kuwait"},{"cc":"LA","en":"Lao People's Democratic Republic"},{"cc":"LB","en":"Lebanon"},{"cc":"LR","en":"Liberia"},{"cc":"LY","en":"Libya"},{"cc":"LC","en":"Saint Lucia"},{"cc":"LI","en":"Liechtenstein"},{"cc":"LK","en":"Sri Lanka"},{"cc":"LS","en":"Lesotho"},{"cc":"LT","en":"Lithuania"},{"cc":"LU","en":"Luxembourg"},{"cc":"LV","en":"Latvia"},{"cc":"MO","en":"Macao"},{"cc":"MF","en":"Saint Martin (French part)"},{"cc":"MA","en":"Morocco"},{"cc":"MC","en":"Monaco"},{"cc":"MD","en":"Moldova, Republic of"},{"cc":"MG","en":"Madagascar"},{"cc":"MV","en":"Maldives"},{"cc":"MX","en":"Mexico"},{"cc":"MH","en":"Marshall Islands"},{"cc":"MK","en":"North Macedonia"},{"cc":"ML","en":"Mali"},{"cc":"MT","en":"Malta"},{"cc":"MM","en":"Myanmar"},{"cc":"ME","en":"Montenegro"},{"cc":"MN","en":"Mongolia"},{"cc":"MP","en":"Northern Mariana Islands"},{"cc":"MZ","en":"Mozambique"},{"cc":"MR","en":"Mauritania"},{"cc":"MS","en":"Montserrat"},{"cc":"MQ","en":"Martinique"},{"cc":"MU","en":"Mauritius"},{"cc":"MW","en":"Malawi"},{"cc":"MY","en":"Malaysia"},{"cc":"YT","en":"Mayotte"},{"cc":"NA","en":"Namibia"},{"cc":"NC","en":"New Caledonia"},{"cc":"NE","en":"Niger"},{"cc":"NF","en":"Norfolk Island"},{"cc":"NG","en":"Nigeria"},{"cc":"NI","en":"Nicaragua"},{"cc":"NU","en":"Niue"},{"cc":"NL","en":"Netherlands"},{"cc":"NO","en":"Norway"},{"cc":"NP","en":"Nepal"},{"cc":"NR","en":"Nauru"},{"cc":"NZ","en":"New Zealand"},{"cc":"OM","en":"Oman"},{"cc":"PK","en":"Pakistan"},{"cc":"PA","en":"Panama"},{"cc":"PN","en":"Pitcairn"},{"cc":"PE","en":"Peru"},{"cc":"PH","en":"Philippines"},{"cc":"PW","en":"Palau"},{"cc":"PG","en":"Papua New Guinea"},{"cc":"PL","en":"Poland"},{"cc":"PR","en":"Puerto Rico"},{"cc":"KP","en":"Korea, Democratic People's Republic of"},{"cc":"PT","en":"Portugal"},{"cc":"PY","en":"Paraguay"},{"cc":"PS","en":"Palestine, State of"},{"cc":"PF","en":"French Polynesia"},{"cc":"QA","en":"Qatar"},{"cc":"RE","en":"Réunion"},{"cc":"RO","en":"Romania"},{"cc":"RU","en":"Russian Federation"},{"cc":"RW","en":"Rwanda"},{"cc":"SA","en":"Saudi Arabia"},{"cc":"SD","en":"Sudan"},{"cc":"SN","en":"Senegal"},{"cc":"SG","en":"Singapore"},{"cc":"GS","en":"South Georgia and the South Sandwich Islands"},{"cc":"SH","en":"Saint Helena, Ascension and Tristan da Cunha"},{"cc":"SJ","en":"Svalbard and Jan Mayen"},{"cc":"SB","en":"Solomon Islands"},{"cc":"SL","en":"Sierra Leone"},{"cc":"SV","en":"El Salvador"},{"cc":"SM","en":"San Marino"},{"cc":"SO","en":"Somalia"},{"cc":"PM","en":"Saint Pierre and Miquelon"},{"cc":"RS","en":"Serbia"},{"cc":"SS","en":"South Sudan"},{"cc":"ST","en":"Sao Tome and Principe"},{"cc":"SR","en":"Suriname"},{"cc":"SK","en":"Slovakia"},{"cc":"SI","en":"Slovenia"},{"cc":"SE","en":"Sweden"},{"cc":"SZ","en":"Eswatini"},{"cc":"SX","en":"Sint Maarten (Dutch part)"},{"cc":"SC","en":"Seychelles"},{"cc":"SY","en":"Syrian Arab Republic"},{"cc":"TC","en":"Turks and Caicos Islands"},{"cc":"TD","en":"Chad"},{"cc":"TG","en":"Togo"},{"cc":"TH","en":"Thailand"},{"cc":"TJ","en":"Tajikistan"},{"cc":"TK","en":"Tokelau"},{"cc":"TM","en":"Turkmenistan"},{"cc":"TL","en":"Timor-Leste"},{"cc":"TO","en":"Tonga"},{"cc":"TT","en":"Trinidad and Tobago"},{"cc":"TN","en":"Tunisia"},{"cc":"TR","en":"Türkiye"},{"cc":"TV","en":"Tuvalu"},{"cc":"TW","en":"Taiwan, Province of China"},{"cc":"TZ","en":"Tanzania, United Republic of"},{"cc":"UG","en":"Uganda"},{"cc":"UA","en":"Ukraine"},{"cc":"UM","en":"United States Minor Outlying Islands"},{"cc":"UY","en":"Uruguay"},{"cc":"US","en":"United States"},{"cc":"UZ","en":"Uzbekistan"},{"cc":"VA","en":"Holy See (Vatican City State)"},{"cc":"VC","en":"Saint Vincent and the Grenadines"},{"cc":"VE","en":"Venezuela, Bolivarian Republic of"},{"cc":"VG","en":"Virgin Islands, British"},{"cc":"VI","en":"Virgin Islands, U.S."},{"cc":"VN","en":"Viet Nam"},{"cc":"VU","en":"Vanuatu"},{"cc":"WF","en":"Wallis and Futuna"},{"cc":"WS","en":"Samoa"},{"cc":"YE","en":"Yemen"},{"cc":"ZA","en":"South Africa"},{"cc":"ZM","en":"Zambia"},{"cc":"ZW","en":"Zimbabwe"}];
+const fallbackCities={
+SA:[['Riyadh','الرياض',24.7136,46.6753],['Jeddah','جدة',21.4858,39.1925],['Dammam','الدمام',26.4207,50.0888]],
+RU:[['Moscow','موسكو',55.7558,37.6173],['Saint Petersburg','سانت بطرسبرغ',59.9343,30.3351],['Kazan','قازان',55.7879,49.1233],['Sochi','سوتشي',43.6028,39.7342]],
+VN:[['Hanoi','هانوي',21.0285,105.8542],['Sapa','سابا',22.3364,103.8438],['Ha Long','هالونغ',20.9101,107.1839],['Ho Chi Minh City','مدينة هو تشي منه',10.8231,106.6299]],
+FR:[['Paris','باريس',48.8566,2.3522],['Nice','نيس',43.7102,7.2620],['Lyon','ليون',45.7640,4.8357]],
+TR:[['Istanbul','إسطنبول',41.0082,28.9784],['Antalya','أنطاليا',36.8969,30.7133]],
+JP:[['Tokyo','طوكيو',35.6762,139.6503],['Osaka','أوساكا',34.6937,135.5023]],
+AE:[['Dubai','دبي',25.2048,55.2708],['Abu Dhabi','أبوظبي',24.4539,54.3773]]
+};
+const CITY_COORDS={
+ 'barcelona,es':[41.3874,2.1686,'برشلونة','Barcelona','ES'], 'barcelona,spain':[41.3874,2.1686,'برشلونة','Barcelona','ES'],
+ 'paris,fr':[48.8566,2.3522,'باريس','Paris','FR'], 'paris,france':[48.8566,2.3522,'باريس','Paris','FR'],
+ 'london,gb':[51.5074,-0.1278,'لندن','London','GB'], 'london,uk':[51.5074,-0.1278,'لندن','London','GB'],
+ 'rome,it':[41.9028,12.4964,'روما','Rome','IT'], 'rome,italy':[41.9028,12.4964,'روما','Rome','IT'],
+ 'istanbul,tr':[41.0082,28.9784,'إسطنبول','Istanbul','TR'], 'tokyo,jp':[35.6762,139.6503,'طوكيو','Tokyo','JP'],
+ 'new york,us':[40.7128,-74.0060,'نيويورك','New York','US'], 'dubai,ae':[25.2048,55.2708,'دبي','Dubai','AE'],
+ 'cairo,eg':[30.0444,31.2357,'القاهرة','Cairo','EG'], 'bangkok,th':[13.7563,100.5018,'بانكوك','Bangkok','TH'],
+ 'singapore,sg':[1.3521,103.8198,'سنغافورة','Singapore','SG'], 'seoul,kr':[37.5665,126.9780,'سيول','Seoul','KR'],
+ 'kuala lumpur,my':[3.1390,101.6869,'كوالالمبور','Kuala Lumpur','MY'], 'amsterdam,nl':[52.3676,4.9041,'أمستردام','Amsterdam','NL'],
+ 'madrid,es':[40.4168,-3.7038,'مدريد','Madrid','ES'], 'lisbon,pt':[38.7223,-9.1393,'لشبونة','Lisbon','PT'],
+ 'vienna,at':[48.2082,16.3738,'فيينا','Vienna','AT'], 'berlin,de':[52.5200,13.4050,'برلين','Berlin','DE'],
+ 'zurich,ch':[47.3769,8.5417,'زيورخ','Zurich','CH'], 'athens,gr':[37.9838,23.7275,'أثينا','Athens','GR'],
+ 'milan,it':[45.4642,9.1900,'ميلانو','Milan','IT'], 'venice,it':[45.4408,12.3155,'البندقية','Venice','IT'],
+ 'hanoi,vn':[21.0285,105.8542,'هانوي','Hanoi','VN'], 'ho chi minh city,vn':[10.8231,106.6299,'مدينة هو تشي منه','Ho Chi Minh City','VN'],
+ 'moscow,ru':[55.7558,37.6173,'موسكو','Moscow','RU'], 'jeddah,sa':[21.4858,39.1925,'جدة','Jeddah','SA'], 'riyadh,sa':[24.7136,46.6753,'الرياض','Riyadh','SA']
+};
+async function directGeocode(name,cc=''){
+ const raw=String(name||'').trim().toLowerCase();
+ const key=raw+(cc?','+cc.toUpperCase():'');
+ const hit=CITY_COORDS[key] || CITY_COORDS[raw] || Object.values(CITY_COORDS).find(v=>String(v[2]).trim().toLowerCase()===raw && (!cc || v[4]===cc.toUpperCase()));
+ if(hit)return {name:hit[3],arabic_name:hit[2],country_code:hit[4],latitude:hit[0],longitude:hit[1],population:99999999};
+ const providers=[
+  `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=10&language=ar&format=json${cc?'&countryCode='+encodeURIComponent(cc):''}`,
+  `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=10&accept-language=ar&city=${encodeURIComponent(name)}${cc?'&countrycodes='+encodeURIComponent(cc.toLowerCase()):''}`
+ ];
+ for(const url of providers){try{const r=await fetch(url,{cache:'no-store',headers:{'accept':'application/json'}});if(!r.ok)continue;const d=await r.json();if(url.includes('open-meteo')){const z=(d.results||[])[0];if(z)return {name:z.name,arabic_name:z.name,country_code:z.country_code,latitude:z.latitude,longitude:z.longitude,population:z.population||0,admin1:z.admin1||''};}else{const z=(d||[])[0];if(z)return {name:z.display_name?.split(',')[0]||name,arabic_name:z.display_name?.split(',')[0]||name,country_code:(z.address?.country_code||cc).toUpperCase(),latitude:Number(z.lat),longitude:Number(z.lon),population:0,admin1:z.address?.state||''};}}catch(e){}}
+ return null;
+}
+let countryList=fallbackCountries.map(x=>({cc:x.cc,ar:x.en,en:x.en}));
+let cityIndex=[],cityResults={from:[],to:[]},tripDraft={from:null,to:null,countryCode:''};
+let trip=JSON.parse(localStorage.getItem('rafeeqTripV17')||'null')||{from:null,to:null,depart:'',return:'',budget:'',tripType:'family'};
+trip.budget=trip.budget||''; trip.tripType=trip.tripType||'family';
+let docs=JSON.parse(localStorage.getItem('rafeeqDocsV17')||'[]');
+let filter='all', climateCache=JSON.parse(localStorage.getItem('rafeeqClimateV17')||'{}'), exploreItems=[], lang=localStorage.getItem('rafeeqLangV18')||'ar', visibleExploreLimit=36;
+const demo={
+ days:[
+ ['24 سبتمبر','الخميس','هانوي','هانوي','07:15 الوصول إلى HAN → 07:45–09:00 الجوازات والشنطة وSIM/eSIM → 09:30 Old Quarter → 10:00–13:00 فطور وراحة → 14:00–17:00 Hoan Kiem + Old Quarter + St. Joseph’s Cathedral → 18:00 عشاء → 20:00 جلسة اجتماعية → 22:00 نوم.','لا تبدأ جولات قوية بعد الرحلة الطويلة.'],
+ ['25 سبتمبر','الجمعة','هانوي → سابا','🚌 الباص','08:00 فطور → 09:00–12:00 Ho Chi Minh Mausoleum + Temple of Literature → 12:30 غداء → 14:00–17:00 Old Quarter + Train Street → 17:30 عشاء مبكر → 20:00 تقريباً باص ليلي إلى Sapa.','الوصول صباح 26 سبتمبر.'],
+ ['26 سبتمبر','السبت','سابا','🏡 Homestay','09:00 Trekking → Lao Chai → Ta Van → Muong Hoa Valley → Rice terraces → Bamboo forest → Homestay.','Trek 2D1N جماعي، مرشد محلي ووجبات.'],
+ ['27 سبتمبر','الأحد','سابا','🛏️ سابا','07:30 فطور → 09:00 استكمال التريك → Ta Van → Giang Ta Chai → Bamboo Forest → Waterfall → 14:00–15:30 العودة إلى Sapa → 18:00–21:00 Sapa Square + السوق الليلي + عشاء.','ليلة سابا بعد التريك.'],
+ ['28 سبتمبر','الاثنين','سابا → هانوي','🛏️ هانوي','08:00 فطور → 09:00–10:00 Check-out → باص VIP نهاري إلى Hanoi (5–6 ساعات) → 15:00–16:00 وصول → تسجيل الدخول → عشاء وراحة.','لا تضع نشاطاً كبيراً مساءً.'],
+ ['29 سبتمبر','الثلاثاء','هانوي → هالونغ','🚢 الكروز','07:30–08:10 Pickup → 11:30 الميناء → 12:30 Boarding → 13:00 غداء → 14:00–17:00 Titop + Kayaking + Cave → 17:30 Sunset + Cooking → 19:00 عشاء → 20:30 Night Fishing/Karaoke.','المبيت على القارب.'],
+ ['30 سبتمبر','الأربعاء','هالونغ → هانوي','🛏️ هانوي','06:30 Tai Chi اختياري → 07:00 فطور → 08:00–10:30 Kayaking/Luon Cave → 11:00 Check-out + غداء → 12:00–13:00 مغادرة → 16:00–17:00 هانوي → Water Puppet → عشاء أخير.','النوم مبكراً.'],
+ ['1 أكتوبر','الخميس','هانوي → الرياض','✈️','إفطار → المطار → 06:00 تقريباً في المطار → 08:45 HAN → 11:55 DOH → 17:05 DOH → 18:35 RUH.','لا تخطط لنشاط آخر.']
+ ],
+ stay:[['Nexy Hostel','هانوي','24 + 28 + 30 سبتمبر','الخيار الأساسي — Old Quarter وقريب من Hoan Kiem','حوالي 23–34 ريال/ليلة مرجعيًا'],['Amazing Hotel Sapa','سابا','27 سبتمبر','بعد التريك','حوالي 176 ريال مرجعيًا في بعض التواريخ'],['Homestay','Ta Van','26 سبتمبر','ضمن Trek 2D1N','مشمول في النشاط']],
+ transport:[['✈️ طيران','HAN → DOH → RUH','1 أكتوبر','08:45 → 18:35','مطار 06:00 تقريباً'],['🚌 باص ليلي','Hanoi → Sapa','25 سبتمبر','حوالي 20:00، ~6 ساعات','يفضل VIP Sleeper'],['🚌 باص نهاري VIP','Sapa → Hanoi','28 سبتمبر','09:00 تقريباً، 5–6 ساعات','يفضل نهاري بسبب كروز اليوم التالي'],['🚢 Cruise','Halong Bay 2D/1N','29–30 سبتمبر','مبيت على القارب','تحقق من خيار Single قبل الدفع']],
+ places:[['هانوي','Old Quarter + Hoan Kiem','مدينة + مطاعم + حياة ليلية','24–25 و28–30 سبتمبر'],['سابا','Lao Chai + Ta Van + Muong Hoa','Trekking + ثقافة محلية + طبيعة','26–27 سبتمبر'],['هالونغ','Titop + Kayak + Caves','كروز وطبيعة بحرية','29–30 سبتمبر'],['Train Street','هانوي','تجربة قصيرة + صور','25 سبتمبر'],['Water Puppet','هانوي','عرض مسرحي تقليدي','30 سبتمبر']],
+ budget:[['التذكرة الدولية','محجوزة','—'],['هانوي 3 ليالٍ','100–250','حسب الفندق'],['سابا ليلة','100–180','حسب الفندق'],['Trek 2D1N','170–250','مرجع تقريبي'],['Hanoi → Sapa','100–140','باص ليلي'],['Sapa → Hanoi','60–100','باص نهاري'],['Halong Cruise','800–1,300','Single قد يرفع السعر'],['الأكل','250–400','خارج الجولات'],['Grab','150–250','تنقلات'],['فعاليات ودخول','100–200','تقديري']]
+};
+let plan=JSON.parse(localStorage.getItem('rafeeqPlanV17')||'null')||demo;
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function save(){localStorage.setItem('rafeeqTripV17',JSON.stringify(trip));localStorage.setItem('rafeeqDocsV17',JSON.stringify(docs));localStorage.setItem('rafeeqPlanV17',JSON.stringify(plan))}
+function go(id,b){const current=document.querySelector('.page.active');if(current)current.classList.remove('active');const next=document.getElementById(id);if(next){next.classList.add('active');next.scrollTop=0}document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');renderAll();if(id==='explore'){updateExploreCity();if(trip.to?.lat)loadExplore(false);renderFlightBooking()}window.scrollTo({top:0,behavior:'smooth'})}
+function openModal(t,b){document.getElementById('mt').innerText=t;document.getElementById('mb').innerHTML=b;document.getElementById('modal').classList.add('show');setTimeout(()=>document.querySelector('.sheet input')?.focus(),60)}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('darkV17',document.body.classList.contains('dark')?'1':'0')}
+function fmtDate(d){if(!d)return'غير محدد';return new Intl.DateTimeFormat('ar-SA',{day:'numeric',month:'long',year:'numeric'}).format(new Date(d+'T00:00:00'))}
+function tripDays(){if(!trip.depart||!trip.return)return'—';return Math.max(0,Math.round((new Date(trip.return)-new Date(trip.depart))/86400000))+' أيام'}
+
+function setSeyrHeroImage(){
+ const n=String(trip.to?.name||trip.to?.ar||'').toLowerCase();
+ const imgs={
+  'marrakech':'https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1800&q=88',
+  'مراكش':'https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=1800&q=88',
+  'barcelona':'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1800&q=88',
+  'برشلونة':'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1800&q=88',
+  'paris':'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1800&q=88',
+  'باريس':'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1800&q=88',
+  'london':'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1800&q=88',
+  'لندن':'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1800&q=88',
+  'tokyo':'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1800&q=88',
+  'طوكيو':'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1800&q=88',
+  'rome':'https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1800&q=88',
+  'روما':'https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1800&q=88',
+  'istanbul':'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1800&q=88',
+  'اسطنبول':'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1800&q=88',
+  'dubai':'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1800&q=88',
+  'دبي':'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1800&q=88'
+ };
+ const url=imgs[n]||'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=88';
+ document.documentElement.style.setProperty('--hero-image',`url("${url}")`);
+}
+function updateHero(){document.getElementById('route').innerText=(trip.from?.ar||trip.from?.name||'الرياض')+' → '+(trip.to?.ar||trip.to?.name||'اختر وجهتك');document.getElementById('dates').innerText=trip.depart?`${fmtDate(trip.depart)} → ${fmtDate(trip.return)} · ${tripDays()}`:'أنشئ رحلتك ليتم بناء التفاصيل تلقائياً';document.getElementById('weatherTitle').innerText='الطقس في '+(trip.to?.ar||trip.to?.name||'الوجهة');const exploreTitle=document.getElementById('exploreTitle');if(exploreTitle)exploreTitle.innerText='📍 استكشف '+(trip.to?.ar||trip.to?.name||'الوجهة');setSeyrHeroImage()}
+function flag(cc){return cc?String.fromCodePoint(...[...cc].map(ch=>127397+ch.charCodeAt())):'🌍'}
+function normCountry(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\u0600-\u06ff]+/g,'')}
+function countryCodeForName(name){
+ const n=normCountry(name);
+ const aliases={'viet nam':'VN','vietnam':'VN','türkiye':'TR','turkiye':'TR','russian federation':'RU','russia':'RU','united states of america':'US','iran (islamic republic of)':'IR','korea, republic of':'KR','south korea':'KR','czechia':'CZ','czech republic':'CZ','bolivia, plurinational state of':'BO','venezuela, bolivarian republic of':'VE','tanzania, united republic of':'TZ','moldova, republic of':'MD','lao peoples democratic republic':'LA','syrian arab republic':'SY','brunei darussalam':'BN','democratic republic of the congo':'CD','congo, democratic republic of the':'CD'};
+ if(aliases[n])return aliases[n];
+ const exact=countryList.find(x=>normCountry(x.en)===n); return exact?.cc||'';
+}
+async function loadCityData(){
+ if(cityReady)return; if(cityLoadPromise)return cityLoadPromise;
+ cityLoadPromise=fetch(CITY_DATA_URL,{cache:'no-store'}).then(r=>r.json()).then(arr=>{
+  const arByCode=new Map();
+  arr.forEach(c=>{const cc=countryCodeForName(c.CountryNameEn);if(cc)arByCode.set(cc,c.CountryNameAr||c.CountryNameEn)});
+  countryList=countryList.map(c=>({...c,ar:arByCode.get(c.cc)||c.en}));
+  arr.forEach(c=>{
+   const cc=countryCodeForName(c.CountryNameEn); if(!cc)return;
+   const list=(c.Cities||[]).map(x=>({name:x.CityNameEn,ar:x.CityNameAr||x.CityNameEn,pop:Number(x.Population)||0,cc}));
+   if(!citiesByCountry.has(cc))citiesByCountry.set(cc,[]);
+   citiesByCountry.get(cc).push(...list);
+  });
+  Object.entries(fallbackCities).forEach(([cc,items])=>{if(!citiesByCountry.has(cc))citiesByCountry.set(cc,[]);for(const x of items){if(!citiesByCountry.get(cc).some(c=>normalize(c.name)===normalize(x[0]))){citiesByCountry.get(cc).push({name:x[0],ar:x[1],cc,lat:x[2],lon:x[3],pop:99999999})}}});
+  cityIndex=[...citiesByCountry.values()].flat();
+  cityReady=true;document.getElementById('fresh').innerText='● قاعدة الدول والمدن جاهزة';return arr;
+ }).catch(()=>{
+  cityLoadPromise=null;
+  Object.entries(fallbackCities).forEach(([cc,items])=>citiesByCountry.set(cc,items.map(x=>({name:x[0],ar:x[1],cc,lat:x[2],lon:x[3],pop:99999999}))));
+  cityIndex=[...citiesByCountry.values()].flat(); cityReady=true; document.getElementById('fresh').innerText='● وضع البحث المباشر جاهز'; return [];
+ });
+ return cityLoadPromise;
+}
+function countryResults(q){q=(q||'').trim();const nq=normalize(q);return countryList.filter(c=>!q||normalize(c.ar).includes(nq)||normalize(c.en).includes(nq)||String(c.cc).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>a.ar.localeCompare(b.ar,'ar')).slice(0,100)}
+function renderCountrySuggestions(q=''){const box=document.getElementById('countrySuggest');if(!box)return;const rs=countryResults(q);box.innerHTML=rs.map(c=>`<div class="suggestion" onclick="selectCountry('${c.cc}')"><b>${flag(c.cc)} ${esc(c.ar)}</b><small> — ${esc(c.en)}</small></div>`).join('\n')||'<div class="suggestion">لا توجد دولة مطابقة</div>'}
+function selectCountry(cc,reset=true){const c=countryList.find(x=>x.cc===cc);if(!c)return;const cs=document.getElementById('countrySearch'),hidden=document.getElementById('country'),to=document.getElementById('toCity');cs.value=c.ar+' — '+c.en;hidden.value=c.cc;tripDraft.countryCode=c.cc;to.disabled=false;to.placeholder='اكتب اسم مدينة الوجهة';if(reset){tripDraft.to=null;to.value='';document.getElementById('toSuggest').innerHTML='<div class="suggestion success">✓ تم تحديد '+esc(c.ar)+' — الآن اكتب مدينة الوجهة</div>';}document.getElementById('countrySuggest').innerHTML='<div class="suggestion success">✓ '+esc(c.ar)+' محددة</div>';to.focus();}
+function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').trim()}
+async function citySearch(type,q){
+ const box=document.getElementById(type==='from'?'fromSuggest':'toSuggest');if(!box)return;
+ q=(q||'').trim();cityResults[type]=[];if(q.length<2){box.innerHTML='';return}
+ const nq=normalize(q);
+ let rs=cityIndex.filter(x=>normalize(x.name).includes(nq)||normalize(x.ar).includes(nq)).sort((a,b)=>b.pop-a.pop).slice(0,12);
+ if(!rs.length){
+  const z=await directGeocode(q,'');
+  if(z) rs=[{name:z.name,ar:z.arabic_name||z.name,cc:z.country_code||'',lat:Number(z.latitude),lon:Number(z.longitude),pop:Number(z.population)||0,admin:z.admin1||''}];
+ }
+ cityResults[type]=rs;
+ box.innerHTML=rs.map((x,i)=>`<div class="suggestion" onclick="chooseCity('${type}',${i})"><b>${esc(x.ar||x.name)}</b> <small>— ${esc(x.name)} ${x.cc?flag(x.cc):''}</small>${x.admin?`<div class="muted">${esc(x.admin)}</div>`:''}</div>`).join('\n')||'<div class="suggestion">لا توجد نتيجة — جرّب اسم المدينة بالعربية أو الإنجليزية.</div>';
+}
+
+function chooseCity(type,i){
+ const x=cityResults[type][i];if(!x)return;
+ if(!x.lat||!x.lon){geocodeSelected(type,x);return}
+ const obj={name:x.name,ar:x.ar||x.name,cc:x.cc,lat:Number(x.lat),lon:Number(x.lon)};
+ if(type==='from'){tripDraft.from=obj;document.getElementById('fromCity').value=obj.ar;document.getElementById('fromSuggest').innerHTML=`<div class="suggestion success">✓ ${esc(obj.ar)} — تم اختيار مدينة المغادرة</div>`}
+ else {tripDraft.to=obj;document.getElementById('toCity').value=obj.ar;document.getElementById('toSuggest').innerHTML=`<div class="suggestion success">✓ ${esc(obj.ar)} — الوجهة محددة</div>`}
+ document.getElementById('tripNotice').innerHTML=`<b>${esc(tripDraft.from?.ar||'—')}</b> → <b>${esc(tripDraft.to?.ar||'—')}</b><br><span class="muted">✓ ${type==='to'?'الوجهة محفوظة':'مدينة المغادرة محفوظة'}</span>`;
+}
+
+async function geocodeSelected(type,x){
+ const z=await directGeocode(x.name||x.ar,x.cc||'');
+ if(z){x.lat=Number(z.latitude);x.lon=Number(z.longitude);x.ar=x.ar||z.arabic_name||z.name;chooseCity(type,cityResults[type].indexOf(x));return;}
+ const box=document.getElementById(type==='to'?'toSuggest':'fromSuggest');if(box)box.innerHTML='<div class="suggestion">تعذر تحديد الإحداثيات الآن. اضغط على اسم المدينة مرة أخرى للمحاولة.</div>';
+}
+function cityKeydown(type,e){if(e.key==='Enter'&&cityResults[type]?.length){e.preventDefault();chooseCity(type,0)}}
+async function newTripModal(){
+ await loadCityData();
+ tripDraft={from:trip.from?{...trip.from}:null,to:trip.to?{...trip.to}:null};
+ const budget=trip.budget||'';
+ const tt=trip.tripType||'family';
+ openModal('✈️ إنشاء رحلة',`<div class="formgrid">
+ <div class="field full"><label>مدينة المغادرة</label><input id="fromCity" autocomplete="off" placeholder="اكتب مدينة مثل الرياض أو Riyadh" value="${esc(tripDraft.from?.ar||'')}" oninput="tripDraft.from=null;citySearch('from',this.value)" onkeydown="cityKeydown('from',event)"><div id="fromSuggest" class="suggestions"></div></div>
+ <div class="field full"><label>أين تريد الذهاب؟</label><input id="toCity" autocomplete="off" placeholder="اكتب اسم المدينة مثل باريس أو Tokyo" value="${esc(tripDraft.to?.ar||'')}" oninput="tripDraft.to=null;citySearch('to',this.value)" onkeydown="cityKeydown('to',event)"><div id="toSuggest" class="suggestions"></div></div>
+ <div class="preferenceGrid full">
+   <div class="preferenceCard budgetInput"><label>💰 ميزانية الرحلة</label><input id="tripBudget" type="number" min="0" step="100" inputmode="numeric" placeholder="مثلاً 5000" value="${esc(budget)}"><span>ر.س</span><div class="preferenceHint">ميزانية تقريبية للشخص، وسنستخدمها لترتيب الاقتراحات.</div></div>
+   <div class="preferenceCard"><label>🧭 نوع الرحلة</label><div class="tripTypes">
+     <button type="button" class="tripTypeBtn ${tt==='youth'?'active':''}" data-trip-type="youth" onclick="selectTripType('youth',this)">👥 شباب</button>
+     <button type="button" class="tripTypeBtn ${tt==='family'?'active':''}" data-trip-type="family" onclick="selectTripType('family',this)">👨‍👩‍👧 عائلية</button>
+     <button type="button" class="tripTypeBtn ${tt==='solo'?'active':''}" data-trip-type="solo" onclick="selectTripType('solo',this)">🧳 فردية</button>
+   </div><input id="tripType" type="hidden" value="${esc(tt)}"><div class="preferenceHint">تؤثر على ترتيب المعالم والمطاعم والمقاهي والأنشطة المقترحة.</div></div>
+ </div>
+ <div class="field"><label>تاريخ المغادرة</label><input id="depart" type="date" value="${esc(trip.depart||'')}"></div>
+ <div class="field"><label>تاريخ العودة</label><input id="return" type="date" value="${esc(trip.return||'')}"></div>
+ <div class="field full"><div id="tripNotice" class="notice">${tripDraft.to?`✓ ${esc(tripDraft.to.ar||tripDraft.to.name)} جاهزة. اختر ميزانيتك ونوع الرحلة.`:'اختر المدينة من النتائج، ثم حدد الميزانية ونوع الرحلة.'}</div></div>
+ </div><button class="btn" style="width:100%;margin-top:13px" onclick="saveTripFromForm()">حفظ الرحلة والتفضيلات</button>`);
+ if(tripDraft.from)document.getElementById('fromSuggest').innerHTML=`<div class="suggestion success">✓ ${esc(tripDraft.from.ar||tripDraft.from.name)}</div>`;
+ if(tripDraft.to)document.getElementById('toSuggest').innerHTML=`<div class="suggestion success">✓ ${esc(tripDraft.to.ar||tripDraft.to.name)} — الوجهة محددة</div>`;
+}
+function selectTripType(type,btn){
+ document.getElementById('tripType').value=type;
+ document.querySelectorAll('.tripTypeBtn').forEach(x=>x.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+}
+
+async function ensureTripCoordinates(){
+ if(!trip.to)return false;
+ if(Number.isFinite(Number(trip.to.lat))&&Number.isFinite(Number(trip.to.lon)))return true;
+ const z=await directGeocode(trip.to.name||trip.to.ar,trip.to.cc||'');
+ if(!z)return false;
+ trip.to.lat=Number(z.latitude);trip.to.lon=Number(z.longitude);trip.to.ar=trip.to.ar||z.arabic_name||z.name;trip.to.cc=trip.to.cc||z.country_code||'';save();return true;
+}
+
+async function saveTripFromForm(){
+ const fi=document.getElementById('fromCity').value.trim(),ti=document.getElementById('toCity').value.trim(),depart=document.getElementById('depart').value,ret=document.getElementById('return').value,budget=document.getElementById('tripBudget').value.trim(),tripType=document.getElementById('tripType').value||'family';
+ if(!tripDraft.from||!fi){alert('اختر مدينة المغادرة من النتائج.');return}
+ if(!tripDraft.to||!ti){alert('اختر وجهة من النتائج.');return}
+ if(!depart||!ret){alert('اختر تاريخ المغادرة والعودة.');return}
+ if(ret<depart){alert('تاريخ العودة يجب أن يكون بعد تاريخ المغادرة.');return}
+ trip={from:tripDraft.from,to:tripDraft.to,depart,return:ret,budget,tripType,updatedAt:Date.now()};ensurePlannerMatchesTrip(true);save();closeModal();updateHero();renderAll();
+ const ok=await ensureTripCoordinates();
+ if(!ok){document.getElementById('fresh').innerText='● تعذر تحديد موقع الوجهة';return;}
+ save(); updateHero(); renderAll(); await Promise.allSettled([loadWeather(),loadClimate(),loadExplore(true)]); updateNotificationBadge();
+}
+
+function weatherText(c){if(c===0)return'صافي';if([1,2,3].includes(c))return'غائم جزئياً';if([45,48].includes(c))return'ضباب';if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c))return'أمطار';if([71,73,75,77,85,86].includes(c))return'ثلوج';if([95,96,99].includes(c))return'عواصف';return'غير معروف'}
+function wicon(c){if(c===0)return'☀️';if([1,2,3].includes(c))return'⛅';if([45,48].includes(c))return'🌫️';if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c))return'🌧️';if([71,73,75,77,85,86].includes(c))return'❄️';if([95,96,99].includes(c))return'⛈️';return'🌡️'}
+async function loadWeather(){
+ if(trip.to && (!Number.isFinite(Number(trip.to.lat))||!Number.isFinite(Number(trip.to.lon)))) await ensureTripCoordinates();
+ if(!trip.to?.lat||!trip.to?.lon){document.getElementById('temp').innerText='—';document.getElementById('weatherIcon').innerText='🌤️';document.getElementById('weatherText').innerText=lang==='en'?'Choose a destination first':'اختر مدينة الوجهة أولاً';return;}
+ try{
+  const u=`/api/weather?lat=${encodeURIComponent(trip.to.lat)}&lon=${encodeURIComponent(trip.to.lon)}&_${Date.now()}`;
+  let r=await fetch(u,{cache:'no-store'}); let d=r.ok?await r.json():null;
+  if(!d){const direct=`${WEATHER}?latitude=${encodeURIComponent(trip.to.lat)}&longitude=${encodeURIComponent(trip.to.lon)}&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunrise,sunset&timezone=auto&forecast_days=7`;const rr=await fetch(direct,{cache:'no-store'});if(rr.ok)d=await rr.json();}
+  if(!d)throw new Error('weather');
+  if(!d.current||!d.daily)throw new Error('weather-data');
+  document.getElementById('temp').innerText=Math.round(d.current.temperature_2m)+'°';
+  document.getElementById('weatherIcon').innerText=wicon(d.current.weather_code);
+  document.getElementById('weatherText').innerText=weatherText(d.current.weather_code);
+  document.getElementById('weatherTime').innerText=`محسوس ${Math.round(d.current.apparent_temperature)}° · رطوبة ${Math.round(d.current.relative_humidity_2m)}% · رياح ${Math.round(d.current.wind_speed_10m)} كم/س`;
+  document.getElementById('forecast').innerHTML=d.daily.time.map((x,i)=>`<div class="card mini"><b>${i===0?'اليوم':new Intl.DateTimeFormat('ar-SA',{weekday:'short'}).format(new Date(x+'T00:00:00'))}</b><div class="w" style="font-size:25px;margin:7px 0">${wicon(d.daily.weather_code[i])}</div><div><b>${Math.round(d.daily.temperature_2m_max[i])}°</b> / ${Math.round(d.daily.temperature_2m_min[i])}°</div><small class="muted">${Math.round(d.daily.precipitation_probability_max?.[i]||0)}% مطر</small></div>`).join('\n');
+  const sunrise=d.daily.sunrise?.[0], sunset=d.daily.sunset?.[0];
+  const extra=document.getElementById('weatherExtra'); if(extra)extra.innerHTML=`<div class="chips"><span class="chip">💧 ${Math.round(d.current.relative_humidity_2m)}% رطوبة</span><span class="chip">🌧️ ${Math.round(d.current.precipitation||0)} مم</span><span class="chip">🌅 ${sunrise?new Date(sunrise).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}):'—'}</span><span class="chip">🌇 ${sunset?new Date(sunset).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}):'—'}</span></div>`;
+ }catch(e){document.getElementById('weatherText').innerText='تعذر جلب بيانات الطقس حالياً';document.getElementById('weatherTime').innerHTML='<button class="btn outline" onclick="loadWeather()">↻ إعادة المحاولة</button>'}
+}
+function monthName(i){return new Intl.DateTimeFormat('ar-SA',{month:'long'}).format(new Date(2024,i,1))}
+function seasonScore(t,p){const comfort=t>=15&&t<=28?1:t>=10&&t<=32?.65:.25;const rain=p<=60?1:p<=110?.65:p<=180?.35:.1;return Math.round((comfort*.55+rain*.45)*100)}
+async function loadClimate(){
+ if(!trip.to?.lat)return;
+ const key=trip.to.lat.toFixed(2)+','+trip.to.lon.toFixed(2);
+ if(climateCache[key]){renderSeason(climateCache[key]);return}
+ document.getElementById('seasonCard').innerHTML='<div class="muted">⏳ نحسب المؤشر المناخي من السجل التاريخي...</div>';
+ try{
+  const end=new Date();end.setFullYear(end.getFullYear()-1);const start=new Date(end);start.setFullYear(end.getFullYear()-9);
+  const fmt=d=>d.toISOString().slice(0,10);
+  const u=`${ARCHIVE}?latitude=${trip.to.lat}&longitude=${trip.to.lon}&start_date=${fmt(start)}&end_date=${fmt(end)}&daily=temperature_2m_mean,precipitation_sum&timezone=auto`;
+  const d=await (await fetch(u,{cache:'force-cache'})).json();const agg=Array.from({length:12},()=>({t:[],p:[]}));
+  d.daily.time.forEach((date,i)=>{const m=Number(date.slice(5,7))-1;agg[m].t.push(d.daily.temperature_2m_mean[i]);agg[m].p.push(d.daily.precipitation_sum[i]||0)});
+  const out=agg.map((a,i)=>({m:i,t:a.t.reduce((x,y)=>x+y,0)/a.t.length,p:a.p.reduce((x,y)=>x+y,0)/Math.max(1,a.p.length),score:seasonScore(a.t.reduce((x,y)=>x+y,0)/a.t.length,a.p.reduce((x,y)=>x+y,0)/Math.max(1,a.p.length))})).sort((a,b)=>b.score-a.score);
+  climateCache[key]=out;localStorage.setItem('rafeeqClimateV17',JSON.stringify(climateCache));renderSeason(out)
+ }catch{
+  const monthlyFallback=[12,13,15,17,20,24,27,27,24,20,16,13].map((t,i)=>({m:i,t,p:40+(i>=5&&i<=8?10:0),score:seasonScore(t,40+(i>=5&&i<=8?10:0))}));
+  climateCache[key]=monthlyFallback;localStorage.setItem('rafeeqClimateV17',JSON.stringify(climateCache));
+  document.getElementById('seasonCard').innerHTML='<div class="notice">تعذر الوصول للسجل المناخي الآن؛ نعرض مؤشراً تخطيطياً احتياطياً، ولن نعتبره بديلاً عن بيانات المناخ الفعلية.</div>';
+  renderSeason(monthlyFallback);
+ }
+}
+function renderSeason(arr){const best=arr.slice(0,3);document.getElementById('seasonCard').innerHTML=`<div><b>أفضل 3 أشهر مبدئياً</b><div class="chips" style="margin:10px 0">${best.map(x=>`<span class="chip active">${monthName(x.m)}</span>`).join('\n')}</div><div class="muted">المؤشر يجمع اعتدال الحرارة وانخفاض الأمطار؛ وهو مؤشر مناخي وليس حكماً سياحياً نهائياً.</div></div><div style="margin-top:13px">${arr.map(x=>`<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><span>${monthName(x.m)}</span><span>${Math.round(x.t)}° · ${Math.round(x.p)} مم</span></div><div class="score"><i style="width:${x.score}%"></i></div></div>`).join('\n')}</div>`}
+function seasonModal(){openModal('🗓️ أفضل وقت للسفر',document.getElementById('seasonCard').innerHTML+'<div class="notice" style="margin-top:12px">البيانات المناخية التاريخية تستخدم كإشارة تخطيطية. قبل السفر راجع الطقس المتوقع والتنبيهات المحلية.</div>')}
+function weatherModal(){openModal('🌤️ الطقس — '+esc(trip.to?.ar||'الوجهة'),`<div class="card"><div class="weather"><div><div class="temp">${esc(document.getElementById('temp').innerText)}</div><p>${esc(document.getElementById('weatherText').innerText)}</p></div><div class="weatherIcon">${document.getElementById('weatherIcon').innerText}</div></div></div><div class="notice success" style="margin-top:12px">البيانات الحالية تُطلب مباشرة من Open-Meteo عند التحديث.</div>`)}
+function bearing(a,b,c,d){const p=Math.PI/180,x=a*p,y=c*p,z=(d-b)*p;return(Math.atan2(Math.sin(z)*Math.cos(y),Math.cos(x)*Math.sin(y)-Math.sin(x)*Math.cos(y)*Math.cos(z))/p+360)%360}
+function qiblaModal(){openModal('🧭 اتجاه القبلة',`<div class="card" style="text-align:center"><div style="font-size:90px">🧭</div><h1 id="qdeg">—</h1><p class="muted">استخدم موقع جهازك لحساب الاتجاه إلى الكعبة.</p><button class="btn" onclick="locateQibla()">استخدم موقعي</button></div><div id="qres" class="notice">يتطلب السماح بالموقع.</div>`)}
+function locateQibla(){navigator.geolocation?.getCurrentPosition(p=>{let b=bearing(p.coords.latitude,p.coords.longitude,21.4225,39.8262);document.getElementById('qdeg').innerText=b.toFixed(1)+'°';document.getElementById('qres').innerText='القبلة: '+b.toFixed(1)+'° من الشمال الحقيقي.'},()=>document.getElementById('qres').innerText='لم يتم السماح بالموقع.')}
+function plugTypeLabel(type){return 'Type '+type}
+const PLUG_PHOTOS={G:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Type_G_plug.jpg/500px-Type_G_plug.jpg'};
+function plugIllustration(type){
+ const t=String(type||'').split('/')[0].trim();
+ const labels={A:'Type A',B:'Type B',C:'Type C',D:'Type D',E:'Type E',F:'Type F',G:'Type G',H:'Type H',I:'Type I',J:'Type J',K:'Type K',L:'Type L',M:'Type M',N:'Type N'};
+ const photo=PLUG_PHOTOS[t];
+ if(photo)return `<div class="powerPlugImage realisticPlug"><img src="${photo}" alt="Real photo of Type G plug" loading="lazy"><div class="plugPhotoOverlay"><b>Type G</b><span>صورة واقعية للقابس</span></div></div>`;
+ const dual=['B','G','I','J','K','M','N'].includes(t);
+ const pins=t==='G'?'<rect x="73" y="18" width="14" height="52" rx="7"/><rect x="113" y="18" width="14" height="52" rx="7"/><rect x="93" y="86" width="14" height="48" rx="7"/>':dual?'<rect x="72" y="22" width="14" height="50" rx="7"/><rect x="114" y="22" width="14" height="50" rx="7"/>':'<circle cx="93" cy="43" r="9"/><circle cx="113" cy="43" r="9"/>';
+ return `<div class="powerPlugImage premiumPlug"><div><svg viewBox="0 0 190 150" role="img" aria-label="${esc(labels[t]||'Electric plug')}" class="plugSvg"><defs><linearGradient id="plugMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef2f0"/><stop offset=".45" stop-color="#9aa5a0"/><stop offset="1" stop-color="#424b47"/></linearGradient><linearGradient id="plugBody" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#d8d4ca"/></linearGradient></defs><ellipse cx="95" cy="133" rx="62" ry="8" fill="#173c31" opacity=".14"/><rect x="40" y="14" width="110" height="120" rx="24" fill="url(#plugBody)" stroke="#244f43" stroke-width="3"/>${pins.replace(/fill="?[^\s>]*"?/g,'')}<g fill="url(#plugMetal)" stroke="#3e4743" stroke-width="1.5">${pins}</g><circle cx="95" cy="106" r="11" fill="#eee9df" stroke="#244f43" stroke-width="4"/></svg><div class="plugCaption">شكل توضيحي ثلاثي الأبعاد · ${esc(labels[t]||'Electric plug')}</div></div></div>`;
+}
+function powerModal(){const cc=trip.to?.cc;const p=POWER[cc];const country=trip.to?.ar||trip.to?.name||'الوجهة';if(!p){openModal('🔌 الكهرباء — '+esc(country),`<div class="notice">لم يتم العثور على بيانات الكهرباء لهذه الدولة في النسخة الحالية.</div><div class="card" style="margin-top:10px"><b>مرجع الكهرباء العالمي</b><p class="muted">يمكنك فتح المرجع العالمي للاطلاع على نوع المقبس والجهد والتردد.</p><button class="btn" onclick="window.open('https://www.worldstandards.eu/electricity/plug-voltage-by-country/','_blank','noopener')">فتح المرجع</button></div>`);return}const sa=POWER.SA;const adapter=cc==='SA'?'أنت مسافر من السعودية: هذا نفس المقبس G، لذلك لا تحتاج محول قابس.':(String(p[0]).split('/')[0].trim()===String(sa[0]).split('/')[0].trim()?'المقبس الأساسي مطابق للسعودية.':'قد تحتاج محول قابس حسب نوع شاحنك. وإذا كان الشاحن يدعم 100–240V فعادةً لا تحتاج محول جهد.');openModal('🔌 الكهرباء — '+esc(country),`${plugIllustration(p[0])}<div class="kpis" style="margin-top:12px"><div class="kpi"><span class="muted">نوع المقبس</span><b>${esc(plugTypeLabel(p[0]))}</b></div><div class="kpi"><span class="muted">الجهد</span><b>${esc(p[1])}</b></div><div class="kpi"><span class="muted">التردد</span><b>${esc(p[2])}</b></div><div class="kpi"><span class="muted">المحول</span><b>${String(p[0]).split('/')[0].trim()===String(sa[0]).split('/')[0].trim()?'غالباً لا تحتاجه':'تحقق من نوع المقبس'}</b></div></div><div class="notice" style="margin-top:12px">${adapter}</div><div class="sourceNote">صورة واقعية عند توفرها، وإلا نعرض نموذجاً توضيحياً. تحقق من شاحن جهازك قبل السفر.</div>`)}
+async function currencyModal(){
+ const cc=trip.to?.cc;const currency=(CURRENCY_BY_CC[cc]||'').toUpperCase();const country=trip.to?.ar||trip.to?.name||'الوجهة';
+ if(!currency){openModal('💱 العملة — '+esc(country),'<div class="notice">لم أتمكن من تحديد عملة هذه الوجهة.</div>');return}
+ if(currency==='SAR'){openModal('💱 العملة — '+esc(country),`<div class="card"><div class="muted">عملة الوجهة</div><h2 style="margin:5px 0">الريال السعودي (SAR)</h2><div class="powerVisual"><div style="font-size:36px">🇸🇦</div><div><b>1 SAR = 1 SAR</b><div class="muted">سعر ثابت داخل نفس العملة</div></div></div></div>`);return}
+ openModal('💱 العملة — '+esc(country),'<div class="notice">جاري جلب أحدث سعر منشور…</div>');
+ try{
+  let d=null;
+  const api=`/api/currency?base=SAR&quote=${encodeURIComponent(currency)}&_=${Date.now()}`;
+  try{const r=await fetch(api,{cache:'no-store'});if(r.ok){const z=await r.json();if(Number(z.rate)>0)d=z}}catch(e){}
+  // Reliable secondary route: triangulate through EUR. This avoids failing when a direct SAR pair is unavailable.
+  if(!d){
+   const [a,b]=await Promise.all([
+    fetch(`https://api.frankfurter.dev/v2/rate/EUR/SAR?_=${Date.now()}`,{cache:'no-store'}).then(r=>r.ok?r.json():null),
+    fetch(`https://api.frankfurter.dev/v2/rate/EUR/${encodeURIComponent(currency)}?_=${Date.now()}`,{cache:'no-store'}).then(r=>r.ok?r.json():null)
+   ]);
+   if(Number(a?.rate)>0&&Number(b?.rate)>0)d={rate:Number(b.rate)/Number(a.rate),date:b.date||a.date};
+  }
+  if(!d)throw new Error('unsupported');
+  const rate=Number(d.rate),date=d.date||'آخر يوم عمل منشور',name=CURRENCY_NAME[currency]||currency;
+  openModal('💱 العملة — '+esc(country),`<div class="card"><div class="muted">عملة الوجهة</div><h2 style="margin:5px 0">${esc(name)} (${currency})</h2><div class="powerVisual" style="margin-top:10px"><div style="font-size:36px">💱</div><div><b>1 SAR = ${rate.toFixed(6)} ${currency}</b><div class="muted">1 ${currency} ≈ ${(1/rate).toFixed(4)} SAR</div></div></div><div class="notice success" style="margin-top:12px">آخر سعر منشور: ${esc(date)}</div><div class="field" style="margin-top:12px"><label>المبلغ بالريال السعودي</label><input id="fxAmount" type="number" min="0" value="100" oninput="fxCalc('${currency}',${rate})"><div id="fxResult" class="notice">100 SAR ≈ ${(100*rate).toFixed(2)} ${currency}</div></div><div class="sourceNote">المصدر: Frankfurter · يتم تحديث البيانات في أيام العمل.</div></div>`);
+ }catch(e){openModal('💱 العملة — '+esc(country),`<div class="notice">تعذر جلب السعر حالياً.</div><button class="btn" style="margin-top:12px" onclick="currencyModal()">↻ إعادة المحاولة</button><div class="sourceNote">لا نعرض سعراً تقديرياً عند تعذر التحقق من المصدر.</div>`)}
+}
+function fxCalc(currency,rate){const n=Number(document.getElementById('fxAmount')?.value||0);const el=document.getElementById('fxResult');if(el)el.innerText=`${n.toLocaleString()} SAR ≈ ${(n*rate).toFixed(2)} ${currency}`}
+function visaModal(){openModal('🛂 التأشيرة','<div class="notice">هذه النسخة لا تصدر قرار تأشيرة. استخدم المصدر الرسمي لحكومة دولة الوجهة أو Timatic عند توفره، لأن المتطلبات قد تتغير.</div>')}
+const DEST_LANG={SA:'ar',AE:'ar',BH:'ar',KW:'ar',QA:'ar',OM:'ar',JO:'ar',LB:'ar',FR:'fr',BE:'fr',CH:'fr',CA:'en',GB:'en',US:'en',AU:'en',NZ:'en',TR:'tr',RU:'ru',UA:'uk',VN:'vi',JP:'ja',KR:'ko',CN:'zh',TW:'zh',TH:'th',ES:'es',MX:'es',DE:'de',AT:'de',IT:'it',PT:'pt',ID:'id',MY:'ms',IN:'hi'};
+const PHRASES={ar:[['مرحباً','Hello','مَرْحَبًا'],['شكراً','Thank you','شُكْرًا'],['من فضلك','Please','مِنْ فَضْلِكَ'],['كم السعر؟','How much?','كَمِ السِّعْر؟'],['أين الحمام؟','Where is the bathroom?','أَيْنَ الحَمَّام؟'],['لا أفهم','I don’t understand','لَا أَفْهَم'],['هل تتحدث الإنجليزية؟','Do you speak English?','هَلْ تَتَحَدَّثُ الإِنْجِلِيزِيَّة؟']],en:[['Hello','مرحباً','Hello'],['Thank you','شكراً','Thank you'],['Please','من فضلك','Please'],['How much?','كم السعر؟','How much?'],['Where is the bathroom?','أين الحمام؟','Where is the bathroom?'],['I don’t understand','لا أفهم','I don’t understand'],['Do you speak English?','هل تتحدث الإنجليزية؟','Do you speak English?']],fr:[['Bonjour','مرحباً','bon-zhoor'],['Merci','شكراً','mehr-see'],['S’il vous plaît','من فضلك','seel voo pleh'],['Combien ça coûte ?','كم السعر؟','kom-byen sa koot'],['Où sont les toilettes ?','أين الحمام؟','oo son lay twa-let'],['Je ne comprends pas','لا أفهم','zhuh nuh kom-pron pah'],['Parlez-vous anglais ?','هل تتحدث الإنجليزية؟','par-lay voo on-glay']],tr:[['Merhaba','مرحباً','mehr-ha-ba'],['Teşekkür ederim','شكراً','teh-shehk-kur eh-deh-reem'],['Lütfen','من فضلك','loot-fen'],['Ne kadar?','كم السعر؟','neh ka-dar'],['Tuvalet nerede?','أين الحمام؟','too-va-let neh-reh-deh'],['Anlamıyorum','لا أفهم','an-la-muh-yo-room'],['İngilizce biliyor musunuz?','هل تتحدث الإنجليزية؟','in-gee-leez-jeh bee-lee-yor moo-soo-nooz']],ru:[['Здравствуйте','مرحباً','zdravstvuyte'],['Спасибо','شكراً','spasibo'],['Пожалуйста','من فضلك','pozhaluysta'],['Сколько стоит?','كم السعر؟','skolko stoit'],['Где туалет?','أين الحمام؟','gde tualet'],['Я не понимаю','لا أفهم','ya ne ponimayu'],['Вы говорите по-английски?','هل تتحدث الإنجليزية؟','vy govorite po-angliyski']],vi:[['Xin chào','مرحباً','sin chow'],['Cảm ơn','شكراً','kam uhn'],['Làm ơn','من فضلك','lam uhn'],['Bao nhiêu tiền?','كم السعر؟','bao nyew tee-en'],['Nhà vệ sinh ở đâu?','أين الحمام؟','nya veh sing uh dow'],['Tôi không hiểu','لا أفهم','toy khong hyew'],['Bạn có nói tiếng Anh không?','هل تتحدث الإنجليزية؟','ban kaw noy tyeng anh khong']],ja:[['こんにちは','مرحباً','konnichiwa'],['ありがとう','شكراً','arigatō'],['お願いします','من فضلك','onegaishimasu'],['いくらですか？','كم السعر؟','ikura desu ka'],['トイレはどこですか？','أين الحمام؟','toire wa doko desu ka'],['分かりません','لا أفهم','wakarimasen'],['英語を話せますか？','هل تتحدث الإنجليزية؟','eigo o hanasemasu ka']],ko:[['안녕하세요','مرحباً','annyeonghaseyo'],['감사합니다','شكراً','gamsahamnida'],['부탁합니다','من فضلك','butakhamnida'],['얼마예요?','كم السعر؟','eolmayeyo'],['화장실이 어디예요?','أين الحمام؟','hwajangsiri eodiyeyo'],['이해하지 못했어요','لا أفهم','ihaehaji mothaesseoyo'],['영어 하세요?','هل تتحدث الإنجليزية؟','yeongeo haseyo']],zh:[['你好','مرحباً','nǐ hǎo'],['谢谢','شكراً','xièxie'],['请','من فضلك','qǐng'],['多少钱？','كم السعر؟','duōshǎo qián'],['洗手间在哪里？','أين الحمام؟','xǐshǒujiān zài nǎlǐ'],['我不明白','لا أفهم','wǒ bù míngbai'],['你会说英语吗？','هل تتحدث الإنجليزية؟','nǐ huì shuō yīngyǔ ma']],es:[['Hola','مرحباً','oh-la'],['Gracias','شكراً','grah-syahs'],['Por favor','من فضلك','por fa-vor'],['¿Cuánto cuesta?','كم السعر؟','kwan-to kwes-ta'],['¿Dónde está el baño?','أين الحمام؟','don-de es-ta el ban-yo'],['No entiendo','لا أفهم','no en-tyen-do'],['¿Habla inglés?','هل تتحدث الإنجليزية؟','ab-la een-gles']],de:[['Hallo','مرحباً','ha-lo'],['Danke','شكراً','dahn-keh'],['Bitte','من فضلك','bit-teh'],['Wie viel kostet das?','كم السعر؟','vee feel kos-tet das'],['Wo ist die Toilette?','أين الحمام؟','vo ist dee toy-let-teh'],['Ich verstehe nicht','لا أفهم','ikh fer-shtay-eh nikht'],['Sprechen Sie Englisch?','هل تتحدث الإنجليزية؟','shpreh-khen zee eng-lish']],it:[['Ciao','مرحباً','chow'],['Grazie','شكراً','gra-tsyeh'],['Per favore','من فضلك','per fa-vo-reh'],['Quanto costa?','كم السعر؟','kwan-to kos-ta'],['Dov’è il bagno?','أين الحمام؟','do-veh eel ban-yo'],['Non capisco','لا أفهم','non ka-pee-sko'],['Parla inglese?','هل تتحدث الإنجليزية؟','par-la in-gleh-zeh']]};
+const DAILY_WORDS={en:[['Wanderlust','حب السفر','a strong desire to travel'],['Journey','رحلة','a trip from one place to another'],['Explore','يستكشف','to discover a place'],['Booking','حجز','an arrangement to reserve'],['Departure','مغادرة','the act of leaving'],['Arrival','وصول','the act of reaching a place'],['Souvenir','تذكار','something kept to remember a trip']],fr:[['Voyage','رحلة','trip'],['Merci','شكراً','thank you'],['Gare','محطة','station'],['Billet','تذكرة','ticket'],['Hôtel','فندق','hotel'],['Plage','شاطئ','beach'],['Réserver','يحجز','to book']],tr:[['Merhaba','مرحباً','hello'],['Yolculuk','رحلة','journey'],['Bilet','تذكرة','ticket'],['Otel','فندق','hotel'],['Plaj','شاطئ','beach'],['Rezervasyon','حجز','reservation'],['Teşekkürler','شكراً','thank you']],ru:[['Путешествие','رحلة','journey'],['Билет','تذكرة','ticket'],['Отель','فندق','hotel'],['Пляж','شاطئ','beach'],['Бронь','حجز','booking'],['Спасибо','شكراً','thank you'],['Вход','دخول','entrance']],vi:[['Du lịch','السفر','travel'],['Vé','تذكرة','ticket'],['Khách sạn','فندق','hotel'],['Bãi biển','شاطئ','beach'],['Đặt chỗ','حجز','reservation'],['Cảm ơn','شكراً','thank you'],['Lối vào','دخول','entrance']],ja:[['旅行','رحلة','りょこう'],['切符','تذكرة','きっぷ'],['ホテル','فندق','hotel'],['海','بحر','うみ'],['予約','حجز','よやく'],['ありがとう','شكراً','thank you'],['入口','مدخل','いりぐち']],ko:[['여행','رحلة','여행'],['표','تذكرة','ticket'],['호텔','فندق','hotel'],['바다','بحر','sea'],['예약','حجز','reservation'],['감사합니다','شكراً','thank you'],['입구','مدخل','entrance']],zh:[['旅行','رحلة','lǚxíng'],['车票','تذكرة','chēpiào'],['酒店','فندق','jiǔdiàn'],['海滩','شاطئ','hǎitān'],['预订','حجز','yùdìng'],['谢谢','شكراً','xièxie'],['入口','مدخل','rùkǒu']],es:[['Viaje','رحلة','trip'],['Billete','تذكرة','ticket'],['Hotel','فندق','hotel'],['Playa','شاطئ','beach'],['Reserva','حجز','reservation'],['Gracias','شكراً','thank you'],['Entrada','مدخل','entrance']],de:[['Reise','رحلة','journey'],['Ticket','تذكرة','ticket'],['Hotel','فندق','hotel'],['Strand','شاطئ','beach'],['Reservierung','حجز','reservation'],['Danke','شكراً','thank you'],['Eingang','مدخل','entrance']],it:[['Viaggio','رحلة','journey'],['Biglietto','تذكرة','ticket'],['Albergo','فندق','hotel'],['Spiaggia','شاطئ','beach'],['Prenotazione','حجز','reservation'],['Grazie','شكراً','thank you'],['Ingresso','مدخل','entrance']],ar:[['رحلة','Journey','trip'],['تذكرة','Ticket','ticket'],['فندق','Hotel','hotel'],['شاطئ','Beach','beach'],['حجز','Booking','reservation'],['شكراً','Thank you','thank you'],['مدخل','Entrance','entrance']]};
+function targetLang(){return DEST_LANG[trip.to?.cc]||'en'}
+let seyrSpeechUnlocked=false;
+let seyrVoices=[];
+function loadSeyrVoices(){try{seyrVoices=window.speechSynthesis?.getVoices?.()||[];}catch(e){seyrVoices=[]}}
+if('speechSynthesis' in window){loadSeyrVoices();window.speechSynthesis.onvoiceschanged=loadSeyrVoices}
+function speakText(text,locale){
+ const value=String(text||'').trim();if(!value)return;
+ if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){return alert(lang==='en'?'Speech is not supported in this browser.':'النطق غير مدعوم في هذا المتصفح.')}
+ const synth=window.speechSynthesis, target=String(locale||'en-US');
+ try{
+  synth.cancel();synth.resume();seyrSpeechUnlocked=true;
+  const speak=()=>{const u=new SpeechSynthesisUtterance(value);u.lang=target;u.rate=.78;u.pitch=1;u.volume=1;const voices=synth.getVoices?.()||seyrVoices||[];const base=target.toLowerCase().split('-')[0];const v=voices.find(x=>x.lang?.toLowerCase()===target.toLowerCase())||voices.find(x=>x.lang?.toLowerCase().startsWith(base));if(v)u.voice=v;u.onstart=()=>{};u.onerror=()=>{};synth.speak(u);setTimeout(()=>{try{synth.resume()}catch(e){}},250)};
+  if((synth.getVoices?.()||[]).length)speak();else{loadSeyrVoices();speak();setTimeout(()=>{loadSeyrVoices();if(synth.speaking)return;speak()},450)}
+ }catch(e){alert(lang==='en'?'Tap Listen once more to start audio.':'اضغط نطق مرة ثانية لتشغيل الصوت.')}
+}
+function phrasesModal(){const l=targetLang(),rows=PHRASES[l]||PHRASES.en;const title=l==='ar'?(lang==='en'?'Arabic phrases':'عبارات بالعربية'):(lang==='en'?'Travel phrases in '+(trip.to?.name||'your destination'):`عبارات بلغة ${trip.to?.ar||trip.to?.name||'الوجهة'}`);const locale={ar:'ar-SA',en:'en-US',fr:'fr-FR',tr:'tr-TR',ru:'ru-RU',vi:'vi-VN',ja:'ja-JP',ko:'ko-KR',zh:'zh-CN',es:'es-ES',de:'de-DE',it:'it-IT'}[l]||l;const speak=lang==='en'?'🔊 Listen':'🔊 نطق';openModal('🗣️ '+title,`<div class="notice success">${lang==='en'?'Tap the speaker to hear each phrase.':'اضغط زر النطق لسماع كل عبارة.'}</div>`+rows.map((x,i)=>`<div class="item phraseRow"><div class="grow"><b>${esc(x[0])}</b><div class="muted">${esc(x[1])}</div><small>${esc(x[2]||'')}</small></div><button class="btn outline" onclick="speakText(decodeURIComponent('${encodeURIComponent(x[0])}'),'${locale}')">${speak}</button></div>`).join('\n'))} 
+function dailyWordModal(){const l=targetLang(),rows=DAILY_WORDS[l]||DAILY_WORDS.en;const now=new Date();const dayKey=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Riyadh'}).format(now);const epoch=Date.UTC(2026,0,1);const current=Date.UTC(Number(dayKey.slice(0,4)),Number(dayKey.slice(5,7))-1,Number(dayKey.slice(8,10)));const index=Math.floor((current-epoch)/86400000)%rows.length;const w=rows[(index+rows.length)%rows.length];const locale={ar:'ar-SA',en:'en-US',fr:'fr-FR',tr:'tr-TR',ru:'ru-RU',vi:'vi-VN',ja:'ja-JP',ko:'ko-KR',zh:'zh-CN',es:'es-ES',de:'de-DE',it:'it-IT'}[l]||l;const title=lang==='en'?'📚 Word of the Day':'📚 كلمة اليوم';const label=lang==='en'?'Changes automatically every day':'تتغير تلقائياً كل يوم';const meaning=lang==='en'?`Arabic meaning: ${w[1]}`:`المعنى: ${w[1]}`;openModal(title,`<div class="card dailyWordCard"><div class="muted">${label} · ${esc(dayKey)}</div><h1 style="margin:8px 0">${esc(w[0])}</h1><div class="notice">${esc(meaning)}</div><p class="muted" style="margin-top:12px">${esc(w[2])}</p><button class="btn" onclick="speakText(decodeURIComponent('${encodeURIComponent(w[0])}'),'${locale}')">🔊 ${lang==='en'?'Listen':'نطق الكلمة'}</button><div class="sourceNote">${lang==='en'?'The word is selected from the daily rotation using the current Riyadh date.':'يتم اختيار الكلمة حسب تاريخ اليوم في الرياض، وتتبدل تلقائياً عند دخول يوم جديد.'}</div></div>`)}
+const AIRPORTS={
+ 'Riyadh':'RUH','الرياض':'RUH','Jeddah':'JED','جدة':'JED','Dammam':'DMM','الدمام':'DMM','Madinah':'MED','المدينة':'MED','Makkah':'JED','مكة':'JED','Dubai':'DXB','دبي':'DXB','Abu Dhabi':'AUH','أبوظبي':'AUH','Doha':'DOH','الدوحة':'DOH','Manama':'BAH','المنامة':'BAH','Kuwait':'KWI','الكويت':'KWI','Muscat':'MCT','مسقط':'MCT','Cairo':'CAI','القاهرة':'CAI','Istanbul':'IST','اسطنبول':'IST','Barcelona':'BCN','برشلونة':'BCN','Madrid':'MAD','مدريد':'MAD','Paris':'CDG','باريس':'CDG','London':'LON','لندن':'LON','Rome':'ROM','روما':'ROM','Milan':'MIL','ميلان':'MIL','Tokyo':'TYO','طوكيو':'TYO','Bangkok':'BKK','بانكوك':'BKK','Singapore':'SIN','سنغافورة':'SIN','Seoul':'SEL','سيول':'SEL','Hong Kong':'HKG','هونغ كونغ':'HKG','New York':'NYC','نيويورك':'NYC','Amsterdam':'AMS','أمستردام':'AMS','Vienna':'VIE','فيينا':'VIE','Zurich':'ZRH','زيورخ':'ZRH','Athens':'ATH','أثينا':'ATH','Tbilisi':'TBS','تبليسي':'TBS','Baku':'BAK','باكو':'BAK','Marrakech':'RAK','مراكش':'RAK','Casablanca':'CMN','الدار البيضاء':'CMN','Hanoi':'HAN','هانوي':'HAN','Kuala Lumpur':'KUL','كوالالمبور':'KUL'};
+function airportCode(place){const n=String(place?.name||place?.ar||place||'').trim();return AIRPORTS[n]||AIRPORTS[n.replace(/\s+/g,' ')]||''}
+function slugCity(v){return String(v||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function getAIProfile(){let p={tone:'friendly',detail:'concise',language:lang};try{p={...p,...JSON.parse(localStorage.getItem('seyrAIProfileV1')||'{}')}}catch(e){}return p}
+function learnAIProfile(q){const t=String(q||'');const p=getAIProfile();p.language=/[A-Za-z]/.test(t)&&!/[\u0600-\u06FF]/.test(t)?'en':'ar';p.detail=t.length>180?'detailed':t.length<70?'concise':p.detail;p.tone=/(😂|🤣|هههه|lol|haha|متحمس|legendary|تاريخي)/i.test(t)?'energetic':'friendly';try{localStorage.setItem('seyrAIProfileV1',JSON.stringify(p))}catch(e){}return p}
+function openFlightSearch(provider){
+ const f=flightSearchUrls(); const url=provider==='google'?f.google:provider==='skyscanner'?f.skyscanner:f.wego;
+ window.open(url,'_blank','noopener');
+}
+function flightSearchUrls(){const from=trip.from?.ar||trip.from?.name||'Riyadh',to=trip.to?.ar||trip.to?.name||'';const dep=trip.depart||'',ret=trip.return||'';const q=`Flights from ${from} to ${to}${dep?` on ${dep}`:''}${ret?` through ${ret}`:''}`;const originCode=airportCode(trip.from),destCode=airportCode(trip.to);const google=`https://www.google.com/travel/flights?q=${encodeURIComponent(q)}`;const wego=originCode&&destCode?`https://sa.wego.com/en/flights/${originCode.toLowerCase()}/${destCode.toLowerCase()}/cheapest-flights-from-${slugCity(from)}-to-${slugCity(to)}`:'https://sa.wego.com/flights';const skyscanner=originCode&&destCode?`https://www.skyscanner.com/transport/flights/${originCode.toLowerCase()}/${destCode.toLowerCase()}/${dep?dep.replaceAll('-','').slice(2):''}/${ret?ret.replaceAll('-','').slice(2):''}/`:`https://www.skyscanner.com/`;return {from,to,dep,ret,google,wego,skyscanner,originCode,destCode}}
+async function searchLiveFlights(){const f=flightSearchUrls(),box=document.getElementById('flightLiveResults');if(!box||!f.originCode||!f.destCode||!f.dep)return;box.innerHTML=`<div class="notice">${lang==='en'?'Searching live fares…':'جاري البحث عن أسعار الرحلات الحية…'}</div>`;try{const u=`/api/flights?origin=${encodeURIComponent(f.originCode)}&destination=${encodeURIComponent(f.destCode)}&depart=${encodeURIComponent(f.dep)}${f.ret?`&return=${encodeURIComponent(f.ret)}`:''}`;const r=await fetch(u,{cache:'no-store'}),d=await r.json();if(!r.ok||d.error)throw new Error(d.error||'flight-error');if(!d.configured){box.innerHTML=`<div class="notice">${lang==='en'?'Wego API access is not configured yet. Open the real Wego search below.':'ربط Wego المباشر يحتاج اعتماد API. افتح بحث Wego الحقيقي بالأسفل الآن.'}</div>`;return}const fares=Array.isArray(d.fares)?d.fares:[];if(!fares.length){box.innerHTML=`<div class="notice">${lang==='en'?'No live fares returned yet. Open Wego to continue.':'لم تصل أسعار حية الآن. افتح Wego لإكمال البحث.'}</div>`;return}box.innerHTML=`<div class="liveFareGrid">${fares.slice(0,8).map(fare=>{const p=fare.price||{},amount=p.totalAmount??p.totalAmountUsd??'',cur=p.currencyCode||d.currency||'SAR',provider=fare.providerCode||'Wego partner',url=fare.handoffUrl||f.wego;return `<div class="fareCard"><b>${esc(provider)}</b><strong>${esc(String(amount))} ${esc(cur)}</strong><small>${lang==='en'?'Live fare from Wego':'سعر حي من Wego'}</small><button class="btn" onclick="window.open('${esc(url)}','_blank','noopener')">${lang==='en'?'Continue':'متابعة'}</button></div>`}).join('')}</div>`}catch(e){box.innerHTML=`<div class="notice">${lang==='en'?'Live Wego pricing is unavailable right now. The real Wego search is still available.':'تعذر جلب السعر الحي من Wego الآن. بحث Wego الحقيقي ما زال متاحاً.'}</div>`}}
+function renderFlightBooking(){const el=document.getElementById('flightBooking');if(!el)return;const f=flightSearchUrls();if(!f.to||!f.dep){el.innerHTML=`<div class="flightHero"><b>${lang==='en'?'Flight booking, ready when you are.':'حجز الطيران جاهز لك عند تحديد التاريخ.'}</b><div class="muted">${lang==='en'?'Set your destination and departure/return dates. SEYR carries them into the flight search.':'حدد الوجهة وتاريخ الذهاب والعودة، وسَيْر يمررها مباشرة إلى خيارات البحث.'}</div></div>`;return}const dateText=lang==='en'?`${f.dep}${f.ret?' → '+f.ret:''}`:`${f.dep}${f.ret?' ← '+f.ret:''}`;const cards=[['Wego','Wego','Live comparison',f.wego,'✈️'],['Google Flights','Google','Live comparison · exact trip query',f.google,'🔎'],['Skyscanner','Skyscanner','Compare airlines & fares',f.skyscanner,'💸'],['GetYourGuide','Activities','Tours after landing',`https://www.getyourguide.com/s/?q=${encodeURIComponent(f.to)}`,'🎟️']];el.innerHTML=`<div class="flightHero"><b>${esc(f.from)} → ${esc(f.to)}</b><div class="muted">${dateText} · ${lang==='en'?'Optional flight search':'خيار اختياري لحجز الطيران'}</div></div><div class="flightGrid">${cards.map(c=>`<div class="flightCard"><div class="flightLogo">${c[4]} ${c[0]}</div><div class="flightDates">${lang==='en'?c[2]:(c[2]==='Live comparison'?'مقارنة حية':c[2].replace('Live comparison · exact trip query','مقارنة مباشرة للرحلة').replace('Compare airlines & fares','مقارنة شركات الطيران والأسعار').replace('Tours after landing','الأنشطة بعد الوصول'))}</div><button class="btn" onclick="window.open('${esc(c[3])}','_blank','noopener')">${lang==='en'?'Open':'فتح'}</button></div>`).join('')}</div><div id="flightLiveResults" class="flightLiveResults"><button class="btn" onclick="searchLiveFlights()">⚡ ${lang==='en'?'Search live Wego fares':'بحث أسعار Wego الحية'}</button></div><div class="flightNote">${lang==='en'?'SEYR never invents fares. With approved Wego credentials, live fares and provider handoff links can appear here; otherwise the real Wego search opens with your route and dates.':'سَيْر لا يخترع أسعار التذاكر. عند ربط اعتماد Wego تظهر الأسعار الحية وروابط المزودين هنا، وإلا يفتح بحث Wego الحقيقي بالمسار والتواريخ.'}</div>`}
+
+function preciseMapQuery(name,coords){const base=String(name||'').trim();if(coords?.lat&&coords?.lon)return `${base} @${Number(coords.lat).toFixed(6)},${Number(coords.lon).toFixed(6)}`;return `${base}, ${trip.to?.name||''}`;}
+function mapLinks(){const city=trip.to?.name||trip.to?.ar||'';const cc=trip.to?.cc||'';const q=encodeURIComponent(preciseMapQuery(city,trip.to));const links=[{n:'Google Maps',url:`https://www.google.com/maps/search/?api=1&query=${q}`}];if(cc==='SA')links.push({n:lang==='en'?'Hudhud':'هدهد',url:`https://www.hudhud.sa/ar/`});else if(cc==='RU')links.push({n:'Yandex Maps',url:`https://yandex.com/maps/?text=${q}`});else if(cc==='KR')links.push({n:'Kakao Map',url:`https://map.kakao.com/?q=${q}`},{n:'Naver Map',url:`https://map.naver.com/p/search/${q}`});else if(cc==='CN')links.push({n:'Baidu Maps',url:`https://maps.baidu.com/?wd=${q}`});return links}
+function openMapForPlace(name,provider){const cc=trip.to?.cc||'';const item=exploreItems.find(x=>String(x.name).trim().toLowerCase()===String(name).trim().toLowerCase());const qText=preciseMapQuery(name,item||trip.to);const q=encodeURIComponent(qText);let url=`https://www.google.com/maps/search/?api=1&query=${q}`;if(provider==='hudhud')url=`https://www.hudhud.sa/ar/`;if(provider==='yandex')url=`https://yandex.com/maps/?text=${q}`;if(provider==='kakao')url=`https://map.kakao.com/?q=${q}`;if(provider==='naver')url=`https://map.naver.com/p/search/${q}`;if(provider==='baidu')url=`https://maps.baidu.com/?wd=${q}`;window.open(url,'_blank','noopener')}
+function openGYG(){const q=encodeURIComponent(trip.to?.name||'');window.open('https://www.getyourguide.com/s/?q='+q,'_blank','noopener')}
+function renderMapSources(){const el=document.getElementById('mapSources');if(!el)return;el.innerHTML=mapLinks().map(x=>`<button class="sourceBtn" onclick="window.open('${x.url}','_blank','noopener')">🗺️ ${esc(x.n)}</button>`).join('\n')}
+function saveGoogleKey(){const k=document.getElementById('googlePlacesKey')?.value.trim()||'';if(k)localStorage.setItem('rafeeqGooglePlacesKey',k);else localStorage.removeItem('rafeeqGooglePlacesKey');alert(k?'تم حفظ مفتاح Google Places محلياً.':'تم حذف المفتاح.');}
+async function loadGooglePlaces(){const key=localStorage.getItem('rafeeqGooglePlacesKey');if(!key||!trip.to?.lat)return [];const types=[['restaurant','restaurant'],['cafe','cafe'],['tourist attraction','tourism'],['museum','tourism'],['shopping mall','shopping'],['park','nature'],['bar','nightlife']];let out=[];for(const [q,type] of types){try{const r=await fetch('https://places.googleapis.com/v1/places:searchText',{method:'POST',headers:{'Content-Type':'application/json','X-Goog-Api-Key':key,'X-Goog-FieldMask':'places.displayName,places.formattedAddress,places.rating,places.userRatingCount,places.websiteUri,places.location,places.primaryType'},body:JSON.stringify({textQuery:`${q} in ${trip.to.name}`,languageCode:'ar',maxResultCount:20,locationBias:{circle:{center:{latitude:Number(trip.to.lat),longitude:Number(trip.to.lon)},radius:20000}}})});if(!r.ok)continue;const d=await r.json();for(const x of (d.places||[])){out.push({name:x.displayName?.text||'',city:trip.to.ar||trip.to.name,desc:x.formattedAddress||q,type,lat:x.location?.latitude,lon:x.location?.longitude,source:'Google Places',rating:x.rating?`${x.rating.toFixed(1)} (${x.userRatingCount||0})`:'',website:x.websiteUri||''})}}catch(e){}}return out.filter(x=>x.name)}
+function updateExploreCity(){const name=trip.to?.ar||trip.to?.name||'اختر مدينة الوجهة';const meta=trip.to?.lat?`${trip.to.ar||trip.to.name} · ${trip.to.cc||''} · ${preferenceLabel()} · الأماكن حول المدينة مباشرة`:'أنشئ رحلة أولاً ليتم تحميل الأماكن حول مدينتك مباشرة.';const n=document.getElementById('exploreCityName'),m=document.getElementById('exploreCityMeta');if(n)n.innerText=name;if(m)m.innerText=meta;const title=document.getElementById('exploreTitle');if(title)title.innerText='📍 استكشف '+name}
+function openCityMaps(){if(!trip.to)return alert('اختر مدينة الوجهة أولاً.');openMapForPlace(trip.to.ar||trip.to.name,'google')}
+const SEYR_EXPLORE_FALLBACK=[
+ ['برج المملكة','الرياض','معلم وإطلالة في قلب الرياض','activity'],['بوليفارد سيتي','الرياض','مطاعم وتسوق وترفيه','activity'],['وادي حنيفة','الرياض','طبيعة وممشى','nature'],['واجهة الرياض','الرياض','مطاعم وتسوق وفعاليات','shopping'],['الدرعية','الرياض','تراث وثقافة ومطاعم','tourism'],['حديقة الملك عبدالله','الرياض','حديقة وأنشطة عائلية','nature'],
+ ['برج خليفة','دبي','معلم شهير وإطلالة بانورامية','activity'],['دبي مول','دبي','تسوق ومطاعم وأنشطة داخلية','shopping'],['مرسى دبي','دبي','واجهة بحرية ومطاعم ومقاهٍ','nature'],['نافورة دبي','دبي','عرض مائي شهير','activity'],['شاطئ جميرا','دبي','شاطئ وإطلالة على برج العرب','beach'],['حي الفهيدي','دبي','تراث وممرات تاريخية','tourism'],
+ ['برج إيفل','باريس','معلم باريس الأشهر','activity'],['اللوفر','باريس','متحف وفنون عالمية','tourism'],['الشانزليزيه','باريس','تسوق ومطاعم','shopping'],['مونمارتر','باريس','حي فني وإطلالات','tourism'],['حدائق لوكسمبورغ','باريس','حدائق ومتنزه','nature'],['نهر السين','باريس','نزهات وإطلالات نهرية','nature'],
+ ['تايمز سكوير','نيويورك','قلب مانهاتن النابض','activity'],['سنترال بارك','نيويورك','حديقة وأنشطة خارجية','nature'],['تمثال الحرية','نيويورك','معلم تاريخي','tourism'],['بروكلين بريدج','نيويورك','إطلالة ومشي','nature'],['فيفث أفينيو','نيويورك','تسوق راقٍ','shopping'],['هاي لاين','نيويورك','ممشى حضري','nature'],
+ ['شيبويا','طوكيو','منطقة حيوية وتسوق','shopping'],['برج طوكيو','طوكيو','إطلالة على المدينة','activity'],['أساكوسا','طوكيو','منطقة تاريخية','tourism'],['أكيهابارا','طوكيو','تقنية وألعاب وأنمي','shopping'],['حديقة أوينو','طوكيو','حديقة ومتاحف','nature'],['سوق تسوكيجي','طوكيو','مأكولات وتجارب محلية','restaurant'],
+ ['جدة التاريخية','جدة','تراث ومبانٍ تاريخية','tourism'],['كورنيش جدة','جدة','واجهة بحرية ومطاعم','beach'],['العلا القديمة','العلا','تراث وطبيعة','tourism'],['هجرة مدائن صالح','العلا','موقع أثري ومناظر طبيعية','tourism'],['المسجد النبوي','المدينة المنورة','معلم ديني رئيسي','tourism'],['قصر المصمك','الرياض','معلم تاريخي','tourism']
+];
+function seyrFallbackExplore(city){return SEYR_EXPLORE_FALLBACK.map(x=>({name:x[0],city:x[1],desc:x[2],type:x[3],source:'دليل SEYR',rating:'',website:'',booking:''})).filter(x=>!city||x.city===city||!trip.to?.lat).slice(0,36)}
+async function loadExplore(force=false){
+ if(trip.to && (!Number.isFinite(Number(trip.to.lat))||!Number.isFinite(Number(trip.to.lon)))) await ensureTripCoordinates();
+ const status=document.getElementById('exploreStatus'),city=trip.to?.ar||trip.to?.name||'';
+ const cacheKey=trip.to?.lat&&trip.to?.lon?'seyrExploreV5:'+Number(trip.to.lat).toFixed(3)+':'+Number(trip.to.lon).toFixed(3):'seyrExploreGlobalV5';
+ let cached=null;try{cached=JSON.parse(localStorage.getItem(cacheKey)||'null')}catch(e){}
+ if(!force&&cached?.items?.length&&Date.now()-Number(cached.ts||0)<30*60*1000){exploreItems=cached.items;updateExploreCity();if(status)status.innerText=`✓ ${exploreItems.length} ${lang==='en'?'places ready':'مكان جاهز'}`;filterExplore();return;}
+ if(status)status.innerText=lang==='en'?'Finding places nearby…':'جاري البحث عن أماكن قريبة…';
+ const places=document.getElementById('places');if(places)places.innerHTML='<div class="card">⏳ جاري تحميل الأماكن…</div>';
+ try{
+  if(!trip.to?.lat||!trip.to?.lon)throw new Error('no-destination');
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+  const r=await fetch(`/api/explore?lat=${encodeURIComponent(trip.to.lat)}&lon=${encodeURIComponent(trip.to.lon)}&city=${encodeURIComponent(city)}&v=5`,{cache:'no-store',signal:controller.signal});clearTimeout(timeout);
+  if(!r.ok)throw new Error('explore-http-'+r.status);const d=await r.json();let live=Array.isArray(d.items)?d.items:[];
+  try{const google=await loadGooglePlaces();if(google.length)live=[...live,...google]}catch(e){}
+  live=live.filter((x,i,a)=>x?.name&&i===a.findIndex(y=>String(y.name).trim().toLowerCase()===String(x.name).trim().toLowerCase())).slice(0,700);
+  if(!live.length)throw new Error('empty-results');exploreItems=live;try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),items:live}))}catch(e){};
+  if(status)status.innerText=lang==='en'?`✓ ${live.length} places found around ${city}`:`✓ ${live.length} مكان حول ${city}`;filterExplore();
+ }catch(e){
+  if(cached?.items?.length)exploreItems=cached.items;else {const plannerFallback=Array.isArray(plan.places)?plan.places.map((x,i)=>({name:x[0],city:x[1]||city,desc:x[2]||'',type:i%4===0?'tourism':i%4===1?'restaurant':i%4===2?'cafe':'activity',source:lang==='en'?'Trip planner':'بيانات الرحلة'})):[];exploreItems=plannerFallback.length?plannerFallback:seyrFallbackExplore(city)}
+  if(status)status.innerText=lang==='en'?`✓ ${exploreItems.length} fallback places ready`:`✓ ${exploreItems.length} مكان متاح كخيار احتياطي`;filterExplore();
+ }
+}
+
+function placeCardHtml(x){const safe=encodeURIComponent(x.name);const type=normalizedExploreType(x);const icon={restaurant:'🍽️',cafe:'☕',activity:'🎟️',shopping:'🛍️',nature:'🌳',beach:'🏖️',nightlife:'🌙',tourism:'🏛️',hotel:'🏨'}[type]||'📍';const labels=lang==='en'?{map:'Google Maps',book:'Book',site:'Official site / booking',find:'Find booking',activity:'Book activity',rating:'Rating unavailable',source:'Source'}:{map:'Google Maps',book:'الحجز',site:'الموقع الرسمي / الحجز',find:'البحث عن الحجز',activity:'احجز نشاطاً',rating:'التقييم غير متاح',source:'المصدر'};let btns=`<button class="btn outline" onclick="openMapForPlace(decodeURIComponent('${safe}'),'google')">${labels.map}</button>`;if(trip.to?.cc==='SA')btns+=`<button class="btn outline" onclick="openMapForPlace(decodeURIComponent('${safe}'),'hudhud')">${lang==='en'?'Hudhud':'هدهد'}</button>`;if(trip.to?.cc==='RU')btns+=`<button class="btn outline" onclick="openMapForPlace(decodeURIComponent('${safe}'),'yandex')">Yandex</button>`;if(trip.to?.cc==='KR')btns+=`<button class="btn outline" onclick="openMapForPlace(decodeURIComponent('${safe}'),'kakao')">Kakao</button>`;const booking=x.booking||x.website||'';if(booking)btns+=`<button class="btn" onclick="window.open('${esc(booking)}','_blank','noopener')">${x.booking?'🎟️ '+labels.book:'🌐 '+labels.site}</button>`;else if(['restaurant','cafe','activity','hotel'].includes(type))btns+=`<button class="btn" onclick="openBookingSearch(decodeURIComponent('${safe}'))">🔎 ${labels.find}</button>`;if(type==='activity'||type==='tourism')btns+=`<button class="btn outline" onclick="openGYGFor(decodeURIComponent('${safe}'))">🎟️ ${labels.activity}</button>`;const rating=x.rating?`⭐ ${esc(x.rating)}`:`⭐ ${labels.rating}`;const desc=x.desc|| (lang==='en'?'A place worth exploring nearby.':'مكان قريب يستحق الاستكشاف.');return `<div class="placeCard"><div class="emoji">${icon}</div><h3>${esc(x.name)}</h3><div class="muted">${esc(x.city||trip.to?.name||'')}</div><p>${esc(desc)}</p><div class="metaRow"><span class="chip active">${esc(x.source||labels.source)}</span><span class="chip">${rating}</span></div><div class="mapBtns">${btns}</div>${booking?`<div class="bookingHint">${lang==='en'?'Opens the official site or booking page.':'يفتح الموقع الرسمي أو صفحة الحجز مباشرة.'}</div>`:''}</div>`}
+function openBookingSearch(name){const city=trip.to?.ar||trip.to?.name||'';window.open('https://www.google.com/search?q='+encodeURIComponent(name+' '+city+' حجز'),'_blank','noopener')}
+function setFilter(type,btn){
+ filter=type;
+ document.querySelectorAll('.exploreTab').forEach(x=>x.classList.toggle('active',x.dataset.filter===type));
+ filterExplore();
+}
+function preferenceWeights(){
+ const t=trip.tripType||'family';
+ const weights={
+  youth:{activity:10,nightlife:10,restaurant:9,cafe:8,beach:8,shopping:8,nature:7,tourism:6,hotel:4},
+  family:{tourism:10,nature:10,activity:9,beach:9,restaurant:8,cafe:7,shopping:7,hotel:7,nightlife:1},
+  solo:{tourism:9,cafe:9,activity:9,nature:8,restaurant:8,shopping:7,beach:7,nightlife:6,hotel:5}
+ }[t]||{};
+ return weights;
+}
+function preferenceLabel(){
+ const types={youth:'شباب',family:'عائلية',solo:'فردية'};
+ const b=Number(trip.budget||0);let budgetLabel=b?`ميزانية ${b.toLocaleString('ar-SA')} ر.س`: 'ميزانية غير محددة';
+ return `${types[trip.tripType||'family']||'عائلية'} · ${budgetLabel}`;
+}
+function updateExploreRecommendation(){
+ const el=document.getElementById('exploreRecommendation');if(!el)return;
+ const t={youth:'رحلة شباب',family:'رحلة عائلية',solo:'رحلة فردية'}[trip.tripType||'family']||'رحلتك';
+ const b=trip.budget?`ميزانية ${Number(trip.budget).toLocaleString('ar-SA')} ر.س`:'حدد الميزانية';
+ el.innerHTML=`<div><b>اقتراحات ${t}</b><div class="muted">${b} · رتبنا النتائج حسب تفضيلاتك.</div></div><button class="btn outline" onclick="newTripModal()">تعديل التفضيلات</button>`;
+}
+function normalizedExploreType(x){let t=String(x?.type||'').toLowerCase();if(['restaurant','fast_food','food'].includes(t))return'restaurant';if(['cafe','coffee_shop'].includes(t))return'cafe';if(['shopping','mall','market'].includes(t))return'shopping';if(['hotel','hostel','guest_house','resort'].includes(t))return'hotel';if(['nightlife','bar','club','pub'].includes(t))return'nightlife';if(['beach'].includes(t))return'beach';if(['nature','park','garden','waterfall','mountain','lake'].includes(t))return'nature';if(['activity','amusement','sports'].includes(t))return'activity';if(['tourism','museum','historic','attraction','viewpoint','gallery'].includes(t))return'tourism';return t||'activity'}
+let activitySub='all';
+function setActivitySub(v,btn){activitySub=v;document.querySelectorAll('.activityOpt').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');filterExplore()}
+function activityMatches(x){if(activitySub==='all')return true;const text=(x.name+' '+x.desc).toLowerCase();const map={adventure:['adventure','hike','trek','sport','climb','surf','kayak','diving','مغام','تسلق','رياض','غوص'],nature:['park','nature','beach','garden','mountain','حديقة','طبيعة','شاطئ','جبل'],culture:['museum','gallery','historic','culture','متحف','فن','تاريخ','ثقافة'],family:['zoo','aquarium','theme park','family','حديقة حيوان','أكواريوم','عائلي'],night:['night','evening','club','بار','ليلي','مساء']};return (map[activitySub]||[]).some(k=>text.includes(k))}
+function renderRecommendations(list){const el=document.getElementById('recommendations');if(!el)return;const picks=list.slice().sort((a,b)=>(preferenceWeights()[b._type]||0)-(preferenceWeights()[a._type]||0)).slice(0,8);const icons={restaurant:'🍽️',cafe:'☕',activity:'🎟️',shopping:'🛍️',nature:'🌿',beach:'🏖️',nightlife:'🌙',tourism:'🏛️',hotel:'🏨'};el.innerHTML=picks.map(x=>`<div class="recCard" onclick="openMapForPlace(decodeURIComponent('${encodeURIComponent(x.name)}'),'google')"><div class="recIcon">${icons[x._type]||'📍'}</div><b>${esc(x.name)}</b><small>${esc(x.city||trip.to?.name||'')} · ${esc(x.rating|| (lang==='en'?'Nearby':'قريب منك'))}</small></div>`).join('')}
+function showMorePlaces(){visibleExploreLimit+=36;filterExplore()}
+function filterExplore(){const q=(document.getElementById('search')?.value||'').toLowerCase().trim();const weights=preferenceWeights();const options=document.getElementById('activityOptions');if(options)options.hidden=filter!=='activity';let list=exploreItems.map(x=>({...x,_type:normalizedExploreType(x)})).filter(x=>(filter==='all'||x._type===filter)&&(!q||(x.name+' '+x.city+' '+x.desc).toLowerCase().includes(q))&&(filter!=='activity'||activityMatches(x)));if(filter==='all')list.sort((a,b)=>(weights[b._type]||0)-(weights[a._type]||0));const count=document.getElementById('exploreResultCount');if(count)count.innerText=list.length?(lang==='en'?`${list.length} places available · showing ${Math.min(visibleExploreLimit,list.length)}`:`${list.length} مكان متاح · نعرض ${Math.min(visibleExploreLimit,list.length)}`):(lang==='en'?'No matching places':'لا توجد نتائج بهذا الفلتر');renderRecommendations(list);const visible=list.slice(0,visibleExploreLimit);document.getElementById('places').innerHTML=visible.map(placeCardHtml).join('')||`<div class="card">${lang==='en'?'No matching results. Try All or another category.':'لا توجد نتائج مطابقة. جرّب الكل أو قسماً آخر.'}</div>`;const more=document.getElementById('morePlacesBtn');if(more){more.hidden=list.length<=visibleExploreLimit;more.innerText=lang==='en'?`Show more (${list.length-visibleExploreLimit})`:`عرض المزيد (${list.length-visibleExploreLimit})`}updateExploreRecommendation();renderFlightBooking()}
+function notificationsData(){const out=[];const now=new Date();if(trip.depart){const dep=new Date(trip.depart+'T09:00:00');const diff=Math.ceil((dep-now)/86400000);[30,14,7,3,1].forEach(n=>{if(diff>=0&&diff<=n)out.push({title:`تذكير الرحلة — ${trip.to?.ar||trip.to?.name||'الوجهة'}`,body:`متبقي تقريباً ${diff} يوم. راجع المستندات والطقس والحجوزات.`,date:trip.depart,kind:'trip'})});}if(trip.to)out.push({title:'تحديث يومي للوجهة',body:'عند فتح التطبيق يتم تحديث الطقس وسعر الصرف ومحاولة تحديث الاستكشاف.',date:new Date().toISOString().slice(0,10),kind:'live'});return out}
+function notificationsModal(){const a=notificationsData();document.getElementById('notifyBadge').innerText=a.length;openModal('🔔 التذكيرات والإشعارات',a.map(x=>`<div class="item reminder"><div class="ico">${x.kind==='trip'?'✈️':'🔄'}</div><div class="grow"><b>${esc(x.title)}</b><div class="muted">${esc(x.body)}</div><small>${esc(x.date)}</small></div></div>`).join('\n')||'<div class="notice">لا توجد تذكيرات حالياً.</div><div class="notice" style="margin-top:10px">يمكنك تشغيل إشعارات المتصفح من الإعدادات عند تحويل المشروع إلى تطبيق/PWA.</div>')}
+function updateNotificationBadge(){document.getElementById('notifyBadge').innerText=notificationsData().length}
+function tripPlanSignature(){return `${trip.to?.cc||''}|${trip.to?.name||trip.to?.ar||''}|${trip.depart||''}|${trip.return||''}|${trip.tripType||'family'}|${trip.budget||''}`}
+function plannerTypeText(){return ({youth:'شباب',family:'عائلية',solo:'فردية'}[trip.tripType||'family']||'عائلية')}
+function buildPlannerForTrip(){
+ const dest=trip.to?.ar||trip.to?.name||'وجهتك'; const days=[];
+ if(trip.depart&&trip.return){
+   const start=new Date(trip.depart+'T00:00:00'), end=new Date(trip.return+'T00:00:00'); let cur=new Date(start), n=0;
+   while(cur<=end && n<31){const iso=cur.toISOString().slice(0,10);const label=fmtDate(iso);const dayName=new Intl.DateTimeFormat('ar-SA',{weekday:'long'}).format(cur);let program='وصول واستكشاف خفيف حول مكان الإقامة'; if(n>0&&n<Math.ceil((end-start)/86400000)){program=plannerTypeText()==='عائلية'?'معلم رئيسي + وقت عائلي + مطعم مناسب للعائلة':plannerTypeText()==='شباب'?'معلم/تجربة + مقهى + نشاط مسائي':'معلم رئيسي + مقهى محلي + وقت حر';} if(n===Math.ceil((end-start)/86400000))program='يوم المغادرة: فطور + Check-out + التوجه للمطار/المحطة'; days.push([label,dayName,dest,'اختيار السكن داخل '+dest,program,'سيتم تحسين اليوم تلقائياً حسب الميزانية ونوع الرحلة.']);cur.setDate(cur.getDate()+1);n++;}
+ } else {days.push(['—','—',dest,'—','حدد تاريخ الرحلة ليُبنى البرنامج اليومي تلقائياً.','نوع الرحلة: '+plannerTypeText()])}
+ return {days,stay:[],transport:[],places:[],budget:[['ميزانية الرحلة',trip.budget?Number(trip.budget).toLocaleString('ar-SA')+' ر.س':'غير محددة','تُستخدم لترتيب الاقتراحات'],['نوع الرحلة',plannerTypeText(),'تؤثر على الأنشطة والمطاعم والمقاهي'],['الوجهة',dest,'جميع أيام المخطط مرتبطة بالوجهة الحالية']],meta:{tripKey:tripPlanSignature(),destination:dest,country:trip.to?.cc||''}};
+}
+function ensurePlannerMatchesTrip(force=false){
+ const key=tripPlanSignature(); if(!trip.to)return; if(force || !plan.meta || plan.meta.tripKey!==key){plan=buildPlannerForTrip();save();}
+}
+function renderPlanner(){ensurePlannerMatchesTrip();const dest=trip.to?.ar||trip.to?.name||'لم يتم اختيار وجهة';const pd=document.getElementById('plannerDestination');if(pd)pd.innerHTML=`<b>📍 ${esc(dest)}</b><div class="muted">${esc(trip.to?.cc||'')} · رحلة ${esc(plannerTypeText())} · ${trip.budget?esc(Number(trip.budget).toLocaleString('ar-SA'))+' ر.س للشخص':'الميزانية غير محددة'}</div>`;document.getElementById('plannerList').innerHTML=plan.days.map((d,i)=>`<div class="day"><div class="dayhead"><b>${esc(d[0])}</b><small>${esc(d[1])}</small></div><div class="daybody"><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>${esc(d[2])}</h3><div class="muted">المبيت: ${esc(d[3])}</div></div><button class="btn outline" onclick="editDay(${i})">تعديل</button></div><p style="margin-top:10px">${esc(d[4])}</p>${d[5]?`<div class="notice" style="margin-top:10px">${esc(d[5])}</div>`:''}</div></div>`).join('\n')||'<div class="card">لا توجد أيام بعد.</div>'}
+let editIndex=null;
+function openDayModal(i=null){editIndex=i;const d=i===null?['','','','','','']:plan.days[i];openModal(i===null?'＋ إضافة يوم':'تعديل اليوم',`<div class="formgrid"><div class="field"><label>التاريخ</label><input id="f1" value="${esc(d[0])}"></div><div class="field"><label>اليوم</label><input id="f2" value="${esc(d[1])}"></div><div class="field"><label>المكان</label><input id="f3" value="${esc(d[2])}"></div><div class="field"><label>المبيت</label><input id="f4" value="${esc(d[3])}"></div><div class="field full"><label>البرنامج</label><textarea id="f5">${esc(d[4])}</textarea></div><div class="field full"><label>الملاحظات</label><textarea id="f6">${esc(d[5])}</textarea></div></div><button class="btn" style="width:100%;margin-top:13px" onclick="saveDay()">حفظ</button>`)}
+function editDay(i){openDayModal(i)}
+function saveDay(){const d=['f1','f2','f3','f4','f5','f6'].map(id=>document.getElementById(id).value.trim());if(!d[0]||!d[2])return alert('أدخل التاريخ والمكان على الأقل.');if(editIndex===null)plan.days.push(d);else plan.days[editIndex]=d;save();closeModal();renderAll()}
+function renderList(id,arr,type){document.getElementById(id).innerHTML=arr.map((x,i)=>`<div class="item"><div class="ico">${type==='stay'?'🏨':type==='transport'?'🚌':'📄'}</div><div class="grow"><b>${esc(x[0])}</b><div class="muted">${esc(x.slice(1).join(' • '))}</div></div><button class="btn outline" onclick="removeItem('${type}',${i})">حذف</button></div>`).join('\n')||'<div class="card">لا توجد بيانات.</div>'}
+function removeItem(type,i){plan[type].splice(i,1);save();renderAll()}
+function addSimple(type){const title=prompt('اكتب اسم العنصر:');if(!title)return;const note=prompt('اكتب التفاصيل:')||'';if(type==='stay')plan.stay.push([title,'','',note,'']);if(type==='transport')plan.transport.push([title,'','','',note]);save();renderAll()}
+function renderDocs(){document.getElementById('docs').innerHTML=docs.map((d,i)=>`<div class="item"><div class="ico">📄</div><div class="grow"><b>${esc(d.name)}</b><div class="muted">${esc(d.size||'')} · ${esc(d.type||'')}</div></div><button class="btn outline" onclick="docs.splice(${i},1);save();renderDocs()">حذف</button></div>`).join('\n')||'<div class="card">لم تضف مستندات بعد.</div>'}
+function uploadDoc(){const i=document.createElement('input');i.type='file';i.multiple=true;i.onchange=()=>{[...i.files].forEach(f=>docs.push({name:f.name,size:(f.size/1024).toFixed(0)+' KB',type:f.type||'file'}));save();renderDocs()};i.click()}
+function renderBudget(){document.getElementById('budgetTable').innerHTML=plan.budget.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td>${esc(x[2])}</td></tr>`).join('\n')}
+function renderKpis(){document.getElementById('kpis').innerHTML=`<div class="kpi"><span class="muted">أيام الرحلة</span><b>${tripDays()}</b></div><div class="kpi"><span class="muted">أيام مخططة</span><b>${plan.days.length}</b></div><div class="kpi"><span class="muted">وجهات بالخطة</span><b>${plan.places.length}</b></div><div class="kpi"><span class="muted">مستندات</span><b>${docs.length}</b></div>`}
+function renderAll(){
+if(trip.to)ensurePlannerMatchesTrip();
+updateHero();updateExploreCity();updateExploreRecommendation();renderFlightBooking();
+const fh=document.getElementById('flightHomeMeta'); if(fh){const f=flightSearchUrls();fh.textContent=(f.to&&f.dep)?`${f.from} → ${f.to} · ${f.dep}${f.ret?' → '+f.ret:''} · Wego + Google Flights + Skyscanner جاهزة للبحث.`:'حدد وجهتك وتواريخ السفر، وسيفتح لك سَيْر مقارنة الرحلات بالمسار والتاريخ الصحيح.';}
+renderPlanner();renderList('stayList',plan.stay,'stay');renderList('transportList',plan.transport,'transport');renderMapSources();if(!exploreItems.length)exploreItems=plan.places.map((x,i)=>({name:x[0],city:x[1],desc:x[2],date:x[3],type:i%4===0?'tourism':i%4===1?'restaurant':i%4===2?'cafe':'activity',source:'بيانات الرحلة'}));filterExplore();renderDocs();renderBudget();renderKpis();updateNotificationBadge();applyLanguage()}
+async function refreshAll(){document.getElementById('fresh').innerText='● تحديث…';if(trip.to)await ensureTripCoordinates();await Promise.allSettled([loadWeather(),loadClimate(),trip.to?.lat?loadExplore(true):Promise.resolve()]);updateNotificationBadge();document.getElementById('fresh').innerText='● محدث '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+
+const LANG={ar:{brand:'SEYR | سَيْر',sub:'سافر أذكى — استكشف أكثر — كل رحلتك في مكان واحد',home:'الرئيسية',planner:'المخطط',explore:'استكشف',docs:'المستندات',account:'حسابي',enBtn:'EN'},en:{brand:'SEYR',sub:'Travel smarter — explore more — everything for your trip in one place',home:'Home',planner:'Planner',explore:'Explore',docs:'Documents',account:'Account',enBtn:'عربي'}};
+const SEYR_I18N={
+ 'إنشاء / تعديل الرحلة':'Create / Edit Trip','مخطط الرحلة':'Trip Planner','استكشف':'Explore','الطقس':'Weather','أفضل وقت للسفر':'Best Time to Travel','القبلة':'Qibla','الكهرباء':'Electricity','العملة':'Currency','التأشيرة':'Visa','العبارات':'Phrases','كلمة اليوم':'Word of the Day','المستندات':'Documents','الرئيسية':'Home','المخطط':'Planner','حسابي':'Account','السكن':'Stay','المواصلات والحجوزات':'Transport & Bookings','رفع مستند':'Upload Document','إضافة سكن':'Add Stay','إضافة رحلة':'Add Trip','إضافة يوم':'Add Day','تعديل':'Edit','حذف':'Delete','حفظ':'Save','حفظ الرحلة والتفضيلات':'Save Trip & Preferences','مدينة المغادرة':'Departure City','أين تريد الذهاب؟':'Where do you want to go?','تاريخ المغادرة':'Departure Date','تاريخ العودة':'Return Date','ميزانية الرحلة':'Trip Budget','نوع الرحلة':'Trip Type','شباب':'Friends','عائلية':'Family','فردية':'Solo','ميزانية تقريبية للشخص، وسنستخدمها لترتيب الاقتراحات.':'Approximate budget per person. We use it to rank recommendations.','تؤثر على ترتيب المعالم والمطاعم والمقاهي والأنشطة المقترحة.':'It affects the ranking of sights, restaurants, cafés and activities.','الكل':'All','معالم':'Sights','مطاعم':'Restaurants','مقاهي':'Cafés','أنشطة':'Activities','تسوق':'Shopping','مغامرات':'Adventure','طبيعة':'Nature','ثقافة':'Culture','ليلية':'Nightlife','تحديث الأماكن':'Refresh places','خريطة المدينة':'City map','أنشطة':'Activities','افتح استكشف':'Open Explore','تعديل تفضيلات الرحلة':'Edit trip preferences','اقتراحاتك جاهزة':'Your recommendations are ready','اقتراحات رحلة شباب':'Friends-trip picks','اقتراحات رحلة عائلية':'Family-trip picks','اقتراحات رحلة فردية':'Solo-trip picks','تحديث يومي للوجهة':'Daily destination update','لا توجد نتائج بهذا الفلتر':'No results for this filter','جاهز':'Ready','تحديث':'Refresh','تحديث…':'Updating…','يتحدث عند الطلب':'Updates on demand','استكشف حول رحلتك':'Explore around your trip','اختر مدينة الوجهة':'Choose a destination city','كل شيء حول المدينة':'Everything around the city','ابحث داخل المدينة: مطعم، مقهى، معلم، نشاط…':'Search this city: restaurant, café, sight, activity…','🎟️ الأنشطة والحجوزات':'🎟️ Activities & bookings','استكشاف أنشطة المدينة':'Explore city activities','احجز نشاطاً':'Book activity','الحجز المباشر':'Direct booking','الموقع الرسمي / الحجز':'Official site / booking','البحث عن الحجز':'Find booking','اللغة':'Language','محدث الآن':'Updated now','محدث':'Updated','الوجهة':'Destination','اختر وجهتك':'Choose your destination','أنشئ رحلتك ليتم بناء التفاصيل تلقائياً':'Create your trip to build the details automatically','ملخص الرحلة':'Trip summary','أيام الرحلة':'Trip days','أيام مخططة':'Planned days','وجهات بالخطة':'Places in plan','مستندات':'Documents','أفضل وقت':'Best time','مناخي':'Climate','اكتشف الوجهة':'Discover destination','مطاعم · مقاهي · معالم · أنشطة · فعاليات':'Restaurants · cafés · sights · activities · events','المخطط':'Planner','المبيت':'Stay','البرنامج':'Plan','الملاحظات':'Notes','التأشيرة':'Visa','العملة':'Currency','الكهرباء':'Electricity','الطقس في الوجهة':'Weather at destination','مستكشف الوجهة':'Destination explorer','لا توجد نتائج مطابقة لهذا الخيار حالياً. جرّب «الكل» أو خياراً آخر.':'No matching results right now. Try “All” or another option.','تقييم غير متاح من المصدر الحالي':'Rating unavailable from the current source','Google Maps':'Google Maps','هدهد':'Hudhud','تسوق':'Shopping','حجز':'Booking','اليوم':'Day','إلى':'to','من':'from','غير محددة':'Not specified','غير محدد':'Not specified','اختر مدينة الوجهة أولاً.':'Choose a destination city first.','تعذر تحميل الأماكن بسرعة':'Could not load places quickly','لا توجد نتائج حية حالياً':'No live results are available right now','تعذر جلب السعر الحي الآن.':'Could not fetch the live rate right now.','استخدم موقعي':'Use my location','يتطلب السماح بالموقع.':'Location permission is required.','محدث الآن':'Updated now','طبيعة':'Nature','شواطئ':'Beaches','ليلية':'Nightlife','فنادق':'Hotels','عرض المزيد':'Show more','حجز الطيران':'Flight booking','بحث عن الرحلات':'Search flights','خيار اختياري لحجز الطيران':'Optional flight search'
+};
+const SEYR_I18N_EN_TO_AR=Object.fromEntries(Object.entries(SEYR_I18N).map(([a,b])=>[b,a]));
+function trText(v){let x=String(v);if(lang==='ar'){for(const [en,ar] of Object.entries(SEYR_I18N_EN_TO_AR))x=x.replaceAll(en,ar);return x}for(const [ar,en] of Object.entries(SEYR_I18N))x=x.replaceAll(ar,en);return x}
+function translateDOM(){if(window.__seyrTranslating)return;window.__seyrTranslating=true;try{const root=document.body;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=walker.nextNode()){if(!n.nodeValue.trim())continue;if(n.parentElement?.closest('script,style'))continue;const v=trText(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v}root.querySelectorAll('input,textarea').forEach(el=>{if(el.placeholder)el.placeholder=trText(el.placeholder)});root.querySelectorAll('option').forEach(el=>el.textContent=trText(el.textContent));}finally{window.__seyrTranslating=false}}
+function toggleLanguage(){lang=lang==='ar'?'en':'ar';localStorage.setItem('rafeeqLangV18',lang);applyLanguage()}
+function applyLanguage(){const L=LANG[lang]||LANG.ar;document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.body.classList.toggle('lang-en',lang==='en');document.querySelector('.brand').innerText=L.brand;document.querySelector('.sub').innerText=L.sub;document.getElementById('langBtn').innerText=L.enBtn;const nav=document.querySelectorAll('.bottom .nav');if(nav.length>=5){nav[0].innerHTML=`<b>⌂</b>${L.home}`;nav[1].innerHTML=`<b>☷</b>${L.planner}`;nav[2].innerHTML=`<b>⌕</b>${L.explore}`;nav[3].innerHTML=`<b>▣</b>${L.docs}`;nav[4].innerHTML=`<b>◎</b>${L.account}`}setTimeout(()=>{translateDOM();filterExplore();renderFlightBooking()},0)}
+
+let seyrAIHistory=[];
+function seyrAIContext(){const dest=trip.to?.ar||trip.to?.name||'غير محددة';const from=trip.from?.ar||trip.from?.name||'الرياض';const type=plannerTypeText();const budget=trip.budget?`${Number(trip.budget).toLocaleString('ar-SA')} ر.س للشخص`:'غير محددة';const dates=trip.depart&&trip.return?`${fmtDate(trip.depart)} إلى ${fmtDate(trip.return)} (${tripDays()})`:'غير محددة';return {destination:dest,countryCode:trip.to?.cc||'',origin:from,tripType:type,budget,dates,profile:getAIProfile(),
+travelers:trip.travelers||trip.pax||1,flightSearch:flightSearchUrls(),weather:document.getElementById('weatherText')?.innerText||'',temperature:document.getElementById('temp')?.innerText||'',plan:(plan.days||[]).slice(0,31),places:exploreItems.slice(0,80).map(x=>({name:x.name,type:normalizedExploreType(x),desc:x.desc,rating:x.rating||'',website:x.website||'',booking:x.booking||''}))}}
+function openSeyrAI(){const el=document.getElementById('seyrAI');el.classList.add('show');el.setAttribute('aria-hidden','false');renderAIContext();if(!seyrAIHistory.length)addAIMessage('assistant',`أهلاً 👋 أنا سَيْر AI.
+أعرف وجهتك وميزانيتك ونوع رحلتك والطقس والمخطط والأماكن التي وجدناها. أقدر أجاوبك وأغيّر لك الخطة وأفتح لك الأماكن والحجوزات.
+
+قل لي مثلاً: «رتب لي 5 أيام بميزانية 5000» أو «غير اليوم الثالث» أو «أبي مطعم عائلي قريب».`);setTimeout(()=>document.getElementById('seyrAIInput')?.focus(),120)}
+function closeSeyrAI(){const el=document.getElementById('seyrAI');el.classList.remove('show');el.setAttribute('aria-hidden','true')}
+function renderAIContext(){const c=seyrAIContext();const el=document.getElementById('seyrAIContext');if(el)el.innerHTML=`📍 <b>${esc(c.destination)}</b> · ${esc(c.countryCode||'')} · ${esc(c.tripType)} · ${esc(c.budget)}<br>🗓️ ${esc(c.dates)} · 🌤️ ${esc(c.temperature)} ${esc(c.weather)} · ${c.places.length} مكان معروف`}
+function addAIMessage(role,text){const box=document.getElementById('seyrAIMessages');if(!box)return;const d=document.createElement('div');d.className='ai-msg '+role;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
+function aiQuick(q){
+ const input=document.getElementById('seyrAIInput'); if(!input)return;
+ input.value=q;
+ const form=input.closest('form');
+ if(form && typeof form.requestSubmit==='function') form.requestSubmit();
+ else if(form) form.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));
+}
+function aiLocalAction(q){const l=q.toLowerCase();if(!trip.to)return null;if(/استكشف|أماكن|مطاعم|مقاهي|نشاط|فعاليات|explore|places|restaurants|cafes|activities|events|sights/.test(l)){go('explore');if(/مطاعم|restaurants/.test(l))setFilter('restaurant',document.querySelector('[data-filter="restaurant"]'));else if(/مقاهي|cafes/.test(l))setFilter('cafe',document.querySelector('[data-filter="cafe"]'));else if(/نشاط|activities|adventure/.test(l))setFilter('activity',document.querySelector('[data-filter="activity"]'));else if(/تسوق|shopping|malls/.test(l))setFilter('shopping',document.querySelector('[data-filter="shopping"]'));else if(/معالم|sights|landmarks/.test(l))setFilter('tourism',document.querySelector('[data-filter="tourism"]'));return lang==='en'?'I opened Explore and selected the relevant category.':'فتحت لك استكشف واخترت القسم المناسب.'}const m=l.match(/(?:اليوم|day)\s*(\d+)/i);if(m&&/غير|عدل|غيّر|بدل|غيّر|غير|change|edit|modify|replace/.test(l)){const idx=Math.max(0,Number(m[1])-1);if(plan.days?.[idx]){plan.days[idx][4]=q.replace(m[0],'').replace(/^(غير|عدل|غيّر|بدل|change|edit|modify|replace)\s*(اليوم\s*\d+|day\s*\d+)?\s*/i,'').trim()||'برنامج مرن حسب تفضيلاتك';save();renderPlanner();go('planner');return `تم تعديل اليوم ${idx+1} في المخطط.`}}if(/ابن.*برنامج|رتب.*أيام|خطة.*\d+|build.*plan|plan.*\d+.*day|organize.*days/.test(l)){ensurePlannerMatchesTrip(true);save();renderPlanner();go('planner');return `أعدت بناء مخطط ${plan.days?.length||0} يوم للوجهة ${trip.to?.ar||trip.to?.name} حسب نوع الرحلة والميزانية.`}return null}
+function localAIReply(q){
+ const c=seyrAIContext(),l=q.toLowerCase();
+ if(!trip.to)return lang==='en'?'Tell me the destination first. Then I can build the trip around your dates, budget and style.':'حدد وجهتك أولاً، وبعدها أبني لك الرحلة حسب التاريخ والميزانية ونوع الرحلة.';
+ const xs=exploreItems.map(x=>({...x,_type:normalizedExploreType(x)}));
+ if(/لا تفوت|must.?see|don.?t miss|مهم|الأهم/.test(l)){const top=xs.filter(x=>['tourism','activity','nature','beach'].includes(x._type)).sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,7);if(top.length)return (lang==='en'?'Here are the places I would put on your shortlist:\n':'هذي أبرز الأماكن الموجودة حالياً عندك في استكشف:\n')+top.map((x,i)=>`${i+1}. ${x.name}${x.rating?' — ⭐ '+x.rating:''}`).join('\n');}
+ if(/راجع.*خط|review.*plan|مشكلة.*خطة|problem.*plan/.test(l)){const issues=[];if(!trip.depart||!trip.return)issues.push(lang==='en'?'Add departure and return dates.':'أضف تاريخ المغادرة والعودة.');if(!trip.budget)issues.push(lang==='en'?'Set a per-person budget.':'حدد ميزانية تقريبية للشخص.');if(!xs.length)issues.push(lang==='en'?'Explore has not loaded live places yet.':'استكشف لم يحمل أماكن حية حتى الآن.');if(!issues.length)return lang==='en'?'Your trip basics look complete. I can refine individual days, food, activities and budget.':'أساسيات الرحلة مكتملة حالياً. أقدر أحسن لك الأيام والأكل والأنشطة والميزانية.';return (lang==='en'?'I found these items to improve:\n':'راجعت الخطة، وهذه الأشياء التي أنصحك بإكمالها:\n')+issues.map((x,i)=>`${i+1}. ${x}`).join('\n');}
+ if(/hotel|hotels|سكن|فنادق/.test(l)){const h=xs.filter(x=>x._type==='hotel').slice(0,8);return h.length?(lang==='en'?'Available stays:\n':'الفنادق/أماكن الإقامة الموجودة في استكشف:\n')+h.map((x,i)=>`${i+1}. ${x.name}`).join('\n'):(lang==='en'?'No live stays were returned yet.':'ما وصلت فنادق حية من المصدر حتى الآن.');}
+ if(/booking|book|حجز|احجز/.test(l)){const b=xs.filter(x=>x.booking||x.website).slice(0,8);return b.length?(lang==='en'?'Places with a site or booking link:\n':'أماكن عندها موقع أو رابط حجز:\n')+b.map((x,i)=>`${i+1}. ${x.name} — ${x.booking||x.website}`).join('\n'):(lang==='en'?'I do not have direct booking links for the loaded places yet.':'ما عندي روابط حجز مباشرة للأماكن المحملة حالياً.');}
+ if(/restaurant|restaurants|cafe|cafes|مطعم|مطاعم|مقهى|مقاهي/.test(l)){const f=xs.filter(x=>['restaurant','cafe'].includes(x._type)).sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,10);if(f.length)return (lang==='en'?'Food options:\n':'خيارات الأكل الموجودة حالياً:\n')+f.map((x,i)=>`${i+1}. ${x.name}${x.rating?' — ⭐ '+x.rating:''}`).join('\n');}
+ if(/budget|ميزاني|تكلفة|كم اصرف|spend|صرف/.test(l)){const b=Number(trip.budget||0);if(b){const daily=tripDays()?Math.round(b/tripDays()):b;return lang==='en'?`Your budget is ${b.toLocaleString()} SAR per person. That is about ${daily.toLocaleString()} SAR per day across ${tripDays()||1} days. I can rebalance food, activities and shopping around that.`:`ميزانيتك ${b.toLocaleString('ar-SA')} ر.س للشخص، يعني تقريباً ${daily.toLocaleString('ar-SA')} ر.س لليوم على ${tripDays()||1} يوم. وأقدر أوزعها بين الأكل والأنشطة والتسوق.`}return lang==='en'?'Set your budget and I will use it to shape the daily plan.':'حدد الميزانية، وبستخدمها في ترتيب البرنامج اليومي.';}
+ if(/weather|طقس|جو/.test(l))return lang==='en'?`The destination weather is ${c.temperature} ${c.weather}. I can adjust outdoor activities around it.`:`الطقس الحالي في الوجهة ${c.temperature} ${c.weather}. وأقدر أعدل الأنشطة الخارجية بناءً عليه.`;
+ if(/plan|itinerary|schedule|خطة|برنامج|جدول|رتب|ابن/.test(l)){ensurePlannerMatchesTrip(true);save();renderPlanner();return lang==='en'?`Done. I rebuilt your ${plan.days?.length||0}-day plan for ${c.destination}, using your ${c.tripType} style and ${c.budget} budget.`:`تم. أعدت بناء برنامج ${plan.days?.length||0} يوم في ${c.destination} حسب نوع الرحلة و${c.budget}.`}
+ if(/what|ماذا|وش|ايش|help|ساعد|تقدر/.test(l))return lang==='en'?`I can use your destination, dates, budget, trip type, weather, planner and Explore. Ask me to build a plan, review it, find food, stays, activities, bookings, or places you should not miss.`:`أقدر أستخدم وجهتك وتواريخك وميزانيتك ونوع الرحلة والطقس والمخطط واستكشف. قل لي: ابنِ البرنامج، راجع الخطة، طلع مطاعم، فنادق، أنشطة، حجوزات، أو أهم الأماكن.`;
+ return lang==='en'?`I’m ready for ${c.destination}. Tell me what you want to change or discover, and I’ll work from your current trip data.`:`أنا جاهز لرحلتك إلى ${c.destination}. قل لي وش تبي تغيّر أو تكتشف، وبشتغل مباشرة من بيانات رحلتك.`;
+}
+
+async function sendSeyrAI(e){e?.preventDefault();const input=document.getElementById('seyrAIInput');if(!input)return;const q=input.value.trim();if(!q)return;input.value='';addAIMessage('user',q);seyrAIHistory.push({role:'user',content:q});learnAIProfile(q);renderAIContext();const thinking=addAIMessage('assistant',lang==='en'?'Thinking with your trip context…':'أفكر من داخل رحلتك الحالية…');thinking?.classList.add('thinking');let remoteDone=false;try{const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);const r=await fetch('/api/assistant',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:q,history:seyrAIHistory.slice(-14),context:{...seyrAIContext(),profile:getAIProfile()}}),signal:ctrl.signal});clearTimeout(timer);const d=await r.json().catch(()=>({}));if(r.ok&&d.answer&&d.mode==='ai'){thinking.textContent=d.answer;thinking.classList.remove('thinking');seyrAIHistory.push({role:'assistant',content:d.answer});remoteDone=true;renderAIContext()}}catch(err){}if(!remoteDone){let local='';try{local=localAIReply(q)}catch(err){local=lang==='en'?'I can still help using your current trip.':'أقدر أساعدك من بيانات رحلتك الحالية.'}if(!local)local=lang==='en'?'I can still help using your current trip.':'أقدر أساعدك من بيانات رحلتك الحالية.';thinking.textContent=local;thinking.classList.remove('thinking');seyrAIHistory.push({role:'assistant',content:local});renderAIContext()}}
+window.addEventListener('load',async()=>{if(localStorage.getItem('darkV17')==='1')document.body.classList.add('dark');await loadCityData();if(trip.to)ensurePlannerMatchesTrip();cityIndex=[...citiesByCountry.values()].flat();applyLanguage();renderAll();if(trip.to){await ensureTripCoordinates();updateHero();renderAll();}await Promise.allSettled([loadWeather(),loadClimate(),loadExplore()]);updateNotificationBadge()})
+</script>
+
+<script id="seyr-final-runtime">
+(function(){
+  // Daily freshness: invalidate cached Explore data once per calendar day and refresh live widgets.
+  const today=new Date().toISOString().slice(0,10), stampKey='seyrDailyRefreshV1';
+  if(localStorage.getItem(stampKey)!==today){
+    try{Object.keys(localStorage).filter(k=>k.startsWith('seyrExplore:')).forEach(k=>localStorage.removeItem(k))}catch(e){}
+    localStorage.setItem(stampKey,today);
+    window.addEventListener('load',()=>setTimeout(()=>{if(typeof refreshAll==='function')refreshAll()},900));
+  }
+  // Translate dynamically-created cards/modals as well.
+  const mo=new MutationObserver(()=>{if(typeof translateDOM==='function')translateDOM()});
+  window.addEventListener('load',()=>mo.observe(document.body,{childList:true,subtree:true}));
+  // Harden touch/click interaction on iOS Safari.
+  document.addEventListener('click',function(e){
+    const b=e.target.closest('button,.exploreTab,.activityOpt,.tripTypeBtn');
+    if(!b)return;
+    b.style.pointerEvents='auto';
+    if(b.classList.contains('exploreTab')){const t=b.dataset.filter;if(t&&typeof setFilter==='function')setFilter(t,b)}
+    if(b.classList.contains('activityOpt')&&typeof setActivitySub==='function'){const m=b.getAttribute('onclick')?.match(/setActivitySub\('([^']+)'/);if(m)setActivitySub(m[1],b)}
+    if(b.classList.contains('tripTypeBtn')&&typeof selectTripType==='function'){const m=b.getAttribute('onclick')?.match(/selectTripType\('([^']+)'/);if(m)selectTripType(m[1],b)}
+  },true);
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+}
+</script>
+
+<script>
+(function(){
+  if(window.__seyrInteractiveInit)return; window.__seyrInteractiveInit=true;
+  const root=document.documentElement, body=document.body;
+  const bar=document.createElement('div'); bar.id='seyrScrollProgress'; document.body.prepend(bar);
+  let lastY=window.scrollY||0, ticking=false, timer;
+  function onScroll(){
+    const y=window.scrollY||0, max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+    root.style.setProperty('--scroll-progress',Math.min(100,Math.max(0,y/max*100))+'%');
+    body.classList.add('seyr-scrolling'); clearTimeout(timer); timer=setTimeout(()=>body.classList.remove('seyr-scrolling'),180);
+    if(y>lastY+8 && y>120) body.classList.add('seyr-nav-hidden');
+    else if(y<lastY-8) body.classList.remove('seyr-nav-hidden');
+    lastY=y;
+    const hero=document.querySelector('.hero');
+    if(hero && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const shift=Math.min(28,Math.max(0,y*.035)); hero.style.setProperty('--hero-shift',shift+'px'); hero.style.transform='translateY('+shift+'px)';
+    }
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(onScroll);ticking=true;}},{passive:true});
+  window.addEventListener('wheel',()=>body.classList.remove('seyr-nav-hidden'),{passive:true});
+  function reveal(){
+    const selectors=['.section','.card','.tile','.placeCard','.day','.item','.kpi','.exploreHero','.exploreTabs','.preferenceCard'];
+    document.querySelectorAll(selectors.join(',')).forEach((el,i)=>{
+      if(el.dataset.seyrReveal)return; el.dataset.seyrReveal='1'; el.classList.add('reveal'); el.style.transitionDelay=Math.min((i%8)*45,280)+'ms';
+    });
+    if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(x=>x.classList.add('is-visible'));return;}
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(x=>io.observe(x));
+  }
+  const oldRenderAll=window.renderAll;
+  if(typeof oldRenderAll==='function') window.renderAll=function(){const r=oldRenderAll.apply(this,arguments);setTimeout(reveal,40);return r};
+  document.addEventListener('click',e=>{const b=e.target.closest('.nav,.exploreTab,.tripTypeBtn');if(b)setTimeout(reveal,70)});
+  window.addEventListener('load',()=>setTimeout(reveal,250));
+  reveal(); onScroll();
+})();
+
+(function(){let lastY=window.scrollY;const fab=document.getElementById('scrollTopFab');let ticking=false;window.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{const y=window.scrollY;document.body.classList.toggle('seyr-scrolling',y>12);document.body.classList.toggle('seyr-nav-hidden',y>lastY+8&&y>140);if(fab)fab.classList.toggle('show',y>420);lastY=y;ticking=false})},{passive:true});window.addEventListener('pointerdown',()=>document.body.classList.remove('seyr-nav-hidden'),{passive:true});})();
+</script>
+</body></html><style id="seyr-live-final-css">
+.flightLiveResults{margin-top:12px}.liveFareGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fareCard{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;display:flex;flex-direction:column;gap:6px}.fareCard strong{font-size:20px}.fareCard small{color:var(--muted)}@media(max-width:560px){.liveFareGrid{grid-template-columns:1fr}}
+</style>
