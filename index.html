@@ -658,7 +658,7 @@ async function loadExplore(force=false){
   if(cached?.items?.length)exploreItems=cached.items;
   else{
    const matched=typeof seyrFallbackExplore==='function'?seyrFallbackExplore(city):[];
-   exploreItems=matched.length?matched.map(function(x){return{name:x.name||x[0],city,desc:x.desc||x[2]||'Suggested place — verify details with the provider',type:x.type||x[3]||'tourism',source:'SEYR suggestions'}}:[];
+   exploreItems=matched.length?matched.map(function(x){return{name:x.name||x[0],city,desc:x.desc||x[2]||'Suggested place — verify details with the provider',type:x.type||x[3]||'tourism',source:'SEYR suggestions'}}):[];
   }
   if(exploreItems.length){
    if(status)status.innerText=lang==='en'?'Showing saved suggestions; live sources are temporarily unavailable.':'تعذر الاتصال بمصادر الأماكن؛ تظهر اقتراحات محفوظة إن وجدت.';
