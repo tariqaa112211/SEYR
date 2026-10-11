@@ -597,29 +597,126 @@ async function currencyModal(){
 async function loadExplore(force=false){
  if(trip.to && (!Number.isFinite(Number(trip.to.lat))||!Number.isFinite(Number(trip.to.lon)))) await ensureTripCoordinates();
  const status=document.getElementById('exploreStatus'),city=trip.to?.ar||trip.to?.name||'';
- const cacheKey=trip.to?.lat&&trip.to?.lon?'seyrExploreV6:'+Number(trip.to.lat).toFixed(3)+':'+Number(trip.to.lon).toFixed(3):'seyrExploreGlobalV6';
+ const lat=Number(trip.to?.lat),lon=Number(trip.to?.lon);
+ const cacheKey=Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0?'seyrExploreV6:'+lat.toFixed(3)+':'+lon.toFixed(3):'seyrExploreGlobalV6';
  let cached=null;try{cached=JSON.parse(localStorage.getItem(cacheKey)||'null')}catch(e){}
- if(!force&&cached?.items?.length&&Date.now()-Number(cached.ts||0)<6*60*60*1000){exploreItems=cached.items;updateExploreCity();if(status)status.innerText=`✓ ${exploreItems.length} ${lang==='en'?'places ready':'مكان جاهز'}`;filterExplore();return;}
- if(status)status.innerText=lang==='en'?'Finding places nearby…':'جاري البحث عن أماكن قريبة…';
- const places=document.getElementById('places');if(places)places.innerHTML='<div class="card">⏳ جاري تحميل الأماكن…</div>';
+ if(!force&&cached?.items?.length&&Date.now()-Number(cached.ts||0)<4*60*60*1000){
+  exploreItems=cached.items;updateExploreCity();
+  if(status)status.innerText=lang==='en'?'✓ '+exploreItems.length+' places cached':'✓ '+exploreItems.length+' مكان محفوظ مؤقتًا';
+  filterExplore();return;
+ }
+ if(status)status.innerText=lang==='en'?'Finding real places nearby…':'جاري جلب أماكن حقيقية قريبة…';
+ const placesBox=document.getElementById('places');
+ if(placesBox)placesBox.innerHTML='<div class="exploreSkeleton"><div class="skeletonCard"></div><div class="skeletonCard"></div><div class="skeletonCard"></div></div>';
+ let live=[];
  try{
-  if(!trip.to?.lat||!trip.to?.lon)throw new Error('no-destination');
-  const q=`[out:json][timeout:10];(nwr(around:15000,${Number(trip.to.lat)},${Number(trip.to.lon)})[tourism];nwr(around:15000,${Number(trip.to.lat)},${Number(trip.to.lon)})[amenity~"restaurant|cafe|fast_food"];nwr(around:15000,${Number(trip.to.lat)},${Number(trip.to.lon)})[leisure~"park|nature_reserve"];);out center tags 120;`;
-  const servers=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-  let raw=[];
-  for(const server of servers){try{const ctrl=new AbortController(),tm=setTimeout(()=>ctrl.abort(),11000);const r=await fetch(server+'?data='+encodeURIComponent(q),{signal:ctrl.signal,cache:'no-store'});clearTimeout(tm);if(r.ok){const d=await r.json();raw=d.elements||[];if(raw.length)break}}catch(e){}}
-  let live=raw.map(x=>{const t=x.tags||{},type=t.tourism?'tourism':t.amenity==='restaurant'?'restaurant':t.amenity==='cafe'?'cafe':t.leisure?'nature':'activity';return{name:t.name||t['name:en']||'',city,desc:t['description:en']||t.description||t.amenity||t.tourism||'',type,lat:x.lat??x.center?.lat,lon:x.lon??x.center?.lon,source:'OpenStreetMap'}}).filter(x=>x.name);
-  try{const google=await loadGooglePlaces();if(google.length)live=[...live,...google]}catch(e){}
-  live=live.filter((x,i,a)=>i===a.findIndex(y=>String(y.name).trim().toLowerCase()===String(x.name).trim().toLowerCase())).slice(0,120);
-  if(!live.length)throw new Error('empty-results');
-  exploreItems=live;try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),items:live}))}catch(e){}
-  if(status)status.innerText=lang==='en'?`✓ ${live.length} places found around ${city}`:`✓ ${live.length} مكان حول ${city}`;filterExplore();
- }catch(e){
-  if(cached?.items?.length)exploreItems=cached.items;else {const matched=seyrFallbackExplore(city);exploreItems=matched.length?matched:SEYR_EXPLORE_FALLBACK.slice(0,36).map(x=>({name:x[0],city,desc:x[2],type:x[3],source:'دليل SEYR',rating:'',website:'',booking:''}))}
-  if(status)status.innerText=lang==='en'?`✓ ${exploreItems.length} fallback places ready`:`✓ ${exploreItems.length} مكان متاح كخيار احتياطي`;filterExplore();
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat===0||lon===0)throw new Error('destination-coordinates-missing');
+  // Prefer the same-origin server route: it merges independent data providers and avoids browser CORS issues.
+  try{
+   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),14000);
+   try{
+    const response=await fetch('/api/places?lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon),{signal:controller.signal,cache:'no-store'});
+    const data=await response.json().catch(()=>({}));
+    if(response.ok&&Array.isArray(data.places))live=data.places;
+   }finally{clearTimeout(timer)}
+  }catch(e){}
+  // Browser-side Overpass is a fallback if the deployed server route is unavailable.
+  if(!live.length){
+   const query='[out:json][timeout:9];(nwr(around:15000,'+lat+','+lon+')[tourism~"attraction|museum|gallery|zoo|theme_park|viewpoint|aquarium|hotel|hostel"];nwr(around:15000,'+lat+','+lon+')[amenity~"restaurant|cafe|fast_food|ice_cream|bar|nightclub"];nwr(around:15000,'+lat+','+lon+')[leisure~"park|nature_reserve|garden"];nwr(around:15000,'+lat+','+lon+')[shop~"mall|department_store"];nwr(around:15000,'+lat+','+lon+')[historic];);out center tags 100;';
+   const endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
+   for(const endpoint of endpoints){
+    try{
+     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),11000);
+     let response;
+     try{response=await fetch(endpoint+'?data='+encodeURIComponent(query),{signal:controller.signal,cache:'no-store'})}finally{clearTimeout(timer)}
+     if(!response.ok)continue;
+     const data=await response.json();
+     live=(data.elements||[]).map(function(item){
+      const tags=item.tags||{},raw=tags.amenity||tags.tourism||tags.leisure||tags.shop||(tags.historic?'historic':'activity');
+      let type='tourism';
+      if(['restaurant','cafe','fast_food','ice_cream'].includes(tags.amenity))type=tags.amenity==='cafe'?'cafe':'restaurant';
+      else if(['bar','nightclub'].includes(tags.amenity))type='nightlife';
+      else if(['park','nature_reserve','garden'].includes(tags.leisure))type='nature';
+      else if(['mall','department_store'].includes(tags.shop))type='shopping';
+      else if(['hotel','hostel','guest_house'].includes(tags.tourism))type='hotel';
+      const latitude=item.lat??item.center?.lat,longitude=item.lon??item.center?.lon;
+      return{name:tags.name||tags['name:en']||tags['name:ar']||'',city,desc:tags.description||tags['description:en']||tags.cuisine||raw,type,lat:latitude,lon:longitude,source:'OpenStreetMap',website:tags.website||tags['contact:website']||'',rating:null};
+     }).filter(x=>x.name&&Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.lon)));
+     if(live.length)break;
+    }catch(e){}
+   }
+  }
+  const seen=new Set();
+  live=live.filter(function(item){const key=String(item.name||'').trim().toLocaleLowerCase();if(!key||seen.has(key))return false;seen.add(key);return true;}).slice(0,120);
+  if(!live.length)throw new Error('no-results');
+  exploreItems=live;
+  try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),items:live}))}catch(e){}
+  updateExploreCity();
+  if(status)status.innerText=lang==='en'?'✓ '+live.length+' places found around '+city:'✓ تم العثور على '+live.length+' مكان حول '+city;
+  filterExplore();
+ }catch(error){
+  if(cached?.items?.length)exploreItems=cached.items;
+  else{
+   const matched=typeof seyrFallbackExplore==='function'?seyrFallbackExplore(city):[];
+   exploreItems=matched.length?matched.map(function(x){return{name:x.name||x[0],city,desc:x.desc||x[2]||'Suggested place — verify details with the provider',type:x.type||x[3]||'tourism',source:'SEYR suggestions'}}:[];
+  }
+  if(exploreItems.length){
+   if(status)status.innerText=lang==='en'?'Showing saved suggestions; live sources are temporarily unavailable.':'تعذر الاتصال بمصادر الأماكن؛ تظهر اقتراحات محفوظة إن وجدت.';
+   filterExplore();
+  }else{
+   if(status)status.innerText=lang==='en'?'Could not load places. Check the destination and retry.':'تعذر تحميل الأماكن. تحقق من الوجهة والاتصال ثم أعد المحاولة.';
+   if(placesBox)placesBox.innerHTML='<div class="card"><b>ما قدرنا نحمل الأماكن الآن</b><p class="muted">قد يكون مصدر البيانات متوقفًا مؤقتًا. جرّب مرة ثانية، أو غيّر المدينة.</p><button class="btn" onclick="loadExplore(true)">↻ إعادة المحاولة</button></div>';
+  }
  }
 }
-async function sendSeyrAI(e){e?.preventDefault();const input=document.getElementById('seyrAIInput');if(!input)return;const q=input.value.trim();if(!q)return;input.value='';addAIMessage('user',q);seyrAIHistory.push({role:'user',content:q});learnAIProfile(q);renderAIContext();const thinking=addAIMessage('assistant',lang==='en'?'Thinking with your trip context…':'أفكر من داخل رحلتك الحالية…');thinking?.classList.add('thinking');let remoteDone=false;try{const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);const r=await fetch('/api/assistant',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:q,history:seyrAIHistory.slice(-14),context:{...seyrAIContext(),profile:getAIProfile()}}),signal:ctrl.signal});clearTimeout(timer);const d=await r.json().catch(()=>({}));if(r.ok&&d.answer&&d.mode==='ai'){thinking.textContent=d.answer;thinking.classList.remove('thinking');seyrAIHistory.push({role:'assistant',content:d.answer});remoteDone=true;renderAIContext()}}catch(err){}if(!remoteDone){let local='';try{local=localAIReply(q)}catch(err){local=lang==='en'?'I can still help using your current trip.':'أقدر أساعدك من بيانات رحلتك الحالية.'}if(!local)local=lang==='en'?'I can still help using your current trip.':'أقدر أساعدك من بيانات رحلتك الحالية.';thinking.textContent=local;thinking.classList.remove('thinking');seyrAIHistory.push({role:'assistant',content:local});renderAIContext()}}
+async function sendSeyrAI(e){
+ e?.preventDefault();
+ const input=document.getElementById('seyrAIInput');
+ if(!input)return;
+ const q=input.value.trim();
+ if(!q)return;
+ const send=document.getElementById('seyrAISend');
+ if(send?.disabled)return;
+ input.value='';
+ if(send)send.disabled=true;
+ addAIMessage('user',q);
+ seyrAIHistory.push({role:'user',content:q});
+ learnAIProfile(q);renderAIContext();
+ const thinking=addAIMessage('assistant',lang==='en'?'Thinking with your trip details…':'أحلل سؤالك مع تفاصيل رحلتك…');
+ thinking?.classList.add('thinking');
+ let answer=null,problem='';
+ try{
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),28000);
+  let response,data;
+  try{
+   response=await fetch('/api/assistant',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:q,history:seyrAIHistory.slice(-14),context:{...seyrAIContext(),profile:getAIProfile()}}),signal:controller.signal});
+   data=await response.json().catch(()=>({}));
+  }finally{clearTimeout(timer)}
+  if(response.ok&&data.answer&&data.mode==='ai')answer=String(data.answer);
+  else problem=String(data.error||('AI service returned HTTP '+response.status));
+ }catch(error){problem=error?.name==='AbortError'?'انتهت مهلة الرد من الذكاء الاصطناعي. جرّب مرة ثانية.':'تعذر الاتصال بخدمة الذكاء الاصطناعي.'}
+ if(thinking){
+  if(answer){
+   thinking.textContent=answer;
+   seyrAIHistory.push({role:'assistant',content:answer});
+  }else if(/not configured|OPENAI_API_KEY/i.test(problem)){
+   const msg=lang==='en'?'The AI assistant is not activated yet. Add OPENAI_API_KEY in Vercel → Project Settings → Environment Variables, then redeploy.':'الذكاء الاصطناعي غير مفعّل على الموقع حتى الآن. أضف OPENAI_API_KEY في Vercel ← Project Settings ← Environment Variables ثم أعد النشر.';
+   thinking.textContent=msg;
+   thinking.classList.add('ai-setup-warning');
+   seyrAIHistory.push({role:'assistant',content:msg});
+  }else{
+   let fallback='';
+   try{fallback=localAIReply(q)}catch(error){}
+   const msg=(fallback|| (lang==='en'?'I could not reach the AI service. Please retry.':'ما قدرت أوصل لخدمة الذكاء الاصطناعي؛ جرّب مرة ثانية.'))+'\n\n'+(lang==='en'?'Note: this is a limited fallback response, not a live AI answer.':'تنبيه: هذا رد احتياطي محدود وليس إجابة من الذكاء الاصطناعي المباشر.');
+   thinking.textContent=msg;
+   thinking.classList.add('ai-setup-warning');
+   seyrAIHistory.push({role:'assistant',content:msg});
+  }
+  thinking.classList.remove('thinking');
+ }
+ if(send)send.disabled=false;
+ renderAIContext();
+}
 window.addEventListener('load',async()=>{if(localStorage.getItem('darkV17')==='1')document.body.classList.add('dark');await loadCityData();if(trip.to)ensurePlannerMatchesTrip();cityIndex=[...citiesByCountry.values()].flat();applyLanguage();renderAll();if(trip.to){await ensureTripCoordinates();updateHero();renderAll();}await Promise.allSettled([loadWeather(),loadClimate(),loadExplore()]);updateNotificationBadge()})
 </script>
 
@@ -750,7 +847,7 @@ async function loadGooglePlaces(){
  }catch(e){return [];}
 }
 function openCityMaps(){var d=trip.to||{},q=d.lat&&d.lon?d.lat+','+d.lon:(d.name||d.ar||'');if(!q){alert('اختر مدينة الوجهة أولاً.');return;}window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q),'_blank','noopener');}
-function openFlightSearch(provider){var from=document.getElementById('flightFrom')?.value||trip.from?.name||trip.from?.ar||'',to=document.getElementById('flightTo')?.value||trip.to?.name||trip.to?.ar||'',dep=document.getElementById('flightDepart')?.value||trip.depart||'',ret=document.getElementById('flightReturn')?.value||trip.return||'';if(!from||!to){alert('حدد مدينة المغادرة والوجهة أولاً.');return;}var url;if(provider==='google')url='https://www.google.com/travel/flights?q='+encodeURIComponent('Flights from '+from+' to '+to+(dep?' on '+dep:'')+(ret?' return '+ret:''));else if(provider==='skyscanner')url='https://www.skyscanner.com/transport/flights/?origin='+encodeURIComponent(from)+'&destination='+encodeURIComponent(to)+(dep?'&outboundDate='+encodeURIComponent(dep):'')+(ret?'&inboundDate='+encodeURIComponent(ret):'');else url='https://www.wego.com/flights?departure_city='+encodeURIComponent(from)+'&arrival_city='+encodeURIComponent(to)+(dep?'&departure_date='+encodeURIComponent(dep):'')+(ret?'&return_date='+encodeURIComponent(ret):'');window.open(url,'_blank','noopener');}
+function openFlightSearch(provider){var from=document.getElementById('flightFrom')?.value||trip.from?.name||trip.from?.ar||'',to=document.getElementById('flightTo')?.value||trip.to?.name||trip.to?.ar||'',dep=document.getElementById('flightDepart')?.value||trip.depart||'',ret=document.getElementById('flightReturn')?.value||trip.return||'';if(!from||!to){alert('حدد مدينة المغادرة والوجهة أولاً.');return;}var url;if(provider==='google')url='https://www.google.com/travel/flights?q='+encodeURIComponent('Flights from '+from+' to '+to+(dep?' on '+dep:'')+(ret?' return '+ret:''));else if(provider==='skyscanner')url='https://www.skyscanner.com/transport/flights/?origin='+encodeURIComponent(from)+'&destination='+encodeURIComponent(to)+(dep?'&outboundDate='+encodeURIComponent(dep):'')+(ret?'&inboundDate='+encodeURIComponent(ret):'');else url='https://www.wego.com/flights?departure_city='+encodeURIComponent(from)+'&arrival_city='+encodeURIComponent(to)+(dep?'&departure_date='+encodeURIComponent(dep):'')+(ret?'&return_date='+encodeURIComponent(ret):'');window.open(url,'_blank','noopener,noreferrer');}
 function openHotelSearch(){var city=trip.to?.name||trip.to?.ar||'';if(!city){alert('حدد الوجهة أولاً.');return;}var u='https://www.booking.com/searchresults.html?ss='+encodeURIComponent(city)+(trip.depart?'&checkin='+encodeURIComponent(trip.depart):'')+(trip.return?'&checkout='+encodeURIComponent(trip.return):'');window.open(u,'_blank','noopener');}
 function openGYG(){var city=trip.to?.name||trip.to?.ar||'';if(!city){alert('اختر الوجهة أولاً.');return;}window.open('https://www.getyourguide.com/s/?q='+encodeURIComponent(city),'_blank','noopener');}
 function openSeyrAI(){var e=document.getElementById('seyrAI');if(!e)return;e.classList.add('show');e.setAttribute('aria-hidden','false');renderAIContext();setTimeout(function(){document.getElementById('seyrAIInput')?.focus()},80);}
@@ -795,6 +892,18 @@ window.addEventListener('load',function(){try{applyLanguage();renderAll();update
 })();
 </script>
 
+
+<style id="seyr-interaction-polish-v1">
+@keyframes seyrRiseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.placeCard,.fareCard,.exploreTab{animation:seyrRiseIn .42s cubic-bezier(.2,.7,.2,1) both}
+.placeCard:nth-child(3n+2){animation-delay:45ms}.placeCard:nth-child(3n){animation-delay:90ms}
+.btn,.sourceBtn,.exploreTab,.tripTypeBtn{transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease}
+.btn:hover,.sourceBtn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(35,36,90,.13)}
+.btn:active,.sourceBtn:active{transform:scale(.98)}
+.ai-setup-warning{border:1px solid #f0c36d;background:#fff8e6!important;color:#694b00!important}
+#seyrAISend:disabled{opacity:.55;cursor:wait}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
 </body></html><style id="seyr-live-final-css">
 .flightLiveResults{margin-top:12px}.liveFareGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fareCard{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;display:flex;flex-direction:column;gap:6px}.fareCard strong{font-size:20px}.fareCard small{color:var(--muted)}@media(max-width:560px){.liveFareGrid{grid-template-columns:1fr}}
 </style>
