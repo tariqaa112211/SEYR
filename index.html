@@ -764,6 +764,24 @@ function fxCalc(currency,rate){var a=Number(document.getElementById('fxAmount')?
 window.addEventListener('load',function(){try{applyLanguage();renderAll();updateExploreCity();renderAIContext()}catch(e){}});
 </script>
 
+
+<script id="seyr-daily-refresh-v2">
+(function(){
+ const dayInRiyadh=function(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Riyadh',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())};
+ window.addEventListener('load',function(){
+  const key='seyrDailyRefreshRiyadhV2',today=dayInRiyadh();
+  let last='';try{last=localStorage.getItem(key)||''}catch(e){}
+  const run=function(){if(typeof window.refreshAll==='function')window.refreshAll();};
+  if(last!==today){
+   try{localStorage.setItem(key,today);Object.keys(localStorage).filter(k=>k.indexOf('seyrExploreV')===0||k.indexOf('seyrExplore:')===0).forEach(k=>localStorage.removeItem(k));}catch(e){}
+   setTimeout(run,1500);
+  }
+  // Keep live weather and mapped places reasonably fresh while the app remains open.
+  window.setInterval(function(){if(document.visibilityState==='visible'&&typeof window.refreshAll==='function')window.refreshAll();},6*60*60*1000);
+ });
+})();
+</script>
+
 </body></html><style id="seyr-live-final-css">
 .flightLiveResults{margin-top:12px}.liveFareGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fareCard{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;display:flex;flex-direction:column;gap:6px}.fareCard strong{font-size:20px}.fareCard small{color:var(--muted)}@media(max-width:560px){.liveFareGrid{grid-template-columns:1fr}}
 </style>
