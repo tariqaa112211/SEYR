@@ -49,7 +49,7 @@ function mapFixture(x) {
 }
 export default async function handler(req, res) {
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return json(res, 405, { error: "Method not allowed" }); }
-  res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=120");
+  res.setHeader("Cache-Control", req.query && req.query.team ? "s-maxage=15, stale-while-revalidate=15" : "s-maxage=600, stale-while-revalidate=1800");
   const key = process.env.API_FOOTBALL_KEY;
   if (!key) return json(res, 503, { configured: false, error: "Football data is not configured. Add API_FOOTBALL_KEY in Vercel environment variables.", clubs: [] });
   try {
