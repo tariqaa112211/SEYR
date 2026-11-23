@@ -62,7 +62,9 @@ export default async function handler(req, res) {
         mapsUrl: Number.isFinite(latitude) && Number.isFinite(longitude)
           ? "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude : "",
         rating: null,
-        reviewCount: null
+        reviewCount: null,
+        image: tags.image || "",
+        openingHours: tags.opening_hours || ""
       };
     }).filter((place) => place.name && Number.isFinite(place.lat) && Number.isFinite(place.lon));
   };
@@ -78,7 +80,7 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": key,
-          "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.primaryType,places.websiteUri,places.googleMapsUri,places.rating,places.userRatingCount"
+          "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location,places.primaryType,places.websiteUri,places.googleMapsUri,places.rating,places.userRatingCount,places.photos,places.currentOpeningHours,places.regularOpeningHours"
         },
         body: JSON.stringify({
           includedTypes: ["restaurant", "cafe", "tourist_attraction", "museum", "park", "shopping_mall", "hotel", "night_club", "bar"],
@@ -104,7 +106,9 @@ export default async function handler(req, res) {
           website: p.websiteUri || "",
           mapsUrl: p.googleMapsUri || "",
           rating: typeof p.rating === "number" ? p.rating : null,
-          reviewCount: typeof p.userRatingCount === "number" ? p.userRatingCount : null
+          reviewCount: typeof p.userRatingCount === "number" ? p.userRatingCount : null,
+          photoName: p.photos && p.photos[0] && p.photos[0].name || "",
+          openingHours: p.currentOpeningHours && p.currentOpeningHours.weekdayDescriptions || p.regularOpeningHours && p.regularOpeningHours.weekdayDescriptions || []
         };
       }).filter((p) => p.name);
     })());
