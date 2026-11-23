@@ -385,7 +385,6 @@ function save(){localStorage.setItem('rafeeqTripV17',JSON.stringify(trip));local
 function go(id,b){const current=document.querySelector('.page.active');if(current)current.classList.remove('active');const next=document.getElementById(id);if(next){next.classList.add('active');next.scrollTop=0}document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');renderAll();if(id==='explore'){updateExploreCity();if(trip.to?.lat)loadExplore(false);renderFlightBooking()}window.scrollTo({top:0,behavior:'smooth'})}
 function openModal(t,b){document.getElementById('mt').innerText=t;document.getElementById('mb').innerHTML=b;document.getElementById('modal').classList.add('show');setTimeout(()=>document.querySelector('.sheet input')?.focus(),60)}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
-function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('darkV17',document.body.classList.contains('dark')?'1':'0')}
 function fmtDate(d){if(!d)return'غير محدد';return new Intl.DateTimeFormat('ar-SA',{day:'numeric',month:'long',year:'numeric'}).format(new Date(d+'T00:00:00'))}
 function tripDays(){if(!trip.depart||!trip.return)return'—';return Math.max(0,Math.round((new Date(trip.return)-new Date(trip.depart))/86400000))+' أيام'}
 
@@ -593,81 +592,6 @@ async function currencyModal(){
   const rate=Number(d.rate),name=CURRENCY_NAME[currency]||currency;
   openModal('💱 العملة — '+esc(country),`<div class="card"><div class="muted">عملة الوجهة</div><h2 style="margin:5px 0">${esc(name)} (${currency})</h2><div class="powerVisual"><div style="font-size:36px">💱</div><div><b>1 SAR = ${rate.toFixed(6)} ${currency}</b><div class="muted">1 ${currency} ≈ ${(1/rate).toFixed(4)} SAR</div></div></div><div class="notice success" style="margin-top:12px">آخر تحديث: ${esc(String(d.date))}</div><div class="field" style="margin-top:12px"><label>المبلغ بالريال السعودي</label><input id="fxAmount" type="number" min="0" value="100" oninput="fxCalc('${currency}',${rate})"><div id="fxResult" class="notice">100 SAR ≈ ${(100*rate).toFixed(2)} ${currency}</div></div><div class="sourceNote">المصدر: ExchangeRate-API Open Endpoint، مع بديل Frankfurter.</div></div>`);
  }catch(e){openModal('💱 العملة — '+esc(country),'<div class="notice">تعذر جلب سعر العملة حالياً.</div><button class="btn" style="margin-top:12px" onclick="currencyModal()">↻ إعادة المحاولة</button>')}
-}
-async function loadExplore(force=false){
- if(trip.to && (!Number.isFinite(Number(trip.to.lat))||!Number.isFinite(Number(trip.to.lon)))) await ensureTripCoordinates();
- const status=document.getElementById('exploreStatus'),city=trip.to?.ar||trip.to?.name||'';
- const lat=Number(trip.to?.lat),lon=Number(trip.to?.lon);
- const cacheKey=Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0?'seyrExploreV6:'+lat.toFixed(3)+':'+lon.toFixed(3):'seyrExploreGlobalV6';
- let cached=null;try{cached=JSON.parse(localStorage.getItem(cacheKey)||'null')}catch(e){}
- if(!force&&cached?.items?.length&&Date.now()-Number(cached.ts||0)<4*60*60*1000){
-  exploreItems=cached.items;updateExploreCity();
-  if(status)status.innerText=lang==='en'?'✓ '+exploreItems.length+' places cached':'✓ '+exploreItems.length+' مكان محفوظ مؤقتًا';
-  filterExplore();return;
- }
- if(status)status.innerText=lang==='en'?'Finding real places nearby…':'جاري جلب أماكن حقيقية قريبة…';
- const placesBox=document.getElementById('places');
- if(placesBox)placesBox.innerHTML='<div class="exploreSkeleton"><div class="skeletonCard"></div><div class="skeletonCard"></div><div class="skeletonCard"></div></div>';
- let live=[];
- try{
-  if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat===0||lon===0)throw new Error('destination-coordinates-missing');
-  // Prefer the same-origin server route: it merges independent data providers and avoids browser CORS issues.
-  try{
-   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),14000);
-   try{
-    const response=await fetch('/api/places?lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon),{signal:controller.signal,cache:'no-store'});
-    const data=await response.json().catch(()=>({}));
-    if(response.ok&&Array.isArray(data.places))live=data.places;
-   }finally{clearTimeout(timer)}
-  }catch(e){}
-  // Browser-side Overpass is a fallback if the deployed server route is unavailable.
-  if(!live.length){
-   const query='[out:json][timeout:9];(nwr(around:15000,'+lat+','+lon+')[tourism~"attraction|museum|gallery|zoo|theme_park|viewpoint|aquarium|hotel|hostel"];nwr(around:15000,'+lat+','+lon+')[amenity~"restaurant|cafe|fast_food|ice_cream|bar|nightclub"];nwr(around:15000,'+lat+','+lon+')[leisure~"park|nature_reserve|garden"];nwr(around:15000,'+lat+','+lon+')[shop~"mall|department_store"];nwr(around:15000,'+lat+','+lon+')[historic];);out center tags 100;';
-   const endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-   for(const endpoint of endpoints){
-    try{
-     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),11000);
-     let response;
-     try{response=await fetch(endpoint+'?data='+encodeURIComponent(query),{signal:controller.signal,cache:'no-store'})}finally{clearTimeout(timer)}
-     if(!response.ok)continue;
-     const data=await response.json();
-     live=(data.elements||[]).map(function(item){
-      const tags=item.tags||{},raw=tags.amenity||tags.tourism||tags.leisure||tags.shop||(tags.historic?'historic':'activity');
-      let type='tourism';
-      if(['restaurant','cafe','fast_food','ice_cream'].includes(tags.amenity))type=tags.amenity==='cafe'?'cafe':'restaurant';
-      else if(['bar','nightclub'].includes(tags.amenity))type='nightlife';
-      else if(['park','nature_reserve','garden'].includes(tags.leisure))type='nature';
-      else if(['mall','department_store'].includes(tags.shop))type='shopping';
-      else if(['hotel','hostel','guest_house'].includes(tags.tourism))type='hotel';
-      const latitude=item.lat??item.center?.lat,longitude=item.lon??item.center?.lon;
-      return{name:tags.name||tags['name:en']||tags['name:ar']||'',city,desc:tags.description||tags['description:en']||tags.cuisine||raw,type,lat:latitude,lon:longitude,source:'OpenStreetMap',website:tags.website||tags['contact:website']||'',rating:null};
-     }).filter(x=>x.name&&Number.isFinite(Number(x.lat))&&Number.isFinite(Number(x.lon)));
-     if(live.length)break;
-    }catch(e){}
-   }
-  }
-  const seen=new Set();
-  live=live.filter(function(item){const key=String(item.name||'').trim().toLocaleLowerCase();if(!key||seen.has(key))return false;seen.add(key);return true;}).slice(0,120);
-  if(!live.length)throw new Error('no-results');
-  exploreItems=live;
-  try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),items:live}))}catch(e){}
-  updateExploreCity();
-  if(status)status.innerText=lang==='en'?'✓ '+live.length+' places found around '+city:'✓ تم العثور على '+live.length+' مكان حول '+city;
-  filterExplore();
- }catch(error){
-  if(cached?.items?.length)exploreItems=cached.items;
-  else{
-   const matched=typeof seyrFallbackExplore==='function'?seyrFallbackExplore(city):[];
-   exploreItems=matched.length?matched.map(function(x){return{name:x.name||x[0],city,desc:x.desc||x[2]||'Suggested place — verify details with the provider',type:x.type||x[3]||'tourism',source:'SEYR suggestions'}}):[];
-  }
-  if(exploreItems.length){
-   if(status)status.innerText=lang==='en'?'Showing saved suggestions; live sources are temporarily unavailable.':'تعذر الاتصال بمصادر الأماكن؛ تظهر اقتراحات محفوظة إن وجدت.';
-   filterExplore();
-  }else{
-   if(status)status.innerText=lang==='en'?'Could not load places. Check the destination and retry.':'تعذر تحميل الأماكن. تحقق من الوجهة والاتصال ثم أعد المحاولة.';
-   if(placesBox)placesBox.innerHTML='<div class="card"><b>ما قدرنا نحمل الأماكن الآن</b><p class="muted">قد يكون مصدر البيانات متوقفًا مؤقتًا. جرّب مرة ثانية، أو غيّر المدينة.</p><button class="btn" onclick="loadExplore(true)">↻ إعادة المحاولة</button></div>';
-  }
- }
 }
 async function sendSeyrAI(e){
  e?.preventDefault();
