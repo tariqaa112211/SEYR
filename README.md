@@ -25,3 +25,8 @@ Never put the OpenAI key in `index.html` or any client-side JavaScript. The key 
 ## Important
 
 The static app can run without AI configuration; in that case, SEYR uses a limited local response fallback. For live AI responses, configure `OPENAI_API_KEY` in Vercel. Test the deployed site on desktop and mobile before sharing it publicly.
+
+## Football data
+
+- Add `API_FOOTBALL_KEY` in Vercel Environment Variables to enable the API-Football v3 integration for club lookup, current-season player statistics, league standings and upcoming fixtures.
+- The current integration does not provide verified historical trophy records, club legends, official ticket availability or stadium coordinates for every club; those fields must remain unavailable until a reliable source is integrated.
