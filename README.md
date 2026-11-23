@@ -28,5 +28,16 @@ The static app can run without AI configuration; in that case, SEYR uses a limit
 
 ## Football data
 
-- Add `API_FOOTBALL_KEY` in Vercel Environment Variables to enable the API-Football v3 integration for club lookup, current-season player statistics, league standings and upcoming fixtures.
+- Add `API_FOOTBALL_KEY` in Vercel Environment Variables to enable the API-Football v3 integration for club lookup, current-season player statistics, league standings, upcoming fixtures and live fixture status/scores. Team-detail responses use a 15-second cache; club discovery is cached for 10 minutes. The client polls club details every 25 seconds only while the Explore/football section is visible.
 - The current integration does not provide verified historical trophy records, club legends, official ticket availability or stadium coordinates for every club; those fields must remain unavailable until a reliable source is integrated.
+
+
+## Refresh behavior and known provider limits
+
+- Weather is refreshed every 8 minutes while the app is visible; leaving the page pauses this polling.
+- Explore uses a 30-minute browser cache and a 15-minute server cache. Manual refresh bypasses the browser cache.
+- Currency is fetched on demand when the currency panel is opened; it is not presented as a continuously streaming quote.
+- Flight and hotel results remain provider search links, not live prices from a booking API.
+- City-to-club discovery has explicit venue-city matching for Madrid, London, Barcelona, Paris, Rome, Munich, Riyadh and Dubai (including Arabic city aliases). Other cities use the provider's city-name search and may return no clubs if its search index cannot resolve the city.
+- The football API returns only fixtures supplied by API-Football. It does not claim to provide every lower-division club, live scores outside provider coverage, stadium coordinates, or official ticket inventory.
+- OPENAI_API_KEY, API_FOOTBALL_KEY and optional GOOGLE_PLACES_API_KEY are private server-side environment variables. No keys are included in the repository.
