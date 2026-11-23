@@ -97,7 +97,7 @@ export default async function handler(req, res) {
     }
     const city = String(req.query && req.query.city || "").trim();
     if (!city || city.length > 100) return json(res, 400, { error: "A valid city query is required.", clubs: [] });
-    const cityKey = norm(city), config = CITY_CLUB_SEARCHES[cityKey];
+    const cityKey = norm(city), aliases = { 'مدريد':'madrid', 'لندن':'london', 'برشلونة':'barcelona', 'باريس':'paris', 'روما':'rome', 'ميونخ':'munich', 'ميونيخ':'munich', 'الرياض':'riyadh', 'دبي':'dubai' }, config = CITY_CLUB_SEARCHES[cityKey] || CITY_CLUB_SEARCHES[aliases[String(city).trim()]];
     let rows = [];
     if (config) {
       const batches = await Promise.all(config.teams.map(name => apiGet("/teams?search=" + encodeURIComponent(name), key).catch(() => [])));
