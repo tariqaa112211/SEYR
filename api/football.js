@@ -22,10 +22,11 @@ export default async function handler(req, res) {
       const id = Number(req.query.team);
       if (!Number.isInteger(id) || id <= 0) return json(res, 400, { error: "Valid team ID required." });
       const year = seasonNow();
-      const [teamRows, fixtureRows, playerRows] = await Promise.all([
+      const [teamRows, fixtureRows, playerRows, leagueRows] = await Promise.all([
         apiGet("/teams?id=" + id, key),
         apiGet("/fixtures?team=" + id + "&next=10", key),
-        apiGet("/players?team=" + id + "&season=" + year, key).catch(() => [])
+        apiGet("/players?team=" + id + "&season=" + year, key).catch(() => []),
+        apiGet("/leagues?team=" + id + "&season=" + year, key).catch(() => [])
       ]);
       const team = teamRows[0] || null;
       if (!team) return json(res, 404, { error: "Club not found in sports provider." });
@@ -34,6 +35,18 @@ export default async function handler(req, res) {
         return { name: p.name || "", photo: p.photo || "", position: s.games && s.games.position || "", appearances: s.games && s.games.appearances || 0, minutes: s.games && s.games.minutes || 0, goals: g.total || 0, assists: g.assists || 0, total: (g.total || 0) + (g.assists || 0) };
       }).filter(x => x.name);
       stats.sort((a,b) => b.total-a.total || b.goals-a.goals || b.minutes-a.minutes);
+      const primaryLeague = leagueRows.find(x => x.league && String(x.league.type || "").toLowerCase() === "league") || leagueRows[0] || null;
+      let position = null;
+      if (primaryLeague && primaryLeague.league && primaryLeague.league.id) {
+        try {
+          const standings = await apiGet("/standings?league=" + primaryLeague.league.id + "&season=" + year, key);
+          const groups = standings[0] && standings[0].league && standings[0].league.standings || [];
+          for (const group of groups) {
+            const row = group.find(x => Number(x.team && x.team.id) === id);
+            if (row) { position = row.rank || null; break; }
+          }
+        } catch (_) {}
+      }
       const fixtures = fixtureRows.filter(x => x.fixture && new Date(x.fixture.date).getTime() >= Date.now()).map(x => ({
         home: x.teams && x.teams.home && x.teams.home.name || "",
         away: x.teams && x.teams.away && x.teams.away.name || "",
@@ -41,7 +54,7 @@ export default async function handler(req, res) {
         date: x.fixture.date || "",
         venue: x.fixture.venue && x.fixture.venue.name || ""
       }));
-      return json(res, 200, { team: { id: team.team.id, name: team.team.name, logo: team.team.logo, founded: team.team.founded, country: team.team.country, venue: team.venue || {} }, season: year, players: stats, bestPlayer: stats.length ? stats[0] : null, fixtures, league: null, position: null, source: "API-FOOTBALL", updatedAt: new Date().toISOString(), notes: ["اللاعب الأكثر مساهمة محسوب من اللاعبين والإحصاءات التي أعادها المزود للموسم الحالي فقط.", "سجل البطولات التاريخي والترتيب الدوري لم يقدمهما هذا المسار، لذلك لا يتم تخمينهما.", "لا تتوفر إحداثيات الملعب في بيانات هذا المسار؛ لن يتم إنشاء دبوس تقريبي."] });
+      return json(res, 200, { team: { id: team.team.id, name: team.team.name, logo: team.team.logo, founded: team.team.founded, country: team.team.country, venue: team.venue || {} }, season: year, players: stats, bestPlayer: stats.length ? stats[0] : null, fixtures, league: primaryLeague && primaryLeague.league ? { name: primaryLeague.league.name, id: primaryLeague.league.id } : null, position, source: "API-FOOTBALL", updatedAt: new Date().toISOString(), notes: ["اللاعب الأكثر مساهمة محسوب من اللاعبين والإحصاءات التي أعادها المزود للموسم الحالي فقط.", "سجل البطولات التاريخي والترتيب الدوري لم يقدمهما هذا المسار، لذلك لا يتم تخمينهما.", "لا تتوفر إحداثيات الملعب في بيانات هذا المسار؛ لن يتم إنشاء دبوس تقريبي."] });
     }
     const city = String(req.query && req.query.city || "").trim();
     if (!city || city.length > 100) return json(res, 400, { error: "A valid city query is required.", clubs: [] });
