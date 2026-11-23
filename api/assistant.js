@@ -88,7 +88,19 @@ export default async function handler(req, res) {
         .map((item) => item.text).join("\n");
     }
     if (!answer.trim()) return res.status(502).json({ error: "The AI provider returned an empty answer." });
-    return res.status(200).json({ answer: answer.trim(), mode: "ai", webSearch: Array.isArray(result.tools) });
+    const sources = [];
+    for (const item of (Array.isArray(result.output) ? result.output : [])) {
+      for (const part of (Array.isArray(item.content) ? item.content : [])) {
+        for (const annotation of (Array.isArray(part.annotations) ? part.annotations : [])) {
+          const url = annotation.url || annotation.url_citation && annotation.url_citation.url;
+          const title = annotation.title || annotation.url_citation && annotation.url_citation.title || url;
+          if (typeof url === "string" && /^https:\/\//i.test(url) && !sources.some(x => x.url === url)) sources.push({ title: String(title || url), url });
+        }
+      }
+    }
+    const webSearch = Array.isArray(result.output) && result.output.some(item => item && item.type === "web_search_call");
+    const withSources = sources.length ? answer.trim() + "\\n\\nSources:\\n" + sources.slice(0, 8).map(x => "- " + x.title + ": " + x.url).join("\\n") : answer.trim();
+    return res.status(200).json({ answer: withSources, mode: "ai", webSearch, sources });
   } catch (error) {
     console.error("SEYR assistant route failed:", error && error.message);
     return res.status(500).json({ error: "Unexpected server error." });
