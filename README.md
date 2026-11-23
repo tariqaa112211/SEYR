@@ -17,7 +17,7 @@ Never put the OpenAI key in `index.html` or any client-side JavaScript. The key 
 
 - Weather and forecast: Open-Meteo; refreshed on app open and periodic refresh while the page remains open.
 - City search: a bundled city/country list with Open-Meteo/Nominatim geocoding fallback.
-- Explore: OpenStreetMap/Overpass; optionally merges Google Places results if `GOOGLE_PLACES_API_KEY` is configured. Coverage and response speed vary by city; mapped places are not endorsements.
+- Explore: live OpenStreetMap/Overpass places linked to the selected trip coordinates. The client searches within 50 km and expands to 100 km for nearby day-trip options when fewer than 80 results are available. It displays only named mapped places and does not pad results with invented venues. The server endpoint searches within 30 km and can merge Google Places results when `GOOGLE_PLACES_API_KEY` is configured. Coverage and provider availability vary by city; mapped places are not endorsements.
 - Currency: ExchangeRate-API open endpoint with Frankfurter fallback.
 - Flights, hotels and activities: opens third-party search pages (Wego, Google Flights, Skyscanner, Booking.com and GetYourGuide). These links are search shortcuts, not a booking API or booking confirmation. Live fare/availability data requires the provider's approved API/partner access.
 - Ratings, live prices and opening hours are not invented when the source does not provide them.
