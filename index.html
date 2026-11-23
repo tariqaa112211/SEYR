@@ -859,4 +859,16 @@ window.addEventListener('load',function(){try{applyLanguage();renderAll();update
  });
 })();
 </script>
+<script id="seyr-weather-smart-refresh">
+(function(){
+ var running=false;
+ window.setInterval(async function(){
+  if(document.visibilityState!=='visible'||running||typeof loadWeather!=='function')return;
+  running=true;try{await loadWeather();}catch(e){}finally{running=false;}
+ },8*60*1000);
+ document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'&&typeof loadWeather==='function')loadWeather();
+ });
+})();
+</script>
 </body></html>
