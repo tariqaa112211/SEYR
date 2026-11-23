@@ -13,12 +13,13 @@ export default async function handler(req, res) {
   // Public, short-lived cache helps keep Explore fast while allowing the data to refresh.
   res.setHeader("Cache-Control", "s-maxage=900, stale-while-revalidate=3600");
   const key = process.env.GOOGLE_PLACES_API_KEY;
-  const overpassQuery = `[out:json][timeout:9];(
-    nwr(around:15000,${lat},${lon})[tourism~"attraction|museum|gallery|zoo|theme_park|viewpoint|aquarium"];
-    nwr(around:15000,${lat},${lon})[amenity~"restaurant|cafe|fast_food|ice_cream|bar|nightclub"];
-    nwr(around:15000,${lat},${lon})[leisure~"park|nature_reserve|garden"];
-    nwr(around:15000,${lat},${lon})[shop~"mall|department_store"];
-    nwr(around:15000,${lat},${lon})[historic];
+  const overpassQuery = `[out:json][timeout:18];(
+    nwr(around:30000,${lat},${lon})[tourism~"attraction|museum|gallery|zoo|theme_park|viewpoint|aquarium|artwork|camp_site"];
+    nwr(around:30000,${lat},${lon})[amenity~"restaurant|cafe|fast_food|ice_cream|bar|nightclub|museum|gallery|arts_centre|theatre|cinema|aquarium|zoo"];
+    nwr(around:30000,${lat},${lon})[leisure~"park|nature_reserve|garden|beach_resort|water_park"];
+    nwr(around:30000,${lat},${lon})[shop~"mall|department_store|marketplace"];
+    nwr(around:30000,${lat},${lon})[historic];
+    nwr(around:30000,${lat},${lon})[natural~"beach|waterfall|cave|peak"];
   );out center tags 100;`;
 
   const requestJson = async (url, options, timeoutMs = 10000) => {
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
   const osmFetch = async (endpoint) => {
     const data = await requestJson(endpoint + "?data=" + encodeURIComponent(overpassQuery), {
       headers: { "Accept": "application/json", "User-Agent": "SEYR-Travel-App/1.0" }
-    }, 10500);
+    }, 18000);
     return (data.elements || []).map((item) => {
       const tags = item.tags || {};
       const rawType = tags.amenity || tags.tourism || tags.leisure || tags.shop || (tags.historic ? "historic" : "activity");
@@ -66,10 +67,10 @@ export default async function handler(req, res) {
     }).filter((place) => place.name && Number.isFinite(place.lat) && Number.isFinite(place.lon));
   };
 
-  const jobs = [
-    osmFetch("https://overpass-api.de/api/interpreter"),
-    osmFetch("https://overpass.kumi.systems/api/interpreter")
-  ];
+  const jobs = [ (async () => {
+    try { return await osmFetch("https://overpass-api.de/api/interpreter"); }
+    catch (_) { return await osmFetch("https://overpass.kumi.systems/api/interpreter"); }
+  })() ];
   if (key) {
     jobs.push((async () => {
       const data = await requestJson("https://places.googleapis.com/v1/places:searchNearby", {
@@ -115,8 +116,11 @@ export default async function handler(req, res) {
   const seen = new Set();
   for (const place of all) {
     const normalized = String(place.name || "").trim().toLocaleLowerCase();
-    if (!normalized || seen.has(normalized)) continue;
-    seen.add(normalized);
+    const locationKey = Number.isFinite(place.lat) && Number.isFinite(place.lon)
+      ? Math.round(place.lat * 10000) + ":" + Math.round(place.lon * 10000) : "no-coordinates";
+    const dedupeKey = normalized + "|" + locationKey;
+    if (!normalized || seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
     unique.push(place);
   }
   if (!unique.length) {
@@ -124,8 +128,10 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: "No places could be loaded right now. Please retry.", places: [], mode: "unavailable" });
   }
   return res.status(200).json({
-    places: unique.slice(0, 120),
-    mode: key && settled[2] && settled[2].status === "fulfilled" ? "osm-google" : "osm",
-    count: Math.min(unique.length, 120)
+    places: unique.slice(0, 500),
+    mode: key && settled[1] && settled[1].status === "fulfilled" ? "osm-google" : "osm",
+    count: Math.min(unique.length, 500),
+    targetCount: 80,
+    radiusKm: 30
   });
 }
