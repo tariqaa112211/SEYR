@@ -67,10 +67,10 @@ export default async function handler(req, res) {
     }).filter((place) => place.name && Number.isFinite(place.lat) && Number.isFinite(place.lon));
   };
 
-  const jobs = [ (async () => {
-    try { return await osmFetch("https://overpass-api.de/api/interpreter"); }
-    catch (_) { return await osmFetch("https://overpass.kumi.systems/api/interpreter"); }
-  })() ];
+  const jobs = [
+    osmFetch("https://overpass-api.de/api/interpreter"),
+    osmFetch("https://overpass.kumi.systems/api/interpreter")
+  ];
   if (key) {
     jobs.push((async () => {
       const data = await requestJson("https://places.googleapis.com/v1/places:searchNearby", {
