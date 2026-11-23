@@ -1,13 +1,19 @@
 const BASE = "https://v3.football.api-sports.io";
 const CACHE = new Map();
 const TTL = 10 * 60 * 1000;
+const REQUEST_TIMEOUT_MS = 12000;
 function json(res, status, body) { return res.status(status).json(body); }
 function norm(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9\u0600-\u06ff]/g, " ").trim(); }
 async function apiGet(path, key) {
   const cached = CACHE.get(path);
   if (cached && Date.now() - cached.at < TTL) return cached.data;
-  const r = await fetch(BASE + path, { headers: { "x-apisports-key": key } });
-  const d = await r.json().catch(() => ({}));
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  let r, d;
+  try {
+    r = await fetch(BASE + path, { headers: { "x-apisports-key": key }, signal: controller.signal });
+    d = await r.json().catch(() => ({}));
+  } finally { clearTimeout(timer); }
   if (!r.ok || (d.errors && Object.keys(d.errors).length)) throw new Error("Sports provider request failed (" + r.status + ")");
   CACHE.set(path, { at: Date.now(), data: d.response || [] });
   return d.response || [];
@@ -15,6 +21,7 @@ async function apiGet(path, key) {
 function seasonNow() { const d = new Date(); return d.getUTCMonth() >= 6 ? d.getUTCFullYear() : d.getUTCFullYear() - 1; }
 export default async function handler(req, res) {
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return json(res, 405, { error: "Method not allowed" }); }
+  res.setHeader("Cache-Control", "s-maxage=600, stale-while-revalidate=1800");
   const key = process.env.API_FOOTBALL_KEY;
   if (!key) return json(res, 503, { configured: false, error: "Football data is not configured. Add API_FOOTBALL_KEY in Vercel environment variables.", clubs: [] });
   try {
