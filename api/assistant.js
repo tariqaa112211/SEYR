@@ -99,7 +99,7 @@ export default async function handler(req, res) {
       }
     }
     const webSearch = Array.isArray(result.output) && result.output.some(item => item && item.type === "web_search_call");
-    const withSources = sources.length ? answer.trim() + "\\n\\nSources:\\n" + sources.slice(0, 8).map(x => "- " + x.title + ": " + x.url).join("\\n") : answer.trim();
+    const withSources = sources.length ? answer.trim() + "\n\nSources:\n" + sources.slice(0, 8).map(x => "- " + x.title + ": " + x.url).join("\n") : answer.trim();
     return res.status(200).json({ answer: withSources, mode: "ai", webSearch, sources });
   } catch (error) {
     console.error("SEYR assistant route failed:", error && error.message);
