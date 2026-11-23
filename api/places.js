@@ -133,7 +133,7 @@ export default async function handler(req, res) {
   }
   return res.status(200).json({
     places: unique.slice(0, 500),
-    mode: key && settled[1] && settled[1].status === "fulfilled" ? "osm-google" : "osm",
+    mode: key && settled[2] && settled[2].status === "fulfilled" ? "osm-google" : "osm",
     count: Math.min(unique.length, 500),
     targetCount: 80,
     radiusKm: 30
